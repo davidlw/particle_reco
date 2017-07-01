@@ -3,7 +3,7 @@
 
 using namespace std;
 
-compile_readxml(const string& lib_name)
+void compile_readxml(const string& lib_name)
 {
     gSystem->CompileMacro("readxml.cc", "kfc", lib_name.c_str());
 }
