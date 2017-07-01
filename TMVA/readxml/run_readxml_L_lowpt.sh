@@ -8,6 +8,7 @@ ssh bonner01 << HERE
 
 source start.sh
 cd ${READXML_PATH}
+cat ../runTMVA_config.h > ${LOG_PATH}/config_L_lowpt.log
 
 echo "Executing..."
 nohup unbuffer root -l -b -q 'readxml.cc+("config/split_L/backgroundTrees_L_1a.xml", "_L_1a")' &> ${LOG_PATH}/readxml_L_lowpt_1a.log &
