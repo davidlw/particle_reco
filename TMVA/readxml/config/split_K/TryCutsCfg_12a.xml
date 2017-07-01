@@ -1,0 +1,10 @@
+<Files>
+    <in_files>
+        <in_file_1>
+            <name_base>/storage1/osg/stage_out/store/user/jgan/PAMinimumBias6/CRAB3_LambdaC_KsProton_data_Pbp6_extracuts_Jun2017/170619_202555/0000/data_LambdaC_KsProton_extracuts_{}.root</name_base>
+            <index_limits>1,100</index_limits>
+        </in_file_1>
+        <directory_name>lcreco</directory_name>
+        <tree_name>lambdac</tree_name>
+    </in_files>
+</Files>
