@@ -15,16 +15,16 @@ const TString signalFileName = "/home/jg61/store/outputs/AODSIM_NEW/MC_LambdaC_K
 const TString signalTreePath = "lcreco/lambdac_match";
 
 // Cutting information
-const std::vector<Double_t> ptBinLimits = {10, 20};
+const std::vector<Double_t> ptBinLimits = {2, 4};
 
 // Base cuts (not tuning cuts)
 const double absEtaMax = 1;
-const double ptD1Min = 1;
+const double ptD1Min = 0.5;
 const double absEtaD1Max = 2.4;
 const double cosAngleD1Min = 0.999;
 const double DLSigD1Min = 5;
-const double absMassD1zScoreMax = 2;
-const double ptD2Min = 0.7;
+const double absMassD1zScoreMax = 3;
+const double ptD2Min = 0.3;
 const double absEtaD2Max = 2.4;
 
 const double massWindowLo = 2.1;
@@ -66,7 +66,7 @@ namespace TMVAClassification_config {
 const TString outfileName = "TMVA.root";
 
 // Input
-const TString backgroundFileName = "/home/jg61/store/outputs/data/data_KsProton_high_pt_nomassd1_complete_skim.root";
+const TString backgroundFileName = "/home/jg61/store/outputs/data/data_KsProton_pt_2to4_nomassd1_smaller2_skim.root";
 const TString backgroundTreePath = "lambdac";
 
 const Double_t signalWeight = 1.0;
@@ -119,7 +119,7 @@ const std::vector<TString> variableProps = {
 namespace readxml_config {
 
 // File information
-const std::string myTMVApath = "../myTMVA";
+const std::string myTMVApath = "../myTMVA_K_2_4";
 const TString histoOutPathBase = "./readxml_histos";
 
 // Cutting information
