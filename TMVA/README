@@ -1,1 +1,52 @@
-*To do*
+--- Description ---
+
+- Implements a modified version of TMVA implemented originally at https://github.com/zc11/TMVARectangleForDvn/tree/master
+
+===============================================================
+
+--- Summary ---
+
+- Runs in three parts:
+    - 1. myTMVA
+    - 2. readxml
+    - 3. readxml_fit
+
+1. myTMVA
+- Does training based on an MC signal tree and a data background tree, looking at the signal reduction power and background reduction power of multiple sets of multivariable cuts (specified by the user).
+- Outputs a ROOT file and an xml file containing cuts/weights.
+
+
+2. readxml
+- Parses an xml weights file output from myTMVA (the myTMVA directory can be specified) for the set of 100 cuts found.
+- Outputs a ROOT file containing histograms of data when subject to these 100 cuts (plus 2 other auxiliary histograms that aren't very useful).
+- Outputs the 100 cuts to the console.
+
+
+3. readxml_fit
+- Performs fits on the histograms (to a double Gaussian with shared mean plus quartic background) contained in the ROOT file output from readxml.
+- Outputs pictures of the fit and calculated values pertaining to the peak.
+    - signal significance
+    - signal yield fraction
+    - raw signal count
+    - mean of the Gaussian fit
+    - weighted RMS average of the standard deviation of the Gaussians
+
+===============================================================
+
+--- Usage ---
+
+** Starting a new analysis **
+
+1. Copy any of the myTMVA directories and rename it as desired. This is necessary because the macro corresponding to this step outputs to an internally defined location, which I haven't figured out how to modify.
+
+2. Edit the runTMVA_config.h file in the main directory to configure the training, histogram output, and fitting for each of the three steps listed in the summary section. Make sure to specify the new myTMVA directory in the parameters.
+
+3. Move into the new myTMVA directory and run the classification macro with the command:
+
+    root -l -b -q TMVAClassification.C
+
+4. Once step 3 is finished, run readxml.cc with the appropriate arguments (see the README in the readxml directory for more information) using the command:
+
+    root -l -b -q 'readxml.cc+(<file_list>, <index>)'
+
+5. Once step 4 is finished, run readxml_fit.cc.
