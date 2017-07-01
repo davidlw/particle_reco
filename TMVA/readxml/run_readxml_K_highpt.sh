@@ -1,6 +1,6 @@
 #!/bin/bash
 
-READXML_PATH="~/particle_reco/TMVA/readxml"
+READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
 LOG_PATH="logs"
 
 source start.sh
