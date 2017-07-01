@@ -7,14 +7,16 @@
 
 ** Automatic **
 
+0. Make sure ROOT is initialized in the current session.
+0.5. For the low pT shell scripts (see below), "start.sh" should be a shell script that sets up the ROOT environment.
 1. To use, set the configuration file runTMVA_config.h in the main directory.
 2. If desired, edit the appropriate shell script to set the path for log files.
-3. Execute the appropriate shell script, depending on the data being analyzed.
-    - run_readxml_L_highpt is for the Lambda + pion channel for bins where pT >= 6
-    - run_readxml_K_highpt is for the Kshort + proton channel for bins where pT >= 6
-    - run_readxml_L_4to6 is for the Lambda + pion channel for bins where 4 <= pT < 6
-    - run_readxml_L_lowpt is for the Lambda + pion channel for bins where pT < 6
-    - run_readxml_K_lowpt is for the Kshort + proton channel for bins where pT < 6
+3. Execute the appropriate shell (bash) script, depending on the data being analyzed.
+    - run_readxml_L_highpt.sh is for the Lambda + pion channel for bins where pT >= 6
+    - run_readxml_K_highpt.sh is for the Kshort + proton channel for bins where pT >= 6
+    - run_readxml_L_4to6.sh is for the Lambda + pion channel for bins where 4 <= pT < 6
+    - run_readxml_L_lowpt.sh is for the Lambda + pion channel for bins where pT < 6
+    - run_readxml_K_lowpt.sh is for the Kshort + proton channel for bins where pT < 6
 
 ** Manual **
 - Follow the configuration steps as described in the automatic section. Then run the command:
@@ -23,7 +25,7 @@
 
 - <file_list> is an xml file specifying which paths to files containing the desired background (data) trees to chain together. See the section on the config subdirectory for more informaion.
 
-- <index> is a tag for the output files. Intended for job-splitting with large datasets.
+- <index> is a tag for the output files. Can be an integer or a string. Intended for job-splitting with large datasets.
 
 --- Subdirectories ---
 
