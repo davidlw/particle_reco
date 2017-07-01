@@ -1,5 +1,6 @@
 #include "TSystem.h"
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -8,7 +9,7 @@ void readxml(const string&, const string&);
 
 void call_readxml(const string& lib_name, const string& backgroundTreeFileList, const string& outIndex)
 {
-    gSystem->Load(lib_name.c_str());
+    cout << gSystem->Load(lib_name.c_str());
 
     readxml(backgroundTreeFileList, outIndex);
 }
