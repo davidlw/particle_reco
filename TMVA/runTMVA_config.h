@@ -119,8 +119,8 @@ const std::vector<TString> variableProps = {
 namespace readxml_config {
 
 // File information
-const std::string myTMVApath = "../myTMVA_K_2_4";
-const TString histoOutPathBase = "./readxml_histos";
+const std::string myTMVApath = "../myTMVA";
+const TString histoOutPathBase = "/home/jg61/particle_reco/TMVA/readxml/histos/readxml_histos";
 
 // Cutting information
 
