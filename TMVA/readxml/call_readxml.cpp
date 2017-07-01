@@ -13,7 +13,7 @@ void call_readxml(const string& lib_name, const string& backgroundTreeFileList, 
     readxml(backgroundTreeFileList, outIndex);
 }
 
-void call_readxml(const string& lib_name, const string* backgroundTreeFileList, int outIndex)
+void call_readxml(const string& lib_name, const string& backgroundTreeFileList, int outIndex)
 {
     call_readxml(lib_name, backgroundTreeFileList, to_string(outIndex));
 }
