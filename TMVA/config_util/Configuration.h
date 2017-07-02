@@ -135,8 +135,8 @@ public:
         if(!use_dedx) return true;
         
         if( !(  (branches[nhits] >= nhits_min) && \
-                (branches[dedx] >= dedx_kca_low[0] * \
-                    pow(dedx_mass / (branches[pd2] - dedx_kca_low[2]), 2) + dedx_kca_low[1] || branches[pd2] >= dedx_cutoff_low) && \
+                (branches[dedx] >= dedx_kca_lo[0] * \
+                    pow(dedx_mass / (branches[pd2] - dedx_kca_lo[2]), 2) + dedx_kca_lo[1] || branches[pd2] >= dedx_cutoff_lo) && \
                 (branches[dedx] < dedx_kca_hi[0] * pow(dedx_mass / (branches[pd2] - dedx_kca_hi[2]), 2) + \
                     dedx_kca_hi[1] || branches[pd2] >= dedx_cutoff_hi)
             )
@@ -211,7 +211,7 @@ public:
         ptD2Min = cfg.get<double>("Shared.Cuts.pt_dau2_min");
         absEtaD2Max = cfg.get<double>("Shared.Cuts.abs_eta_dau2_max");
         absxyDCASigD2Max = cfg.get<double>("Shared.Cuts.abs_xyDCASig_dau2_max");
-        absxDCASigD2Max = cfg.get<double>("Shared.Cuts.abs_zDCASig_dau2_max");
+        abszDCASigD2Max = cfg.get<double>("Shared.Cuts.abs_zDCASig_dau2_max");
 
         massWindowLo = cfg.get<double>("Shared.Cuts.mass_window_low");
         massWindowHi = cfg.get<double>("Shared.Cuts.mass_window_high");
@@ -232,7 +232,7 @@ public:
         }
         else
         {
-            cout << "Warning: use_dedx was neither \"true\" nor \"false\". Setting to false."
+            cout << "Warning: use_dedx was neither \"true\" nor \"false\". Setting to false.\n";
             use_dedx = false;
         }
 
@@ -266,8 +266,8 @@ public:
 
             "&& ( !" + to_string(use_dedx) + \
                 "|| (nhits_dau2 >=" + to_string(nhits_min) + \
-                "&& (dEdxHarmonic_dau2 >=" + to_string(dedx_kca_low[0]) + "* (" + to_string(dedx_mass) + "/ (p_dau2 -" + \
-                    to_string(dedx_kca_low[2]) + "))^2 +" + to_string(dedx_kca_low[1]) + "|| p_dau2 >=" + to_string(dedx_cutoff_low) + \
+                "&& (dEdxHarmonic_dau2 >=" + to_string(dedx_kca_lo[0]) + "* (" + to_string(dedx_mass) + "/ (p_dau2 -" + \
+                    to_string(dedx_kca_lo[2]) + "))^2 +" + to_string(dedx_kca_lo[1]) + "|| p_dau2 >=" + to_string(dedx_cutoff_lo) + \
                 ") && (dEdxHarmonic_dau2 <" + to_string(dedx_kca_hi[0]) + "* (" + to_string(dedx_mass) + "/ (p_dau2 -" + \
                     to_string(dedx_kca_hi[2]) + "))^2 +" + to_string(dedx_kca_hi[1]) + "|| p_dau2 >=" + \
                     to_string(dedx_cutoff_hi) + ") ) )"
@@ -306,7 +306,7 @@ public:
         variableComparators.reserve(variableNamesList.size());
         for(auto i = variableNamesList.begin(); i < variableNamesList.end(); i++)
         {
-            branch currentBranch = whichBranch(*i);
+            int currentBranch = whichBranch(*i);
 
             branchNames[currentBranch] = true;
             variableComparators.push_back( getComparator(currentBranch) );
@@ -379,35 +379,19 @@ private:
         // Will only ever return the index of certain variables that may possibly be varied. (No mass, no pt, no nhits, etc.)
         boost::erase_all(str, " ");
 
-        // Special case: mass_dau1 z score. If it contains "mass_dau1", just set it to be "mass_dau1" to ease the switch statement
-        if(str.find("mass_dau1") != string::npos)
-            str = "mass_dau1";
 
-        switch(str)
-        {
-            case "abs(eta)":
-                return eta;
-            case "pt_dau1":
-                return ptd1;
-            case "abs(eta_dau1)":
-                return etad1;
-            case "cos(3DPointingAngle_dau1)":
-                return angle;
-            case "3DDecayLengthSig_dau1":
-                return dl;
-            case "mass_dau1":
-                return md1;
-            case "pt_dau2":
-                return ptd2;
-            case "abs(eta_dau2)":
-                return etad2;
-            case "abs(xyDCASig_dau2)":
-                return xydca;
-            case "abs(zDCASig_dau2)":
-                return zdca;
-            default:
-                return -1;
-        }
+        if(str == "abs(eta)") return eta;
+        if(str == "pt_dau1") return ptd1;
+        if(str == "abs(eta_dau1)") return etad1;
+        if(str == "cos(3DPointingAngle_dau1)") return angle;
+        if(str == "3DDecayLengthSig_dau1") return dl;
+        if(str.find("mass_dau1") != string::npos) return md1;
+        if(str == "pt_dau2") return ptd2;
+        if(str == "abs(eta_dau2)") return etad2;
+        if(str == "abs(xyDCASig_dau2)") return xydca;
+        if(str == "abs(zDCASig_dau2)") return zdca;
+
+        return -1;
     }
 };
 

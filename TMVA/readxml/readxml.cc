@@ -155,7 +155,7 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
     vector<string> in_bases = io_list.inpath_bases;
     for(unsigned i = 0; i < in_bases.size(); i++)
     {
-        int idxlo = io_list.idx_lims()[i][0], idxhi = io_list.idx_lims()[i][1];
+        int idxlo = io_list.idx_lims[i][0], idxhi = io_list.idx_lims[i][1];
         for(int j = idxlo; j <= idxhi; j++)
         {
             string file = in_bases[i];
