@@ -121,26 +121,26 @@ public:
     // Take in a vector of branch values (corresponding to branchNames), and return true if all the cuts in the set are satisfied and false if not.
     bool passesBaseSignalCuts(const vector<Float_t>& branches)
     {
-        if(!(branches[pt] >= ptBinLimits[0] && branches[pt] < ptBinLimits[1])) return false;
-        if(fabs(branches[eta]) >= absEtaMax) return false;
-        if(branches[ptd1] <= ptD1Min) return false;
-        if(fabs(branches[etad1]) >= absEtaD1Max) return false;
-        if(cos(branches[angle]) <= cosAngleD1Min) return false;
-        if(branches[dl] <= DLSigD1Min) return false;
-        if(fabs( (branches[md1] - massD1Mean) / massD1Sigma ) > absMassD1zScoreMax) return false;
-        if(branches[ptd2] <= ptD2Min) return false;
-        if(fabs(branches[etad2]) >= absEtaD2Max) return false;
+        // if(!(branches[pt] >= ptBinLimits[0] && branches[pt] < ptBinLimits[1])) return false;
+        // if(fabs(branches[eta]) >= absEtaMax) return false;
+        // if(branches[ptd1] <= ptD1Min) return false;
+        // if(fabs(branches[etad1]) >= absEtaD1Max) return false;
+        // if(cos(branches[angle]) <= cosAngleD1Min) return false;
+        // if(branches[dl] <= DLSigD1Min) return false;
+        // if(fabs( (branches[md1] - massD1Mean) / massD1Sigma ) > absMassD1zScoreMax) return false;
+        // if(branches[ptd2] <= ptD2Min) return false;
+        // if(fabs(branches[etad2]) >= absEtaD2Max) return false;
 
-        // If dedx cuts are not desired, then at this point return true. If not, do one last cut.
-        if(!use_dedx) return true;
+        // // If dedx cuts are not desired, then at this point return true. If not, do one last cut.
+        // if(!use_dedx) return true;
         
-        if( !(  (branches[nhits] >= nhits_min) && \
-                (branches[dedx] >= dedx_kca_lo[0] * \
-                    pow(dedx_mass / (branches[pd2] - dedx_kca_lo[2]), 2) + dedx_kca_lo[1] || branches[pd2] >= dedx_cutoff_lo) && \
-                (branches[dedx] < dedx_kca_hi[0] * pow(dedx_mass / (branches[pd2] - dedx_kca_hi[2]), 2) + \
-                    dedx_kca_hi[1] || branches[pd2] >= dedx_cutoff_hi)
-            )
-        ) return false;
+        // if( !(  (branches[nhits] >= nhits_min) && \
+        //         (branches[dedx] >= dedx_kca_lo[0] * \
+        //             pow(dedx_mass / (branches[pd2] - dedx_kca_lo[2]), 2) + dedx_kca_lo[1] || branches[pd2] >= dedx_cutoff_lo) && \
+        //         (branches[dedx] < dedx_kca_hi[0] * pow(dedx_mass / (branches[pd2] - dedx_kca_hi[2]), 2) + \
+        //             dedx_kca_hi[1] || branches[pd2] >= dedx_cutoff_hi)
+        //     )
+        // ) return false;
 
         return true;
     }
