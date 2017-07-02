@@ -22,7 +22,8 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
   cout << "Loading configurations...\n";
   Configuration cfg(config_file_name);
   IOconfig io_list(IOfile_list);
-  cout << "Configurations loaded!\n";
+  cout << "Using general configuration file: " << config_file_name << "\n";
+  cout << "Using IO configuration file: " << IOfile_list << "\n";
 
   // Stuff that was in readxml.h //
   Double_t effS[cfg.nEff], effB[cfg.nEff];

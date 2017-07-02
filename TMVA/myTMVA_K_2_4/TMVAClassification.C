@@ -171,7 +171,7 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
    // --- Here the preparation phase begins
    cout << "Loading configuration...\n";
    Configuration cfg(config_file_name);
-   cout << "Configuration loaded!\n";
+   cout << "Using configuration file: " << config_file_name << "\n";
 
    // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
    TFile* outputFile = TFile::Open(cfg.outfileName.c_str(), "RECREATE");
