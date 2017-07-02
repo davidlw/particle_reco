@@ -326,7 +326,7 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
 
    TString varProps = "";
    vector<string> vProps = cfg.variableProps;
-   for(int i = 0; i < vProps.size(); i++)
+   for(unsigned i = 0; i < vProps.size(); i++)
    {
       varProps += ":VarProp[" + to_string(i) + "]=" + vProps[i];
    }
