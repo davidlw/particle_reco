@@ -43,9 +43,8 @@
 #include "TSystem.h"
 #include "TROOT.h"
 
-#include "../runTMVA_config.h"
-using namespace runTMVA_shared_config;
-using namespace TMVAClassification_config;
+#include "../config_util/Configuration.h"
+using namespace Configuration_TMVA;
 
 #if not defined(__CINT__) || defined(__MAKECINT__)
 // needs to be included when makecint runs (ACLIC)
@@ -55,7 +54,7 @@ using namespace TMVAClassification_config;
 
 #endif
 
-void TMVAClassification( TString myMethodList = "" )
+void TMVAClassification( const string& config_file_name, TString myMethodList = "" )
 {
    // The explicit loading of the shared libTMVA is done in TMVAlogon.C, defined in .rootrc
    // if you use your private .rootrc, or run from a different directory, please copy the
@@ -170,9 +169,12 @@ void TMVAClassification( TString myMethodList = "" )
    // --------------------------------------------------------------------------------------------------
 
    // --- Here the preparation phase begins
+   cout << "Loading configuration...\n";
+   Configuration cfg(config_file_name);
+   cout << "Configuration loaded!\n";
 
    // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-   TFile* outputFile = TFile::Open(outfileName, "RECREATE");
+   TFile* outputFile = TFile::Open(cfg.outfileName.c_str(), "RECREATE");
 
    // Create the factory object. Later you can choose the methods
    // whose performance you'd like to investigate. The factory is 
@@ -196,9 +198,10 @@ void TMVAClassification( TString myMethodList = "" )
    // note that you may also use variable expressions, such as: "3*var1/var2*abs(var3)"
    // [all types of expressions that can also be parsed by TTree::Draw( "expression" )]
 
-   for(auto i = variableNamesList.begin(); i < variableNamesList.end(); i++)
+   vector<string> varNamesList = cfg.variableNamesList;
+   for(auto i = varNamesList.begin(); i < varNamesList.end(); i++)
    {
-      factory->AddVariable(*i);
+      factory->AddVariable((*i).c_str());
    }
 
    // You can add so-called "Spectator variables", which are not used in the MVA training,
@@ -215,23 +218,23 @@ void TMVAClassification( TString myMethodList = "" )
    //   gSystem->Exec("wget http://root.cern.ch/files/tmva_class_example.root");
    
    
-   TFile *inputS = TFile::Open(signalFileName);
-   TFile *inputB = TFile::Open(backgroundFileName);
+   TFile *inputS = TFile::Open(cfg.signalFileName.c_str());
+   TFile *inputB = TFile::Open(cfg.backgroundFileName.c_str());
 
    std::cout << "--- TMVAClassification       : Using input file: " << inputS->GetName() << " & "<< inputB->GetName() <<std::endl;
    
    // --- Register the training and test trees
 
-   TTree *signal     = (TTree*)inputS->Get(signalTreePath);
-   TTree *background = (TTree*)inputB->Get(backgroundTreePath); 
+   TTree *signal     = (TTree*)inputS->Get(cfg.signalTreePath.c_str());
+   TTree *background = (TTree*)inputB->Get(cfg.backgroundTreePath.c_str()); 
 
    //global event weights per tree (see below for setting event-wise weights)
    //Double_t signalWeight     = 1.0;
    //Double_t backgroundWeight = 1.0;
    
    // You can add an arbitrary number of signal or background trees
-   factory->AddSignalTree    ( signal,     signalWeight     );
-   factory->AddBackgroundTree( background, backgroundWeight );
+   factory->AddSignalTree    ( signal,     cfg.signalWeight     );
+   factory->AddBackgroundTree( background, cfg.backgroundWeight );
    
    // To give different trees for training and testing, do as follows:
    //    factory->AddSignalTree( signalTrainingTree, signalTrainWeight, "Training" );
@@ -280,9 +283,9 @@ void TMVAClassification( TString myMethodList = "" )
    // Apply additional cuts on the signal and background samples (can be different)
 
    //pp
-   TCut ptbin = (ptBranchName + ">=" + to_string(ptBinLimits[0]) + "&&" + ptBranchName + "<" + to_string(ptBinLimits[1])).c_str();
-   TCut mycuts = ptbin + baseSignalCuts;
-   TCut mycutb = ptbin + baseBackgroundCuts;
+   TCut ptbin = (cfg.ptBranchName + ">=" + to_string(cfg.ptBinLimits[0]) + "&&" + cfg.ptBranchName + "<" + to_string(cfg.ptBinLimits[1])).c_str();
+   TCut mycuts = ptbin + cfg.baseSignalCuts;
+   TCut mycutb = ptbin + cfg.baseBackgroundCuts;
 
    // Tell the factory how to use the training and testing events
    //
@@ -322,9 +325,10 @@ void TMVAClassification( TString myMethodList = "" )
    //"H:!V:FitMethod=GA:EffSel:Steps=30:Cycles=3:PopSize=400:SC_steps=10:SC_rate=5:SC_factor=0.95:VarProp[0]=FMax:VarProp[1]=FMax:VarProp[2]=FMax");
 
    TString varProps = "";
-   for(int i = 0; i < variableProps.size(); i++)
+   vector<string> vProps = cfg.variableProps;
+   for(int i = 0; i < vProps.size(); i++)
    {
-      varProps += ":VarProp[" + to_string(i) + "]=" + variableProps[i];
+      varProps += ":VarProp[" + to_string(i) + "]=" + vProps[i];
    }
    if (Use["CutsSA"])
       factory->BookMethod( TMVA::Types::kCuts, "CutsSA",
@@ -513,5 +517,5 @@ void TMVAClassification( TString myMethodList = "" )
    delete factory;
 
    // Launch the GUI for the root macros
-   if(!gROOT->IsBatch()) TMVAGui(outfileName);
+   if(!gROOT->IsBatch()) TMVAGui(cfg.outfileName.c_str());
 }

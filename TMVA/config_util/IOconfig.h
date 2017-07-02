@@ -1,16 +1,16 @@
 /*
- * InputChain.h
+ * IOconfig.h
  *
  *  Created on: Jun 13, 2017
  *      Author: johanngan
  *
- *  Class for reading files input information (for a TChain) from an .xml file
+ *  Class for reading file configuration from an .xml file for the readxml macro
  */
 
 //============================================================================
 
-#ifndef INPUTCHAIN_H_
-#define INPUTCHAIN_H_
+#ifndef IOCONFIG_H_
+#define IOCONFIG_H_
 
 //============================================================================
 
@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+    
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
@@ -26,17 +26,30 @@
 
 //============================================================================
 
-namespace InputChain {
+namespace IOconfig_readxml {
 
-class InputChain {
+class IOconfig {
 public:
-    InputChain(const string& input_file)
-    {
-        // Read in configuration parameters
-        boost::property_tree::ptree cfg;
-        boost::property_tree::xml_parser::read_xml(input_file, cfg);
+    // readxml output path
+    string histoOutPathBase;
 
-        // File information
+    // readxml input tree files
+    vector<string> inpath_bases;
+    vector< vector<int> > idx_lims;
+    string directory_name;
+    string tree_name;
+
+
+    // Constructor
+    IOconfig(const string& file_info)
+    {
+        // Read in configuration parameters from an xml file
+        boost::property_tree::ptree cfg;
+        boost::property_tree::xml_parser::read_xml(file_info, cfg);
+
+        histoOutPathBase = cfg.get<string>("Files.out_files.histo_outpath_base");
+
+
         directory_name = cfg.get<string>("Files.in_files.directory_name");
         tree_name = cfg.get<string>("Files.in_files.tree_name");
 
@@ -57,24 +70,10 @@ public:
             inpath_bases.push_back(in);
             idx_lims.push_back( strToVect<int>( cfg.get<string>(in_file + ".index_limits") ) );
         }
-    }
 
-    virtual ~InputChain() {}
-
-    // Getters
-    vector<string> get_in_bases() const {return inpath_bases;}
-    vector< vector<int> > get_idx_lims() const {return idx_lims;}
-    string get_dir_name() const {return directory_name;}
-    string get_tree_name() const {return tree_name;}
-
-private:
-    // File info
-    vector<string> inpath_bases;
-    vector< vector<int> > idx_lims;
-    string directory_name;
-    string tree_name;
+    }   
 };
 
-} /* namespace InputChain */
+} /* namespace IOconfig_readxml */
 
-#endif /* INPUTCHAIN_H_ */
+#endif /* IOCONFIG_H_ */

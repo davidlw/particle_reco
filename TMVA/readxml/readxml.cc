@@ -1,6 +1,4 @@
 #include "includes/readxml.h"
-using namespace runTMVA_shared_config;
-using namespace readxml_config;
 
 #include "includes/Tools.h"
 
@@ -19,10 +17,25 @@ using namespace readxml_config;
 
 using namespace std;
 
-void readxml(const string& backgroundTreeFileList, const string& outIndex)
+void readxml(const string& config_file_name, const string& IOfile_list, const string& output_tag = "")
 {
-  Float_t ptmin = ptBinLimits[0];
-  Float_t ptmax = ptBinLimits[1];
+  cout << "Loading configurations...\n";
+  Configuration cfg(config_file_name);
+  IOconfig io_list(IOfile_list);
+  cout << "Configurations loaded!\n";
+
+  // Stuff that was in readxml.h //
+  Double_t effS[cfg.nEff], effB[cfg.nEff];
+
+  std::vector<TString> cuts;
+  std::vector< std::vector<Double_t> > cutval(cfg.nMaxVar);
+  std::vector<TString> varval(cfg.nMaxVar);
+  Float_t ptmin, ptmax, raa;
+  ////
+
+
+  Float_t ptmin = cfg.ptBinLimits[0];
+  Float_t ptmax = cfg.ptBinLimits[1];
 
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
@@ -37,7 +50,7 @@ void readxml(const string& backgroundTreeFileList, const string& outIndex)
   gStyle->SetTitleX(.0f);
 
   //read weight file
-  const string filename = myTMVApath + "/weights/TMVAClassification_CutsSA.weights.xml";
+  const string filename = cfg.myTMVApath + "/weights/TMVAClassification_CutsSA.weights.xml";
   void *doc = TMVA::gTools().xmlengine().ParseFile(filename.c_str(),TMVA::gTools().xmlenginebuffersize());
   void* rootnode = TMVA::gTools().xmlengine().DocGetRootElement(doc); // node "MethodSetup"
   TString fullMethodName("");  
@@ -127,24 +140,24 @@ void readxml(const string& backgroundTreeFileList, const string& outIndex)
     cout<<"Finished reading cuts."<<endl;
     //construct histos with TMVA cuts
     
-    TFile *inputS = TFile::Open(signalFileName);
+    TFile *inputS = TFile::Open(cfg.signalFileName.c_str());
     if(!inputS)
     {
         cout<<"Signal file not found."<<endl;
         return;
     }
     
-    TTree *signal = (TTree*) inputS->Get(signalTreePath);
+    TTree *signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
 
     // Chain together the background trees
-    InputChain::InputChain ic(backgroundTreeFileList);
     TChain *background = new TChain("background");
-    for(unsigned i = 0; i < ic.get_in_bases().size(); i++)
+    vector<string> in_bases = io_list.inpath_bases;
+    for(unsigned i = 0; i < in_bases.size(); i++)
     {
-        int idxlo = ic.get_idx_lims()[i][0], idxhi = ic.get_idx_lims()[i][1];
+        int idxlo = io_list.idx_lims()[i][0], idxhi = io_list.idx_lims()[i][1];
         for(int j = idxlo; j <= idxhi; j++)
         {
-            string file = ic.get_in_bases()[i];
+            string file = in_bases[i];
             if(file.find("{}") != file.npos)
                 file.replace( file.find("{}"), 2, to_string(j) );
 
@@ -152,24 +165,26 @@ void readxml(const string& backgroundTreeFileList, const string& outIndex)
         }
     }
 
-    TString histoOutFileName = histoOutPathBase + outIndex.c_str() + ".root";
-    TFile histoOutFile(histoOutFileName, "recreate");
+    string histoOutPath = io_list.histoOutPathBase + output_tag + ".root";
+    TFile histoOutFile(histoOutPath.c_str(), "recreate");
+
 
     TH1D* LCmass[100];
-    TH1D* LCmassS = new TH1D("LCmassS", "LCmassS", nMassBins, massWindowLo, massWindowHi);
-    TH1D* LCmassB = new TH1D("LCmassB", "LCmassB", nMassBins, massWindowLo, massWindowHi);
+    TH1D* LCmassS = new TH1D("LCmassS", "LCmassS", cfg.nMassBins, cfg.massWindowLo, cfg.massWindowHi);
+    TH1D* LCmassB = new TH1D("LCmassB", "LCmassB", cfg.nMassBins, cfg.massWindowLo, cfg.massWindowHi);
 
     for(int icut=0;icut<100;icut++)
     {
-        LCmass[icut] = new TH1D(Form("mass_cut%d", icut), Form("mass_cut%d", icut), nMassBins, massWindowLo, massWindowHi);
+        LCmass[icut] = new TH1D(Form("mass_cut%d", icut), Form("mass_cut%d", icut), cfg.nMassBins, cfg.massWindowLo, cfg.massWindowHi);
     }
 
     cout<<"Finished histogram construction."<<endl;
 
-    vector<Float_t> branches(branchNames.size());
-    for(unsigned i = 0; i < branchNames.size(); i++)
+    vector<string> bNames = cfg.branchNames;
+    vector<Float_t> branches(bNames.size());
+    for(unsigned i = 0; i < bNames.size(); i++)
     {
-        signal->SetBranchAddress(branchNames[i], &branches[i]);
+        signal->SetBranchAddress(bNames[i].c_str(), &branches[i]);
     }
 
     Long64_t nentriesS = signal->GetEntries();
@@ -178,24 +193,24 @@ void readxml(const string& backgroundTreeFileList, const string& outIndex)
         signal->GetEntry(i);
         
         //first implement non-tuning cut; must be sychronized with the setting in TMVA tuning (mycutb)
-        if(passesBaseSignalCuts(branches))
-            LCmassS->Fill(branches[m]);        
+        if(cfg.passesBaseSignalCuts(branches))
+            LCmassS->Fill(branches[m]);
     }
 
-    for(unsigned i = 0; i < branchNames.size(); i++)
+    for(unsigned i = 0; i < bNames.size(); i++)
     {
-        background->SetBranchAddress(branchNames[i], &branches[i]);
+        background->SetBranchAddress(bNames[i].c_str(), &branches[i]);
     }
 
     
     Long64_t nentries = background->GetEntries();
-    vector<Double_t> cutVals(variableNamesList.size());
+    vector<Double_t> cutVals(cfg.variableNamesList.size());
     for (Long64_t i = 0; i < nentries; i++)
     {
         background->GetEntry(i);
         
         //first implement non-tuning cut; must be sychronized with the setting in TMVA tuning (mycutb)
-        if(passesBaseBackgroundCuts(branches))
+        if(cfg.passesBaseBackgroundCuts(branches))
         {
             LCmassB->Fill(branches[m]);
         
@@ -207,13 +222,13 @@ void readxml(const string& backgroundTreeFileList, const string& outIndex)
                     cutVals[k] = cutval[k].at(icut);
                 }
 
-                if(passesVariableCuts(branches, cutVals))
+                if(cfg.passesVariableCuts(branches, cutVals))
                     LCmass[icut]->Fill(branches[m]);
             }
         }
     }
 
-    cout<<"Finished filling histograms."<<endl;
+    cout << "Finished filling histograms." << endl;
 
     histoOutFile.Write();
 
@@ -222,15 +237,10 @@ void readxml(const string& backgroundTreeFileList, const string& outIndex)
     for(int icut = 0; icut < 100; icut++)
     {
         cout << "icut: " << icut;
-        for(unsigned j = 0; j < variableNamesList.size(); j++)
+        for(unsigned j = 0; j < cfg.variableNamesList.size(); j++)
         {
-            cout << ", " << variableNamesList[j] << " " << variableComparators[j] << " " << cutval[j].at(icut);
+            cout << ", " << cfg.variableNamesList[j] << " " << cfg.variableComparators[j] << " " << cutval[j].at(icut);
         }
         cout << endl;
     }   
-}
-
-void readxml(const string& backgroundTreeFileList, int outIndex)
-{
-    readxml(backgroundTreeFileList, to_string(outIndex));
 }
