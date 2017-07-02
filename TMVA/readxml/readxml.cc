@@ -20,9 +20,11 @@ using namespace std;
 void readxml(const string& config_file_name, const string& IOfile_list, const string& output_tag = "")
 {
   cout << "Loading configurations...\n";
+
   Configuration cfg(config_file_name);
-  IOconfig io_list(IOfile_list);
   cout << "Using general configuration file: " << config_file_name << "\n";
+
+  IOconfig io_list(IOfile_list);
   cout << "Using IO configuration file: " << IOfile_list << "\n";
 
   // Stuff that was in readxml.h //
