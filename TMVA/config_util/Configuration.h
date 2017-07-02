@@ -243,7 +243,7 @@ public:
         dedx_cutoff_lo = cfg.get<double>("Shared.Cuts.dEdx.x_cutoff_low");
         nhits_min = cfg.get<double>("Shared.Cuts.dEdx.nhits_dau2_min");
 
-        variableNamesList = strToVect<string>("Shared.Cuts.variable_names_list");
+        variableNamesList = strToVect<string>(cfg.get<string>("Shared.Cuts.variable_names_list"));
 
 
         // *** TMVAClassification.C configuration *** //
@@ -366,6 +366,7 @@ private:
             case zdca:
                 return "<";
             default:
+                cout << "ERROR in Configuration_TMVA::Configuration::getComparator(). Branch is not comparable.\n";
                 return "";
         }
     }
@@ -391,6 +392,7 @@ private:
         if(str == "abs(xyDCASig_dau2)") return xydca;
         if(str == "abs(zDCASig_dau2)") return zdca;
 
+        cout << "ERROR in Configuration_TMVA::Configuration::whichBranch(). Variable name does not match with any presets.\n";
         return -1;
     }
 };
