@@ -31,7 +31,6 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
   std::vector<TString> cuts;
   std::vector< std::vector<Double_t> > cutval(cfg.nMaxVar);
   std::vector<TString> varval(cfg.nMaxVar);
-  Float_t ptmin, ptmax, raa;
   ////
 
 

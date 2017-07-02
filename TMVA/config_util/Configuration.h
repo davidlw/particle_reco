@@ -339,7 +339,7 @@ public:
     }
 
 private:
-    string getComparator(branch b)
+    string getComparator(int b)
     {
         // Get the comparator for the specified branch (hard coded). Returns empty if the branch shouldn't be being compared.
 
