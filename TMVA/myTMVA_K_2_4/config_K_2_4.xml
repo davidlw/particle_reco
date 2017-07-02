@@ -59,7 +59,7 @@
 
         <pt_branch_name>pt</pt_branch_name>
 
-        <variable_properties>&gt,&gt,&lt,&lt</variable_properties>
+        <variable_properties>&gt;,&gt;,&lt;,&lt;</variable_properties>
     </Vars>
 
 </myTMVA>
