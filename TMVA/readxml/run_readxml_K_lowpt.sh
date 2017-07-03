@@ -2,8 +2,8 @@
 
 READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
 LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs/K_2_4"
-CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA/config.xml"
-OUT_TAG="_K"
+CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA_K_2_4/config_K_2_4.xml"
+OUT_TAG="_K_2_4"
 
 # SERVER_LIST and INDICES are the same size
 SERVER_LIST=(01 02 03 04 05 06 07)
