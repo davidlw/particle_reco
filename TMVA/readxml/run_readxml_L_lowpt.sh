@@ -22,7 +22,7 @@ LIST_LENGTH=${#SERVER_LIST[*]}
 for i in $(seq 0 $(($LIST_LENGTH - 1))); do
 
 echo "ssh bonner"${SERVER_LIST[$i]}
-ssh bonner${i} << HERE
+ssh bonner${SERVER_LIST[$i]} << HERE
 
     source start.sh
     cd ${READXML_PATH}
