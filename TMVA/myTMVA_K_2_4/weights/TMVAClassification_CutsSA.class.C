@@ -10,10 +10,10 @@ Method         : Cuts::CutsSA
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.06/01       [394753]
 Creator        : jg61
-Date           : Thu Jun 29 20:44:11 2017
+Date           : Sun Jul  2 04:37:05 2017
 Host           : Linux vocms0301.cern.ch 2.6.32-642.4.2.el6.x86_64 #1 SMP Wed Aug 24 09:19:54 CEST 2016 x86_64 x86_64 x86_64 GNU/Linux
-Dir            : /home/jg61/ROOT/programs/TMVA/TMVA_KsProton_10to20/myTMVA
-Training events: 1451605
+Dir            : /home/jg61/particle_reco/TMVA/myTMVA_K_2_4
+Training events: 184068
 Analysis type  : [Classification]
 
 
@@ -33,28 +33,24 @@ CutRangeMin[0]: "-1.000000e+00" [Minimum of allowed cut range (set per variable)
     CutRangeMin[1]: "-1.000000e+00"
     CutRangeMin[2]: "-1.000000e+00"
     CutRangeMin[3]: "-1.000000e+00"
-    CutRangeMin[4]: "-1.000000e+00"
 CutRangeMax[0]: "-1.000000e+00" [Maximum of allowed cut range (set per variable)]
     CutRangeMax[1]: "-1.000000e+00"
     CutRangeMax[2]: "-1.000000e+00"
     CutRangeMax[3]: "-1.000000e+00"
-    CutRangeMax[4]: "-1.000000e+00"
 VarProp[0]: "FMax" [Categorisation of cuts]
     VarProp[1]: "FMax"
     VarProp[2]: "FMin"
     VarProp[3]: "FMin"
-    VarProp[4]: "FMin"
 ##
 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 5
-pt_dau1                       pt_dau1                       pt_dau1                       pt_dau1                                                         'F'    [0.50007134676,17.0357265472]
-pt_dau2                       pt_dau2                       pt_dau2                       pt_dau2                                                         'F'    [1.36141574383,19.0167713165]
-abs(eta_dau1)                 abs_eta_dau1_                 abs(eta_dau1)                 abs(eta_dau1)                                                   'F'    [7.64063599945e-07,1.5940823555]
-abs(eta_dau2)                 abs_eta_dau2_                 abs(eta_dau2)                 abs(eta_dau2)                                                   'F'    [5.45311252154e-07,1.27238690853]
-abs((mass_dau1-0.498)/0.0067)     abs__mass_dau1_M_0.498__D_0.0067_ abs((mass_dau1-0.498)/0.0067)     abs((mass_dau1-0.498)/0.0067)                                           'F'    [3.84316535929e-06,9.99998283386]
+NVar 4
+pt_dau1                       pt_dau1                       pt_dau1                       pt_dau1                                                         'F'    [0.500024855137,3.59542417526]
+pt_dau2                       pt_dau2                       pt_dau2                       pt_dau2                                                         'F'    [0.300013333559,3.78980088234]
+abs(eta_dau1)                 abs_eta_dau1_                 abs(eta_dau1)                 abs(eta_dau1)                                                   'F'    [5.83569635637e-06,2.09743952751]
+abs(eta_dau2)                 abs_eta_dau2_                 abs(eta_dau2)                 abs(eta_dau2)                                                   'F'    [1.88886690466e-06,2.39315032959]
 NSpec 0
 
 
@@ -97,11 +93,11 @@ class ReadCutsSA : public IClassifierReader {
    ReadCutsSA( std::vector<std::string>& theInputVars ) 
       : IClassifierReader(),
         fClassName( "ReadCutsSA" ),
-        fNvars( 5 ),
+        fNvars( 4 ),
         fIsNormalised( false )
    {      
       // the training input variables
-      const char* inputVars[] = { "pt_dau1", "pt_dau2", "abs(eta_dau1)", "abs(eta_dau2)", "abs((mass_dau1-0.498)/0.0067)" };
+      const char* inputVars[] = { "pt_dau1", "pt_dau2", "abs(eta_dau1)", "abs(eta_dau2)" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -133,15 +129,12 @@ class ReadCutsSA : public IClassifierReader {
       fVmax[2] = 0;
       fVmin[3] = 0;
       fVmax[3] = 0;
-      fVmin[4] = 0;
-      fVmax[4] = 0;
 
       // initialize input variable types
       fType[0] = 'F';
       fType[1] = 'F';
       fType[2] = 'F';
       fType[3] = 'F';
-      fType[4] = 'F';
 
       // initialize constants
       Initialize();
@@ -173,15 +166,15 @@ class ReadCutsSA : public IClassifierReader {
    // normalisation of input variables
    const bool fIsNormalised;
    bool IsNormalised() const { return fIsNormalised; }
-   double fVmin[5];
-   double fVmax[5];
+   double fVmin[4];
+   double fVmax[4];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[5];
+   char   fType[4];
 
    // initialize internal variables
    void Initialize();
