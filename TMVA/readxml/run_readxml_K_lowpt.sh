@@ -27,6 +27,7 @@ ssh bonner${SERVER_LIST[$i]} "
 
     echo 'Executing...';
     for j in \${INDICES[$i]}; do
+        echo hello
         nohup unbuffer root -l -b -q \`echo 'readxml.cc+(\"${CONFIG_FILE}\", \"${READXML_PATH}/IOconfig/split_K/backgroundTrees_K_\${j}.xml\", \"${OUT_TAG}_\${j}\")'\` &> ${LOG_PATH}/readxml_K_lowpt_\${j}.log &
     done;"
 
