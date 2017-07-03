@@ -130,6 +130,8 @@ public:
         if(fabs( (branches[md1] - massD1Mean) / massD1Sigma ) > absMassD1zScoreMax) return false;
         if(branches[ptd2] <= ptD2Min) return false;
         if(fabs(branches[etad2]) >= absEtaD2Max) return false;
+        if(fabs(branches[xydca]) >= absxyDCASigD2Max) return false;
+        if(fabs(branches[zdca]) >= abszDCASigD2Max) return false;
 
         // If dedx cuts are not desired, then at this point return true. If not, do one last cut.
         if(!use_dedx) return true;
@@ -154,14 +156,26 @@ public:
     }
 
     // Tuning cut function
-    // Takes in a vector of branch values (corresponding to branchNames) and a vector of cut values (with same number of elements as the number of tuning variables), 
-    //     and return true if the cuts are satisifed and false if not.
+    // Takes in a vector of branch values (corresponding to branchNames) and a vector of cut values (with same number of elements as branches), 
+    //     and return true if the cuts are satisifed and false if not. Only look at the cuts if that variable is specified to be for cutting
+    //     in isVariableCut.
     bool passesVariableCuts(const std::vector<Float_t>& branches, const std::vector<Double_t>& cutVals)
     {
-        if(branches[ptd1] <= cutVals[0]) return false;
-        if(branches[ptd2] <= cutVals[1]) return false;
-        if(fabs(branches[etad1]) >= cutVals[2]) return false;
-        if(fabs(branches[etad2]) >= cutVals[3]) return false;
+        if( isVariableCut[eta] && fabs(branches[eta]) >= cutVals[eta] ) return false;
+        if( isVariableCut[ptd1] && branches[ptd1] <= cutVals[ptd1] ) return false;
+        if( isVariableCut[etad1] && fabs(branches[etad1]) >= cutVals[etad1] ) return false;
+        if( isVariableCut[angle] && cos(branches[angle]) <= cutVals[angle] ) return false;
+        if( isVariableCut[dl] && branches[dl] <= cutVals[dl] ) return false;
+        if( isVariableCut[md1] && fabs(branches[md1] - massD1Mean) / massD1Sigma > cutVals[md1] ) return false;
+        if( isVariableCut[ptd2] && branches[ptd2] <= cutVals[ptd2] ) return false;
+        if( isVariableCut[etad2] && fabs(branches[etad2]) >= cutVals[etad2] ) return false;
+        if( isVariableCut[xydca] && fabs(branches[xydca]) >= cutVals[xydca] ) return false;
+        if( isVariableCut[zdca] && fabs(branches[zdca]) >= cutVals[zdca] ) return false;
+
+        // if(branches[ptd1] <= cutVals[0]) return false;
+        // if(branches[ptd2] <= cutVals[1]) return false;
+        // if(fabs(branches[etad1]) >= cutVals[2]) return false;
+        // if(fabs(branches[etad2]) >= cutVals[3]) return false;
 
         return true;
     }
@@ -308,7 +322,7 @@ public:
         {
             int currentBranch = whichBranch(*i);
 
-            branchNames[currentBranch] = true;
+            isVariableCut[currentBranch] = true;
             variableComparators.push_back( getComparator(currentBranch) );
         }
 
@@ -336,6 +350,31 @@ public:
         // Labeling
         dau1name = (cfg.get<string>("Fit.dau1_name")).c_str();
         dau2name = (cfg.get<string>("Fit.dau2_name")).c_str();
+    }
+
+
+    int whichBranch(string str)
+    {
+        // Parses a string and returns an enum corresponding to the proper branch (hard coded).
+        // If the string doesn't correspond to any branch, return -1.
+
+        // Will only ever return the index of certain variables that may possibly be varied. (No mass, no pt, no nhits, etc.)
+        boost::erase_all(str, " ");
+
+
+        if(str == "abs(eta)") return eta;
+        if(str == "pt_dau1") return ptd1;
+        if(str == "abs(eta_dau1)") return etad1;
+        if(str == "cos(3DPointingAngle_dau1)") return angle;
+        if(str == "3DDecayLengthSig_dau1") return dl;
+        if(str.find("mass_dau1") != string::npos) return md1;
+        if(str == "pt_dau2") return ptd2;
+        if(str == "abs(eta_dau2)") return etad2;
+        if(str == "abs(xyDCASig_dau2)") return xydca;
+        if(str == "abs(zDCASig_dau2)") return zdca;
+
+        cout << "ERROR in Configuration_TMVA::Configuration::whichBranch(). Variable name does not match with any presets.\n";
+        return -1;
     }
 
 private:
@@ -369,31 +408,6 @@ private:
                 cout << "ERROR in Configuration_TMVA::Configuration::getComparator(). Branch is not comparable.\n";
                 return "";
         }
-    }
-
-
-    int whichBranch(string str)
-    {
-        // Parses a string and returns an enum corresponding to the proper branch (hard coded).
-        // If the string doesn't correspond to any branch, return -1.
-
-        // Will only ever return the index of certain variables that may possibly be varied. (No mass, no pt, no nhits, etc.)
-        boost::erase_all(str, " ");
-
-
-        if(str == "abs(eta)") return eta;
-        if(str == "pt_dau1") return ptd1;
-        if(str == "abs(eta_dau1)") return etad1;
-        if(str == "cos(3DPointingAngle_dau1)") return angle;
-        if(str == "3DDecayLengthSig_dau1") return dl;
-        if(str.find("mass_dau1") != string::npos) return md1;
-        if(str == "pt_dau2") return ptd2;
-        if(str == "abs(eta_dau2)") return etad2;
-        if(str == "abs(xyDCASig_dau2)") return xydca;
-        if(str == "abs(zDCASig_dau2)") return zdca;
-
-        cout << "ERROR in Configuration_TMVA::Configuration::whichBranch(). Variable name does not match with any presets.\n";
-        return -1;
     }
 };
 

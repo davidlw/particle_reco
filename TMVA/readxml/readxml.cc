@@ -189,6 +189,7 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
         signal->SetBranchAddress(bNames[i].c_str(), &branches[i]);
     }
 
+    // Fill the signal histogram
     Long64_t nentriesS = signal->GetEntries();
     for (Long64_t i = 0; i < nentriesS; i++)
     {
@@ -206,7 +207,26 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
 
     
     Long64_t nentries = background->GetEntries();
-    vector<Double_t> cutVals(cfg.variableNamesList.size());
+
+    // Determine the indices of the branches corresponding to each variable cut
+    vector<string> vNamesList = cfg.variableNamesList;
+    vector<int> vCutsIdx(vNamesList.size());
+    for(int i = 0; i < vNamesList.size(); i++)
+    {
+        vCutsIdx[i] = cfg.whichBranch(vNamesList[i]);
+    }
+
+    // Read the cutVals (as in Configuration.passesVariableCuts) vector for each of the 100 cut sets
+    vector< vector<Double_t> > cutValsList(100, vector<double>(bNames.size()));
+    for(unsigned i = 0; i < cutValsList.size(); i++)
+    {
+        for(unsigned j = 0; j < vCutsIdx.size(); j++)
+        {
+            cutValsList[i][ vCutsIdx[j] ] = cutval[j].at(i);
+        }
+    }
+
+    // Fill the background histograms
     for (Long64_t i = 0; i < nentries; i++)
     {
         background->GetEntry(i);
@@ -219,14 +239,21 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
             //now implement the tuning cuts
             for(int icut = 0; icut < 100; icut++)
             {
-                for(unsigned k = 0; k < cutVals.size(); k++)
-                {
-                    cutVals[k] = cutval[k].at(icut);
-                }
-
-                if(cfg.passesVariableCuts(branches, cutVals))
+                if( cfg.passesVariableCuts(branches, cutValsList[icut]) )
                     LCmass[icut]->Fill(branches[m]);
             }
+
+
+            // for(int icut = 0; icut < 100; icut++)
+            // {
+            //     for(unsigned k = 0; k < cutVals.size(); k++)
+            //     {
+            //         cutVals[k] = cutval[k].at(icut);
+            //     }
+
+            //     if(cfg.passesVariableCuts(branches, cutVals))
+            //         LCmass[icut]->Fill(branches[m]);
+            // }
         }
     }
 
