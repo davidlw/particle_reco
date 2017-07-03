@@ -1,7 +1,7 @@
 #!/bin/bash
 
 READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
-LOG_PATH="logs"
+LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs"
 
 source start.sh
 cd ${READXML_PATH}

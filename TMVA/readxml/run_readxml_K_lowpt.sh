@@ -15,13 +15,6 @@ INDICES=("1a 1b 1c 2a 2b 2c 3a" \
 
 LIST_LENGTH=${#SERVER_LIST[*]}
 
-
-source start.sh
-cd ${READXML_PATH}
-
-echo "Compiling..."
-root -l -b -q compile_readxml.cpp
-
 # Login to each server and launch the corresponding cluster of jobs
 for i in $(seq 0 $(($LIST_LENGTH - 1))); do
     echo "ssh bonner"${SERVER_LIST[$i]}
@@ -33,24 +26,7 @@ for i in $(seq 0 $(($LIST_LENGTH - 1))); do
         echo "Executing..."
         for j in ${INDICES[$i]}; do
             nohup unbuffer root -l -b -q `echo 'readxml.cc+("'${READXML_PATH}'/IOconfig/split_K/backgroundTrees_K_'${j}'.xml", "_K_'${j}'")'` &> ${LOG_PATH}/readxml_K_lowpt_${j}.log &
-        done 
-
-    HERE   
-
-
-
-
-for i in SERVER_LIST; do
-    echo "ssh bonner"${i}
-    ssh bonner${i} << HERE
-
-        source start.sh
-        cd ${READXML_PATH}
-
-        echo "Executing..."
-        for j in '${INDICES_'${i}'[*]}'; do
-            nohup unbuffer root -l -b -q `echo 'readxml.cc+("'${READXML_PATH}'/IOconfig/split_K/backgroundTrees_K_'${j}'.xml", "_K_'${j}'")'` &> ${LOG_PATH}/readxml_K_lowpt_${j}.log &
-        done 
+        done
 
     HERE
 
