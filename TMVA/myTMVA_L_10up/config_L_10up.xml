@@ -1,0 +1,83 @@
+<Shared>
+
+    <Files>
+        <signal_file_name>/home/jg61/store/outputs/AODSIM_NEW/MC_LambdaC_LambdaPi_gen_match_bkg_merged.root</signal_file_name>
+        <signal_tree_path>lcreco/lambdac_match</signal_tree_path>
+    </Files>
+
+    <Cuts>
+        <pt_bin_limits>10,1e6</pt_bin_limits>
+
+        <abs_eta_max>1</abs_eta_max>
+        <pt_dau1_min>1</pt_dau1_min>
+        <abs_eta_dau1_max>2.4</abs_eta_dau1_max>
+        <cos_angle_dau1_min>0.999</cos_angle_dau1_min>
+        <decay_length_sig_dau1_min>5</decay_length_sig_dau1_min>
+        <abs_mass_dau1_zscore_max>2</abs_mass_dau1_zscore_max>
+        <pt_dau2_min>0.7</pt_dau2_min>
+        <abs_eta_dau2_max>2.4</abs_eta_dau2_max>
+        <abs_xyDCASig_dau2_max>1e6</abs_xyDCASig_dau2_max>
+        <abs_zDCASig_dau2_max>1e6</abs_zDCASig_dau2_max>
+
+        <mass_dau1_mean>1.116</mass_dau1_mean>
+        <mass_dau1_sigma>0.0028</mass_dau1_sigma>
+
+        <mass_window_low>2.1</mass_window_low>
+        <mass_window_high>2.5</mass_window_high>
+
+        <dEdx>
+            <use_dedx>false</use_dedx>
+
+            <dedx_mass>0.9382720813</dedx_mass>
+
+            <dedx_kca_high>3.5,4.2,0.1</dedx_kca_high>
+            <x_cutoff_high>2.5</x_cutoff_high>
+
+            <dedx_kca_low>2.6,2.2,-0.1</dedx_kca_low>
+            <x_cutoff_low>2.2</x_cutoff_low>
+
+            <nhits_dau2_min>11</nhits_dau2_min>
+        </dEdx>
+
+        <variable_names_list>pt_dau1,pt_dau2,abs(eta_dau1),abs(eta_dau2)</variable_names_list>
+    </Cuts>
+
+</Shared>
+
+
+<myTMVA>
+
+    <Files>
+        <out_file_name>TMVA.root</out_file_name>
+        <background_file_name>/home/jg61/store/outputs/data/data_LambdaPi_high_pt_nomassd1_complete_skim.root</background_file_name>
+        <background_tree_path>lambdac</background_tree_path>
+    </Files>
+
+    <Vars>
+        <signal_weight>1</signal_weight>
+        <background_weight>1</background_weight>
+
+        <pt_branch_name>pt</pt_branch_name>
+
+        <variable_properties>FMax,FMax,FMin,FMin</variable_properties>
+    </Vars>
+
+</myTMVA>
+
+
+<readxml>
+    
+    <myTMVA_path>/home/jg61/particle_reco/TMVA/myTMVA_L_10up</myTMVA_path>
+    <target_bin_size>5e-3</target_bin_size>
+    <n_eff>100</n_eff>
+
+</readxml>
+
+
+<Fit>
+    <image_type>.png</image_type>
+    <peak_stdev>2</peak_stdev>
+    <peak_mass>2.28646</peak_mass>
+    <dau1_name>#Lambda</dau1_name>
+    <dau2_name>#pi</dau2_name>
+</Fit>
