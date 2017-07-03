@@ -1,10 +1,16 @@
 <Files>
+    <out_files>
+        <histo_outpath_base>/home/jg61/particle_reco/TMVA/readxml/histos/readxml_histos</histo_outpath_base>
+    </out_files>
+
     <in_files>
+        <directory_name>lcreco</directory_name>
+        <tree_name>lambdac</tree_name>
+        
         <in_file_1>
             <name_base>/storage1/osg/stage_out/store/user/jgan/PAMinimumBias7/CRAB3_LambdaC_KsProton_data_Pbp7_extracuts_Jun2017/170619_202611/0000/data_LambdaC_KsProton_extracuts_{}.root</name_base>
             <index_limits>201,298</index_limits>
         </in_file_1>
-        <directory_name>lcreco</directory_name>
-        <tree_name>lambdac</tree_name>
+
     </in_files>
 </Files>
