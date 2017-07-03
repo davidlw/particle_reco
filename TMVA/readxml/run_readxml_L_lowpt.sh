@@ -2,6 +2,7 @@
 
 READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
 LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs"
+OUT_TAG="_L"
 
 # SERVER_LIST and INDICES are the same size
 SERVER_LIST=(01 02 03 04 05 06 07)
@@ -26,10 +27,11 @@ for i in $(seq 0 $(($LIST_LENGTH - 1))); do
 
         echo "Executing..."
         for j in ${INDICES[$i]}; do
-            nohup unbuffer root -l -b -q `echo 'readxml.cc+("'${READXML_PATH}'/IOconfig/split_L/backgroundTrees_L_'${j}'.xml", "_L_'${j}'")'` &> ${LOG_PATH}/readxml_L_lowpt_${j}.log &
+            nohup unbuffer root -l -b -q `echo 'readxml.cc+("'${READXML_PATH}'/IOconfig/split_L/backgroundTrees_L_'${j}'.xml", "'${OUT_TAG}'_'${j}'")'` &> ${LOG_PATH}/readxml_L_lowpt_${j}.log &
         done
 
     HERE
+done
 
 echo
 echo "Finished executing."
