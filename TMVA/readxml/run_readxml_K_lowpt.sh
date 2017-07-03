@@ -3,7 +3,7 @@
 READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
 LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs"
 CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA/config.xml"
-OUT_TAG="_K"
+OUT_TAG="_K_2_4"
 
 # SERVER_LIST and INDICES are the same size
 SERVER_LIST=(01 02 03 04 05 06 07)
@@ -28,6 +28,7 @@ ssh bonner${SERVER_LIST[$i]} "
     echo 'Executing...';
     for j in ${INDICES[$i]}; do
         echo hello
+        echo \`echo 'readxml.cc+(\"${CONFIG_FILE}\", \"${READXML_PATH}/IOconfig/split_K/backgroundTrees_K_\${j}.xml\", \"${OUT_TAG}_\${j}\")'\` &> ${LOG_PATH}/readxml_K_lowpt_\${j}.log
         nohup unbuffer root -l -b -q \`echo 'readxml.cc+(\"${CONFIG_FILE}\", \"${READXML_PATH}/IOconfig/split_K/backgroundTrees_K_\${j}.xml\", \"${OUT_TAG}_\${j}\")'\` &> ${LOG_PATH}/readxml_K_lowpt_\${j}.log &
     done;"
 
