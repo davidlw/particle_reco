@@ -298,7 +298,7 @@ public:
         myTMVApath = cfg.get<string>("readxml.myTMVA_path");
 
 
-        vector<string> branchNames = {
+        branchNames = {
             "mass",
             "pt",
             "eta",
