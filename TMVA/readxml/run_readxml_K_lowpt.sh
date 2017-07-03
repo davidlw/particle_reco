@@ -22,7 +22,7 @@ for i in $(seq 0 $(($LIST_LENGTH - 1))); do
 
 echo "ssh bonner"${SERVER_LIST[$i]}
 ssh bonner${SERVER_LIST[$i]} "
-    source start.sh;
+    source /home/jg61//bin/start.sh;
     cd ${READXML_PATH};
 
     echo 'Executing...';
