@@ -19,18 +19,20 @@ LIST_LENGTH=${#SERVER_LIST[*]}
 
 # Login to each server and launch the corresponding cluster of jobs
 for i in $(seq 0 $(($LIST_LENGTH - 1))); do
-    echo "ssh bonner"${SERVER_LIST[$i]}
-    ssh bonner${i} << HERE
 
-        source start.sh
-        cd ${READXML_PATH}
+echo "ssh bonner"${SERVER_LIST[$i]}
+ssh bonner${i} << HERE
 
-        echo "Executing..."
-        for j in ${INDICES[$i]}; do
-            nohup unbuffer root -l -b -q `echo 'readxml.cc+("'${READXML_PATH}'/IOconfig/split_L/backgroundTrees_L_'${j}'.xml", "'${OUT_TAG}'_'${j}'")'` &> ${LOG_PATH}/readxml_L_lowpt_${j}.log &
-        done
+    source start.sh
+    cd ${READXML_PATH}
 
-    HERE
+    echo "Executing..."
+    for j in ${INDICES[$i]}; do
+        nohup unbuffer root -l -b -q `echo 'readxml.cc+("'${READXML_PATH}'/IOconfig/split_L/backgroundTrees_L_'${j}'.xml", "'${OUT_TAG}'_'${j}'")'` &> ${LOG_PATH}/readxml_L_lowpt_${j}.log &
+    done
+
+HERE
+
 done
 
 echo
