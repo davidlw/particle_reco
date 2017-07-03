@@ -211,7 +211,7 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
     // Determine the indices of the branches corresponding to each variable cut
     vector<string> vNamesList = cfg.variableNamesList;
     vector<int> vCutsIdx(vNamesList.size());
-    for(int i = 0; i < vNamesList.size(); i++)
+    for(unsigned i = 0; i < vNamesList.size(); i++)
     {
         vCutsIdx[i] = cfg.whichBranch(vNamesList[i]);
     }
