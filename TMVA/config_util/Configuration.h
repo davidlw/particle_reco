@@ -161,11 +161,6 @@ public:
     //     in isVariableCut.
     bool passesVariableCuts(const std::vector<Float_t>& branches, const std::vector<Double_t>& cutVals)
     {
-        for(int i = 0; i < isVariableCut.size(); i++)
-        {
-            cout << branchNames[i] << ": ?=" << isVariableCut[i] << ", cutVal=" << cutVals[i] << endl;
-        }
-
         if( isVariableCut[eta] && fabs(branches[eta]) >= cutVals[eta] ) return false;
         if( isVariableCut[ptd1] && branches[ptd1] <= cutVals[ptd1] ) return false;
         if( isVariableCut[etad1] && fabs(branches[etad1]) >= cutVals[etad1] ) return false;
