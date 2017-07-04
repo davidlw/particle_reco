@@ -192,7 +192,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
         latex.DrawLatex(0.70,0.70,Form("#mu = %.3f", meanf));
         latex.DrawLatex(0.70,0.65,Form("#sigma = %.4f", sigmaf));
 
-        c->Print(Form(("./plots/fits/cut%d" + cfg.imageType).c_str(), icut));
+        c->Print(Form(("./plots/fits/cut%d" + output_tag + cfg.imageType).c_str(), icut));
 
         delete h;
     }
@@ -203,7 +203,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
     cg->cd();
     TGraph* g = new TGraph (100, sigeff, sigsig);
     g->Draw();
-    cg->Print(("./plots/sig_v_eff" + cfg.imageType).c_str());
+    cg->Print(("./plots/sig_v_eff" + output_tag + cfg.imageType).c_str());
 
 
     // Draw signal and background histograms with only base cuts.
@@ -213,10 +213,10 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
     TCanvas *cS = new TCanvas("cS","cS",1600,1600);
     cS->cd();
     LCmassS->Draw("E");
-    cS->Print(("./plots/signal" + cfg.imageType).c_str());
+    cS->Print(("./plots/signal" + output_tag + cfg.imageType).c_str());
 
     TCanvas *cB = new TCanvas("cB","cB",1600,1600);
     cB->cd();
     LCmassB->Draw("E");
-    cB->Print(("./plots/background" + cfg.imageType).c_str());    
+    cB->Print(("./plots/background" + output_tag + cfg.imageType).c_str());    
 }
