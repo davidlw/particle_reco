@@ -19,5 +19,5 @@ $(PROG): $(OBJS)
 clean:
 	rm -f *.o $(PROG)
 
-TryCuts.o: TryCuts.h Configuration.h ../../InputChain.h
+TryCuts.o: TryCuts.h Configuration.h ../../InputChain/InputChain.h
 Configuration.o: Configuration.h

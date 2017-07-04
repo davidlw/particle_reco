@@ -1,8 +1,8 @@
 #!/bin/bash
 
 TRYCUTS_EXEC="/home/jg61/particle_reco/TryCuts/src/TryCuts"
-LOG_PATH="/home/jg61/particle_reco/TryCuts/logs"
-CONFIG_FILE="/home/jg61/particle_reco/TryCuts/config/TryCutsCfg_lowpt.xml"
+LOG_PATH="/home/jg61/particle_reco/TryCuts/logs/split_K"
+CONFIG_FILE="/home/jg61/particle_reco/TryCuts/config/TryCutsCfg_K_lowpt.xml"
 
 # SERVER_LIST and INDICES are the same size
 SERVER_LIST=(01 02 03 04 05 06 07)
