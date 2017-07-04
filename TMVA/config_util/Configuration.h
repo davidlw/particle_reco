@@ -163,7 +163,7 @@ public:
     {
         for(int i = 0; i < isVariableCut.size(); i++)
         {
-            cout << variableNamesList[i] << ": ?=" << isVariableCut[i] << ", cutVal=" << cutVals[i] << endl;
+            cout << branchNames[i] << ": ?=" << isVariableCut[i] << ", cutVal=" << cutVals[i] << endl;
         }
 
         if( isVariableCut[eta] && fabs(branches[eta]) >= cutVals[eta] ) return false;
