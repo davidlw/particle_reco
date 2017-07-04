@@ -8,4 +8,4 @@ OUT_TAG="_K_high"
 source start.sh
 cd ${READXML_PATH}
 
-nohup unbuffer root -l -b -q `echo 'readxml.cc+("'${CONFIG_FILE}'","'${OUT_TAG}'")'` &> ${LOG_PATH}/fit_histos.log &
+nohup unbuffer root -l -b -q `echo 'readxml_fit.cc("'${CONFIG_FILE}'","'${OUT_TAG}'")'` &> ${LOG_PATH}/fit_histos.log &
