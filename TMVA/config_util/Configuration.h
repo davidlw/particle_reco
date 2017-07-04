@@ -184,9 +184,11 @@ public:
     // *** Configuration only for readxml_fit *** //
 
     // File information
+    string histoFitFile;
     string imageType;
 
     // Fitting information
+    vector<double> entryIdxLims;    // First and last mass_cut histos to fit
     double peakStDev;
     double peakMass;
 
@@ -206,8 +208,8 @@ public:
         // *** Shared configuration *** //
 
         // Files
-        signalFileName = (cfg.get<string>("Shared.Files.signal_file_name")).c_str();
-        signalTreePath = (cfg.get<string>("Shared.Files.signal_tree_path")).c_str();
+        signalFileName = cfg.get<string>("Shared.Files.signal_file_name");
+        signalTreePath = cfg.get<string>("Shared.Files.signal_tree_path");
 
         // Cuts
         ptBinLimits = strToVect<double>(cfg.get<string>("Shared.Cuts.pt_bin_limits"));
@@ -338,15 +340,17 @@ public:
         // *** readxml_fit configuration *** //
 
         // Files
-        imageType = (cfg.get<string>("Fit.image_type")).c_str();
+        histoFitFile = cfg.get<string>("Fit.in_file");
+        imageType = cfg.get<string>("Fit.image_type");
 
         // Fitting
+        entryIdxLims = strToVect<int>(cfg.get<string>("Fit.entry_index_limits"));
         peakStDev = cfg.get<double>("Fit.peak_stdev");
         peakMass = cfg.get<double>("Fit.peak_mass");
 
         // Labeling
-        dau1name = (cfg.get<string>("Fit.dau1_name")).c_str();
-        dau2name = (cfg.get<string>("Fit.dau2_name")).c_str();
+        dau1name = cfg.get<string>("Fit.dau1_name");
+        dau2name = cfg.get<string>("Fit.dau2_name");
     }
 
 

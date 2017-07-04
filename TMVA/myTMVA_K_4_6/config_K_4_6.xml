@@ -76,9 +76,13 @@
 
 
 <Fit>
+    <in_file>/home/jg61/particle_reco/TMVA/readxml/histos/K_4_6/readxml_histos_K_4_6_merged.root</in_file>
     <image_type>.png</image_type>
+
+    <entry_index_limits>0,99</entry_index_limits>
     <peak_stdev>2</peak_stdev>
     <peak_mass>2.28646</peak_mass>
+    
     <dau1_name>K_{s}^{0}</dau1_name>
     <dau2_name>p</dau2_name>
 </Fit>
