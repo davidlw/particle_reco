@@ -154,7 +154,7 @@ void readxml(const string& config_file_name, const string& file_list, const stri
     // Chain together the background trees
     TChain *background = new TChain("background");
     vector<string> in_bases = ichain.get_in_bases();
-    vector<int> i_lims = ichain.get_idx_lims();
+    vector< vector<int> > i_lims = ichain.get_idx_lims();
     for(unsigned i = 0; i < in_bases.size(); i++)
     {
         int idxlo = i_lims[i][0], idxhi = i_lims[i][1];
