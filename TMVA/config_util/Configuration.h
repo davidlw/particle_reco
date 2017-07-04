@@ -99,6 +99,7 @@ public:
 
     // File information
     string myTMVApath;
+    string histoOutPathBase;
 
     // Names of branches to be used in cutting
     vector<string> branchNames;
@@ -291,6 +292,7 @@ public:
 
         // File information
         myTMVApath = cfg.get<string>("readxml.myTMVA_path");
+        histoOutPathBase = cfg.get<string>("readxml.histo_outpath_base");
 
 
         branchNames = {

@@ -68,6 +68,7 @@
 <readxml>
     
     <myTMVA_path>/home/jg61/particle_reco/TMVA/myTMVA_L_4_6</myTMVA_path>
+    <histo_outpath_base>/home/jg61/particle_reco/TMVA/readxml/histos/L_4_6/readxml_histos</histo_outpath_base>
     <target_bin_size>5e-3</target_bin_size>
     <n_eff>100</n_eff>
 

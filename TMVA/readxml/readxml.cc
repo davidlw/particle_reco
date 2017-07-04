@@ -17,15 +17,15 @@
 
 using namespace std;
 
-void readxml(const string& config_file_name, const string& IOfile_list, const string& output_tag = "")
+void readxml(const string& config_file_name, const string& file_list, const string& output_tag = "")
 {
   cout << "Loading configurations...\n";
 
   Configuration cfg(config_file_name);
   cout << "Using general configuration file: " << config_file_name << "\n";
 
-  IOconfig io_list(IOfile_list);
-  cout << "Using IO configuration file: " << IOfile_list << "\n";
+  InputChain ichain(file_list);
+  cout << "Using input chain configuration file: " << file_list << "\n";
 
   // Stuff that was in readxml.h //
   Double_t effS[cfg.nEff], effB[cfg.nEff];
@@ -156,7 +156,7 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
     vector<string> in_bases = io_list.inpath_bases;
     for(unsigned i = 0; i < in_bases.size(); i++)
     {
-        int idxlo = io_list.idx_lims[i][0], idxhi = io_list.idx_lims[i][1];
+        int idxlo = ichain.idx_lims[i][0], idxhi = ichain.idx_lims[i][1];
         for(int j = idxlo; j <= idxhi; j++)
         {
             string file = in_bases[i];
@@ -167,7 +167,7 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
         }
     }
 
-    string histoOutPath = io_list.histoOutPathBase + output_tag + ".root";
+    string histoOutPath = cfg.histoOutPathBase + output_tag + ".root";
     TFile histoOutFile(histoOutPath.c_str(), "recreate");
 
 
