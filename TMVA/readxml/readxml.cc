@@ -24,7 +24,7 @@ void readxml(const string& config_file_name, const string& file_list, const stri
   Configuration cfg(config_file_name);
   cout << "Using general configuration file: " << config_file_name << "\n";
 
-  InputChain ichain(file_list);
+  InputChain::InputChain ichain(file_list);
   cout << "Using input chain configuration file: " << file_list << "\n";
 
   // Stuff that was in readxml.h //
@@ -153,7 +153,7 @@ void readxml(const string& config_file_name, const string& file_list, const stri
 
     // Chain together the background trees
     TChain *background = new TChain("background");
-    vector<string> in_bases = io_list.inpath_bases;
+    vector<string> in_bases = ichain.inpath_bases;
     for(unsigned i = 0; i < in_bases.size(); i++)
     {
         int idxlo = ichain.idx_lims[i][0], idxhi = ichain.idx_lims[i][1];
