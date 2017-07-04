@@ -56,7 +56,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
     double sigeff[100];
     TH1D* h;
 
-    for(int icut = cfg.entryIdxLims[0]; icut = cfg.entryIdxLims[1]; icut++)
+    for(int icut = cfg.entryIdxLims[0]; icut <= cfg.entryIdxLims[1]; icut++)
     {
         RooMsgService::instance().setStreamStatus(0,kFALSE);
         RooMsgService::instance().setStreamStatus(1,kFALSE);
@@ -109,8 +109,8 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
         double c2 = b.getVal();
         
         double sigmaf = sqrt(sigmaf1 * sigmaf1 * sigwf1 + sigmaf2 * sigmaf2 * sigwf2);
-        double massmin = meanf - peakStDev * sigmaf;
-        double massmax = meanf + peakStDev * sigmaf;
+        double massmin = meanf - cfg.peakStDev * sigmaf;
+        double massmax = meanf + cfg.peakStDev * sigmaf;
 
         int nmin = h->GetXaxis()->FindBin(massmin);
         int nmax = h->GetXaxis()->FindBin(massmax);
