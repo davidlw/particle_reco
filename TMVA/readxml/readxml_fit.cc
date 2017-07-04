@@ -65,11 +65,11 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
         c->cd();
         h = (TH1D*)histoFile.Get(Form("mass_cut%d", icut));      
 
-        RooRealVar x("x", "mass", massWindowLo, massWindowHi);
+        RooRealVar x("x", "mass", cfg.massWindowLo, cfg.massWindowHi);
         RooDataHist data("data","dataset", x, h);
-        RooPlot* xframe = x.frame(nMassBins);
+        RooPlot* xframe = x.frame(cfg.nMassBins);
         data.plotOn(xframe,Name("data"));
-        RooRealVar mean("mean", "mean", peakMass, peakMass - 0.01, peakMass + 0.01);
+        RooRealVar mean("mean", "mean", cfg.peakMass, cfg.peakMass - 0.01, cfg.peakMass + 0.01);
         RooRealVar sigma1("sigma1","sigma1",0.015,0.005,0.015);
         RooRealVar sigma2("sigma2","sigma2",0.015,0.005,0.015);
         RooRealVar sig1("sig1","signal1",10,0,10000000);
@@ -114,8 +114,8 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
 
         int nmin = h->GetXaxis()->FindBin(massmin);
         int nmax = h->GetXaxis()->FindBin(massmax);
-        int anmin = h->GetXaxis()->FindBin(massWindowLo);
-        int anmax = h->GetXaxis()->FindBin(massWindowHi);
+        int anmin = h->GetXaxis()->FindBin(cfg.massWindowLo);
+        int anmax = h->GetXaxis()->FindBin(cfg.massWindowHi);
         
         double awyh1 = h->Integral(anmin,nmin);
         double awyh2 = h->Integral(nmax,anmax);
@@ -154,11 +154,11 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
         double signif = sigy/sqrt(totyh);
         sigsig[icut] = signif;
         sigeff[icut] = icut;
-        xframe->SetXTitle( ("m(" + dau1name + dau2name + ") [GeV/c^{2}]").c_str() );
+        xframe->SetXTitle( ("m(" + cfg.dau1name + cfg.dau2name + ") [GeV/c^{2}]").c_str() );
         xframe->GetXaxis()->CenterTitle();
         xframe->GetXaxis()->SetTitleOffset(1.2);
         xframe->GetXaxis()->SetLabelSize(0.02);
-        xframe->SetYTitle(("Events(per " + to_string(massBinSize) + "GeV/c^{2})").c_str());
+        xframe->SetYTitle(("Events(per " + to_string(cfg.massBinSize) + "GeV/c^{2})").c_str());
         xframe->GetYaxis()->CenterTitle();
         xframe->GetYaxis()->SetTitleOffset(1.3);
         xframe->GetYaxis()->SetLabelSize(0.02);
