@@ -188,7 +188,7 @@ public:
     string imageType;
 
     // Fitting information
-    vector<double> entryIdxLims;    // First and last mass_cut histos to fit
+    vector<int> entryIdxLims;    // First and last mass_cut histos to fit
     double peakStDev;
     double peakMass;
 
