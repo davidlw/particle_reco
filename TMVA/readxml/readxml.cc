@@ -242,18 +242,6 @@ void readxml(const string& config_file_name, const string& IOfile_list, const st
                 if( cfg.passesVariableCuts(branches, cutValsList[icut]) )
                     LCmass[icut]->Fill(branches[m]);
             }
-
-
-            // for(int icut = 0; icut < 100; icut++)
-            // {
-            //     for(unsigned k = 0; k < cutVals.size(); k++)
-            //     {
-            //         cutVals[k] = cutval[k].at(icut);
-            //     }
-
-            //     if(cfg.passesVariableCuts(branches, cutVals))
-            //         LCmass[icut]->Fill(branches[m]);
-            // }
         }
     }
 

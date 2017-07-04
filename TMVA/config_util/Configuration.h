@@ -161,21 +161,21 @@ public:
     //     in isVariableCut.
     bool passesVariableCuts(const std::vector<Float_t>& branches, const std::vector<Double_t>& cutVals)
     {
+        for(int i = 0; i < isVariableCut.size(); i++)
+        {
+            cout << variableNamesList[i] << ": ?=" << isVariableCut[i] << ", cutVal=" << cutVals[i] << endl;
+        }
+
         if( isVariableCut[eta] && fabs(branches[eta]) >= cutVals[eta] ) return false;
         if( isVariableCut[ptd1] && branches[ptd1] <= cutVals[ptd1] ) return false;
         if( isVariableCut[etad1] && fabs(branches[etad1]) >= cutVals[etad1] ) return false;
-        if( isVariableCut[angle] && cos(branches[angle]) <= cutVals[angle] ) return false;
-        if( isVariableCut[dl] && branches[dl] <= cutVals[dl] ) return false;
         if( isVariableCut[md1] && fabs(branches[md1] - massD1Mean) / massD1Sigma > cutVals[md1] ) return false;
         if( isVariableCut[ptd2] && branches[ptd2] <= cutVals[ptd2] ) return false;
         if( isVariableCut[etad2] && fabs(branches[etad2]) >= cutVals[etad2] ) return false;
+        if( isVariableCut[angle] && cos(branches[angle]) <= cutVals[angle] ) return false;
+        if( isVariableCut[dl] && branches[dl] <= cutVals[dl] ) return false;
         if( isVariableCut[xydca] && fabs(branches[xydca]) >= cutVals[xydca] ) return false;
         if( isVariableCut[zdca] && fabs(branches[zdca]) >= cutVals[zdca] ) return false;
-
-        // if(branches[ptd1] <= cutVals[0]) return false;
-        // if(branches[ptd2] <= cutVals[1]) return false;
-        // if(fabs(branches[etad1]) >= cutVals[2]) return false;
-        // if(fabs(branches[etad2]) >= cutVals[3]) return false;
 
         return true;
     }
