@@ -35,6 +35,8 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
     Configuration cfg(config_file_name);
     cout << "Using general configuration file: " << config_file_name << "\n";
 
+    cout << "Using output tag: " << output_tag << "\n";
+
     gStyle->SetOptTitle(0);
     gStyle->SetOptStat(0);
     gStyle->SetEndErrorSize(0);
