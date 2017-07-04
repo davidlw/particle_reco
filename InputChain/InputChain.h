@@ -20,7 +20,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
-#include "strToVect.h"
+#include "../ROOT_Util/strToVect.h"
 
 //============================================================================
 

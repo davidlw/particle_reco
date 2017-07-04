@@ -2,7 +2,7 @@ LIB = ROOT_Util
 CC = g++ -std=c++14 `root-config --libs --cflags`
 DEBUG = -g
 CFLAGS = -c -Wall $(DEBUG)
-OBJS = calcPartition.o cloneAsTree.o cutTree.o doubleToStr.o drawMany.o loadChain.o
+OBJS = calcPartition.o doubleToStr.o drawMany.o loadChain.o
 SRCS = $(OBJS:o=cpp)
 
 all: lib$(LIB).a
@@ -24,8 +24,6 @@ depend:
 # DO NOT DELETE
 
 calcPartition.o: calcPartition.h
-cloneAsTree.o: cloneAsTree.h
-cutTree.o: cutTree.h cloneAsTree.h
 doubleToStr.o: doubleToStr.h
 drawMany.o: drawMany.h calcPartition.h
 loadChain.o: loadChain.h
