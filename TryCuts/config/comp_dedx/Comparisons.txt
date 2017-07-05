@@ -1,0 +1,11 @@
+2-4:
+icut: 60, sigsig: 16.4159, pt_dau1 > 1.22274, pt_dau2 > 0.321796, abs(eta_dau1) < 1.27017, abs(eta_dau2) < 0.996874, abs((mass_dau1 - 0.498)/0.0067) <= 3.33525
+
+6-8:
+icut: 99, sigsig: 18.3108, pt_dau1 > 0.506756, pt_dau2 > 0.930655, abs(eta_dau1) < 1.58823, abs(eta_dau2) < 1.3313, abs((mass_dau1 - 0.498)/0.0067) <= 5.72416
+
+8-10:
+icut: 84, sigsig: 17.1279, pt_dau1 > 1.63891, pt_dau2 > 1.98879, abs(eta_dau1) < 1.6546, abs(eta_dau2) < 1.29887, abs((mass_dau1 - 0.498)/0.0067) <= 2.73723
+
+10-20:
+icut: 38, sigsig: 12.8555, pt_dau1 > 4.11693, pt_dau2 > 4.65478, abs(eta_dau1) < 1.05376, abs(eta_dau2) < 1.08679, abs((mass_dau1 - 0.498)/0.0067) <= 2.96263
