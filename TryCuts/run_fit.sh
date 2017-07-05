@@ -6,4 +6,4 @@ CONFIG_FILE="/home/jg61/particle_reco/TryCuts/config/TryCutsCfg_K_highpt_full.xm
 
 source start.sh
 
-nohup unbuffer ${FIT_EXEC} ${CONFIG_FILE} _K_highpt &> ${LOG_PATH}/fits.log &
+nohup unbuffer ${FIT_EXEC} ${CONFIG_FILE} &> ${LOG_PATH}/fits.log &
