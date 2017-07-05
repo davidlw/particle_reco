@@ -58,4 +58,16 @@
 		<range>2.1,2.5</range>
         <bin_size>5e-3</bin_size>
     </Histo>
+
+    <Fit>
+        <in_file>???</in_file>
+        <out_path>/home/jg61/particle_reco/TryCuts/fits/K_2_4</out_path>
+        <image_type>.png</image_type>
+        
+        <peak_stdev>2</peak_stdev>
+        <peak_mass>2.28646</peak_mass>
+
+        <dau1_name>K_{s}^{0}</dau1_name>
+        <dau2_name>p</dau2_name>
+    </Fit>
 </Config>
