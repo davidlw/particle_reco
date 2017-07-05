@@ -14,7 +14,7 @@ TryCuts: TryCuts.o Configuration.o
 	$(CC) $(LFLAGS) TryCuts.o Configuration.o -o $@ $(LIBS)
 
 TryCuts_fit: TryCuts_fit.o Configuration.o
-	$(CC) $(LFLAGS) TryCuts_fit.o Configuration.o -o $@ $(LIBS)
+	$(CC) $(LFLAGS) TryCuts_fit.o Configuration.o -o $@ $(LIBS) -lRooFitCore -lRooFit
 
 .cpp.o:
 	$(CC) $(INC) $(CFLAGS) $< -o $@
