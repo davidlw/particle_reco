@@ -59,7 +59,7 @@
     </Histo>
 
     <Fit>
-        <in_file>???</in_file>
+        <in_file>/home/jg61/particle_reco/TryCuts/histos/K_6_8/data_comp_dedx_K_6_8_K_highpt_histos.root</in_file>
         <out_path>/home/jg61/particle_reco/TryCuts/fits/K_6_8</out_path>
         <image_type>.png</image_type>
         
