@@ -49,6 +49,7 @@ void TryCuts_fit(const string& config_file_name, const string& output_tag)
     double massWindowLo = cfg.get_hrange()[0], massWindowHi = cfg.get_hrange()[1];
     string dau1name = cfg.get_dau1name(), dau2name = cfg.get_dau2name();
     string imageType = cfg.get_imageType();
+    double peakMass = cfg.get_peakMass(), peakStDev = cfg.get_peakStd();
 
 
     TH1D* h;
@@ -66,7 +67,7 @@ void TryCuts_fit(const string& config_file_name, const string& output_tag)
         RooDataHist data("data","dataset", x, h);
         RooPlot* xframe = x.frame(cfg.n_bins());
         data.plotOn(xframe,Name("data"));
-        RooRealVar mean("mean", "mean", cfg.peakMass, cfg.peakMass - 0.01, cfg.peakMass + 0.01);
+        RooRealVar mean("mean", "mean", peakMass, peakMass - 0.01, peakMass + 0.01);
         RooRealVar sigma1("sigma1","sigma1",0.015,0.005,0.015);
         RooRealVar sigma2("sigma2","sigma2",0.015,0.005,0.015);
         RooRealVar sig1("sig1","signal1",10,0,10000000);
@@ -106,8 +107,8 @@ void TryCuts_fit(const string& config_file_name, const string& output_tag)
         double c2 = b.getVal();
         
         double sigmaf = sqrt(sigmaf1 * sigmaf1 * sigwf1 + sigmaf2 * sigmaf2 * sigwf2);
-        double massmin = meanf - cfg.peakStDev * sigmaf;
-        double massmax = meanf + cfg.peakStDev * sigmaf;
+        double massmin = meanf - peakStDev * sigmaf;
+        double massmax = meanf + peakStDev * sigmaf;
 
         int nmin = h->GetXaxis()->FindBin(massmin);
         int nmax = h->GetXaxis()->FindBin(massmax);
