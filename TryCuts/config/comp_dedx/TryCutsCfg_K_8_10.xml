@@ -43,13 +43,13 @@
 
             <mass>0.9382720813</mass>
 
-            <kca_high>3.5,4.2,0.1</kca_high>
+            <kca_high>2.7,4.2,0.12</kca_high>
             <x_cutoff_high>2.5</x_cutoff_high>
 
-            <kca_low>2.6,2.2,-0.1</kca_low>
+            <kca_low>3.8,2,-0.17</kca_low>
             <x_cutoff_low>2.2</x_cutoff_low>
 
-            <nhits_dau2_min>11</nhits_dau2_min>
+            <nhits_dau2_min>0</nhits_dau2_min>
         </dedx>
     </Cuts>
     
