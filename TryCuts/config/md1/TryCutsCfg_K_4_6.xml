@@ -60,7 +60,7 @@
     </Histo>
 
     <Fit>
-        <in_file>???</in_file>
+        <in_file>/home/jg61/particle_reco/TryCuts/histos/K_4_6/data_md1_K_4_6_merged.root</in_file>
         <out_path>/home/jg61/particle_reco/TryCuts/fits/K_4_6</out_path>
         <image_type>.png</image_type>
         

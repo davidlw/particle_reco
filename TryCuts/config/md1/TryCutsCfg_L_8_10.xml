@@ -59,7 +59,7 @@
     </Histo>
 
     <Fit>
-        <in_file>???</in_file>
+        <in_file>/home/jg61/particle_reco/TryCuts/histos/L_8_10/data_md1_L_8_10_L_highpt_histos.root</in_file>
         <out_path>/home/jg61/particle_reco/TryCuts/fits/L_8_10</out_path>
         <image_type>.png</image_type>
         
