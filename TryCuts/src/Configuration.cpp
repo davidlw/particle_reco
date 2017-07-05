@@ -56,6 +56,18 @@ Configuration::Configuration(const string& cfg_file)
 	cutoff_high = cfg.get<double>("Config.Cuts.dedx.x_cutoff_high");
 	nhits_min = cfg.get<int>("Config.Cuts.dedx.nhits_dau2_min");
 
+
+	// Fitting info
+	histoFitFile = cfg.get<string>("Config.Fit.in_file");
+	imageType = cfg.get<string>("Config.Fit.image_type");
+
+	peakStDev = cfg.get<double>("Config.Fit.peak_stdev");
+    peakMass = cfg.get<double>("Config.Fit.peak_mass");
+
+    dau1name = cfg.get<string>("Config.Fit.dau1_name");
+    dau2name = cfg.get<string>("Config.Fit.dau2_name");
+
+
 	// Histogram information
 	histo_range = strToVect<double>( cfg.get<string>("Config.Histo.range") );
 	binsize = cfg.get<double>("Config.Histo.bin_size");

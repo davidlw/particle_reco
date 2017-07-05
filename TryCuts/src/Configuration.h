@@ -58,6 +58,13 @@ public:
 	vector<double> get_hrange() const {return histo_range;}
 	double get_binsize() const {return binsize;}
 
+	string get_histoFile() const {return histoFitFile;}
+	double get_peakMass() const {return peakMass;}
+	double get_peakStd() const {return peakStDev;}
+	string get_dau1name() const {return dau1name;}
+	string get_dau2name() const {return dau2name;}
+	string get_imageType() const {return imageType;}
+
 	// Calculate information about the output histograms
 	int n_histos() const;
 	int n_bins() const;
@@ -88,6 +95,14 @@ private:
 	vector<double> kca_high;
 	double cutoff_high;
 	int nhits_min;
+
+    // Fitting info
+    string histoFitFile;
+    double peakMass;
+    double peakStDev;
+    string dau1name;
+    string dau2name;
+    string imageType;
 
 	// Histogram info
 	vector<double> histo_range;
