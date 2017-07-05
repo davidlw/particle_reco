@@ -3,11 +3,14 @@
 
 #include "Configuration.h"
 
+#include "TStyle.h"
 #include "TCanvas.h"
 #include "TH1.h"
 #include "TMath.h"
 #include "TFile.h"
 #include "TString.h"
+#include "TLine.h"
+#include "TLatex.h"
 #include "RooFit.h"
 #include "RooRealVar.h"
 #include "RooPlot.h"

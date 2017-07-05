@@ -19,7 +19,7 @@ void TryCuts_fit(const string& config_file_name, const string& output_tag)
 {
     cout << "Loading configurations...\n";
 
-    Configuration cfg(config_file_name);
+    Configuration::Configuration cfg(config_file_name);
     cout << "Using general configuration file: " << config_file_name << "\n";
 
     cout << "Using output tag: " << output_tag << "\n";
