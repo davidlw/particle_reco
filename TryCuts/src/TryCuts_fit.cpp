@@ -46,6 +46,7 @@ void TryCuts_fit(const string& config_file_name, const string& output_tag)
     vector<double> sigsig(cfg.n_histos(), -1);
     vector<double> sigeff(cfg.n_histos(), -1);
 
+    string outPath = cfg.get_fitOutPath();
     double massWindowLo = cfg.get_hrange()[0], massWindowHi = cfg.get_hrange()[1];
     string dau1name = cfg.get_dau1name(), dau2name = cfg.get_dau2name();
     string imageType = cfg.get_imageType();
@@ -189,7 +190,7 @@ void TryCuts_fit(const string& config_file_name, const string& output_tag)
         latex.DrawLatex(0.70,0.70,Form("#mu = %.3f", meanf));
         latex.DrawLatex(0.70,0.65,Form("#sigma = %.4f", sigmaf));
 
-        c->Print(Form(("./fits/cut_%d" + output_tag + imageType).c_str(), icut));
+        c->Print(Form((outPath + "/cut_%d" + output_tag + imageType).c_str(), icut));
 
         delete h;
     }

@@ -59,6 +59,7 @@ Configuration::Configuration(const string& cfg_file)
 
 	// Fitting info
 	histoFitFile = cfg.get<string>("Config.Fit.in_file");
+	fitOutPath = cfg.get<string>("Config.Fit.out_path");
 	imageType = cfg.get<string>("Config.Fit.image_type");
 
 	peakStDev = cfg.get<double>("Config.Fit.peak_stdev");

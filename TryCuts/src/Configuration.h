@@ -59,6 +59,7 @@ public:
 	double get_binsize() const {return binsize;}
 
 	string get_histoFile() const {return histoFitFile;}
+	string get_fitOutPath() const {return fitOutPath;}
 	double get_peakMass() const {return peakMass;}
 	double get_peakStd() const {return peakStDev;}
 	string get_dau1name() const {return dau1name;}
@@ -98,6 +99,7 @@ private:
 
     // Fitting info
     string histoFitFile;
+    string fitOutPath;
     double peakMass;
     double peakStDev;
     string dau1name;
