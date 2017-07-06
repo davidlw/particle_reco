@@ -44,7 +44,7 @@
             <mass>0.9382720813</mass>
 
             <kca_high>2.7,4.2,0.12</kca_high>
-            <x_cutoff_high>2.5</x_cutoff_high>
+            <x_cutoff_high>1e6</x_cutoff_high>
 
             <kca_low>3.8,2,-0.17</kca_low>
             <x_cutoff_low>2.2</x_cutoff_low>
