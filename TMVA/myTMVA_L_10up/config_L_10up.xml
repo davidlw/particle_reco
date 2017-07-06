@@ -36,7 +36,7 @@
             <dedx_kca_low>2.6,2.2,-0.1</dedx_kca_low>
             <x_cutoff_low>2.2</x_cutoff_low>
 
-            <nhits_dau2_min>11</nhits_dau2_min>
+            <nhits_dau2_min>0</nhits_dau2_min>
         </dEdx>
 
         <variable_names_list>pt_dau1,pt_dau2,abs(eta_dau1),abs(eta_dau2)</variable_names_list>

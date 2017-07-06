@@ -13,7 +13,7 @@
         <abs_eta_dau1_max>2.4</abs_eta_dau1_max>
         <cos_angle_dau1_min>0.999</cos_angle_dau1_min>
         <decay_length_sig_dau1_min>5</decay_length_sig_dau1_min>
-        <abs_mass_dau1_zscore_max>3</abs_mass_dau1_zscore_max>
+        <abs_mass_dau1_zscore_max>2</abs_mass_dau1_zscore_max>
         <pt_dau2_min>0.3</pt_dau2_min>
         <abs_eta_dau2_max>2.4</abs_eta_dau2_max>
         <abs_xyDCASig_dau2_max>1e6</abs_xyDCASig_dau2_max>
@@ -36,7 +36,7 @@
             <dedx_kca_low>2.6,2.2,-0.1</dedx_kca_low>
             <x_cutoff_low>2.2</x_cutoff_low>
 
-            <nhits_dau2_min>11</nhits_dau2_min>
+            <nhits_dau2_min>0</nhits_dau2_min>
         </dEdx>
 
         <variable_names_list>pt_dau1,pt_dau2,abs(eta_dau1),abs(eta_dau2)</variable_names_list>
