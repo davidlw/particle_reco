@@ -49,7 +49,7 @@
 
     <Files>
         <out_file_name>TMVA.root</out_file_name>
-        <background_file_name>/home/jg61/store/outputs/data/data_KsProton_pt_4to6_nomassd1_smaller2_skim.root</background_file_name>
+        <background_file_name>/home/jg61/store/outputs/data/data_KsProton_pt_4to6_nomassd1_smaller_skim.root</background_file_name>
         <background_tree_path>lambdac</background_tree_path>
     </Files>
 
