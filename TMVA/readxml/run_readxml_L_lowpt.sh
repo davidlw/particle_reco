@@ -1,9 +1,10 @@
 #!/bin/bash
 
+PTBIN="L_2_4"
 READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
-LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs"
-CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA/config.xml"
-OUT_TAG="_L"
+LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs/${PTBIN}"
+CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA_${PTBIN}/config_${PTBIN}.xml"
+OUT_TAG="_${PTBIN}"
 
 # SERVER_LIST and INDICES are the same size
 SERVER_LIST=(01 02 03 04 05 06 07)
@@ -28,7 +29,7 @@ ssh bonner${SERVER_LIST[$i]} "
 
     echo 'Executing...';
     for j in ${INDICES[$i]}; do
-        nohup unbuffer root -l -b -q \`echo 'readxml.cc+(\"${CONFIG_FILE}\",\"/home/jg61/particle_reco/InputChain/config/split_L/dataTrees_L_'\${j}'.xml\",\"${OUT_TAG}_'\${j}'\")'\` &> ${LOG_PATH}/readxml_L_lowpt_\${j}.log &
+        nohup unbuffer root -l -b -q \`echo 'readxml.cc+(\"${CONFIG_FILE}\",\"/home/jg61/particle_reco/InputChain/config/split_L/dataTrees_L_'\${j}'.xml\",\"${OUT_TAG}_'\${j}'\")'\` &> ${LOG_PATH}/readxml${OUT_TAG}_\${j}.log &
     done;"
 
 done
