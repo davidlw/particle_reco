@@ -22,10 +22,14 @@
         
 		<eta_dau1>
 			<cut1>0,1.5</cut1>
+            <cut2>0,1.1</cut2>
+            <cut3>0,1.3</cut3>
         </eta_dau1>
         
 		<eta_dau2>
 			<cut1>0,1.5</cut1>
+            <cut2>0,1.1</cut2>
+            <cut3>0,1.3</cut3>
         </eta_dau2>
         
 		<xyDCA_high>1e10</xyDCA_high>
