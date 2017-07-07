@@ -13,21 +13,22 @@
         </eta>
         
 		<pt_dau1>
-			<cut1>1.6,1e6</cut1>
-            <cut2>1.7,1e6</cut2>
+			<cut1>0.8,1e6</cut1>
+            <cut2>1.6,1e6</cut2>
         </pt_dau1>
         
 		<pt_dau2>
-			<cut1>2.3,1e6</cut1>
-            <cut2>3,1e6</cut2>
+			<cut1>2.1,1e6</cut1>
         </pt_dau2>
         
 		<eta_dau1>
-			<cut1>0,1.2</cut1>
+			<cut1>0,1.1</cut1>
+            <cut2>0,1.4</cut2>
         </eta_dau1>
         
 		<eta_dau2>
-			<cut1>0,1.2</cut1>
+			<cut1>0,1.1</cut1>
+            <cut2>0,1.4</cut2>
         </eta_dau2>
         
 		<xyDCA_high>1e10</xyDCA_high>
@@ -51,7 +52,7 @@
             <kca_low>2.6,2.2,-0.1</kca_low>
             <x_cutoff_low>2.2</x_cutoff_low>
 
-            <nhits_dau2_min>11</nhits_dau2_min>
+            <nhits_dau2_min>0</nhits_dau2_min>
         </dedx>
     </Cuts>
     
