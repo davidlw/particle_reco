@@ -1,9 +1,10 @@
 #!/bin/bash
 
+PTBIN="K_2_4"
 READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
-LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs"
-CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA/config.xml"
-OUT_TAG="_K_high"
+LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs/${PTBIN}"
+CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA_${PTBIN}/config_${PTBIN}.xml"
+OUT_TAG="_${PTBIN}"
 
 source start.sh
 cd ${READXML_PATH}
