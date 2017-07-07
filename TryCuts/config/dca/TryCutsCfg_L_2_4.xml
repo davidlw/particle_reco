@@ -21,17 +21,17 @@
         </pt_dau2>
         
 		<eta_dau1>
-			<cut1>0,1.5</cut1>
+			<cut1>0,1.1</cut1>
         </eta_dau1>
         
 		<eta_dau2>
-			<cut1>0,1.5</cut1>
+			<cut1>0,1.1</cut1>
         </eta_dau2>
         
 		<xyDCA_high>2,4,8,1e10</xyDCA_high>
         <zDCA_high>2,4,8,1e10</zDCA_high>
 
-        <mass_dau1_zscore_max>2</mass_dau1_zscore_max>
+        <mass_dau1_zscore_max>4</mass_dau1_zscore_max>
         <mass_dau1_mean>1.116</mass_dau1_mean>
         <mass_dau1_sigma>0.0028</mass_dau1_sigma>
 		
