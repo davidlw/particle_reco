@@ -76,7 +76,7 @@
 
 
 <Fit>
-    <in_file>/home/jg61/particle_reco/TMVA/readxml/histos/L_4_6/readxml_histos_L_4to6.root</in_file>
+    <in_file>/home/jg61/particle_reco/TMVA/readxml/histos/L_4_6/readxml_histos_L_4_6.root</in_file>
     <image_type>.png</image_type>
 
     <entry_index_limits>0,99</entry_index_limits>
