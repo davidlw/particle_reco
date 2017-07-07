@@ -13,11 +13,11 @@
         <abs_eta_dau1_max>2.4</abs_eta_dau1_max>
         <cos_angle_dau1_min>0.999</cos_angle_dau1_min>
         <decay_length_sig_dau1_min>5</decay_length_sig_dau1_min>
-        <abs_mass_dau1_zscore_max>2</abs_mass_dau1_zscore_max>
+        <abs_mass_dau1_zscore_max>4</abs_mass_dau1_zscore_max>
         <pt_dau2_min>0.7</pt_dau2_min>
         <abs_eta_dau2_max>2.4</abs_eta_dau2_max>
-        <abs_xyDCASig_dau2_max>1e6</abs_xyDCASig_dau2_max>
-        <abs_zDCASig_dau2_max>1e6</abs_zDCASig_dau2_max>
+        <abs_xyDCASig_dau2_max>25</abs_xyDCASig_dau2_max>
+        <abs_zDCASig_dau2_max>25</abs_zDCASig_dau2_max>
 
         <mass_dau1_mean>1.116</mass_dau1_mean>
         <mass_dau1_sigma>0.0028</mass_dau1_sigma>
@@ -39,7 +39,7 @@
             <nhits_dau2_min>0</nhits_dau2_min>
         </dEdx>
 
-        <variable_names_list>pt_dau1,pt_dau2,abs(eta_dau1),abs(eta_dau2)</variable_names_list>
+        <variable_names_list>pt_dau1,pt_dau2,abs(eta_dau1),abs(eta_dau2),abs(xyDCASig_dau2),abs(zDCASig_dau2)</variable_names_list>
     </Cuts>
 
 </Shared>
@@ -59,7 +59,7 @@
 
         <pt_branch_name>pt</pt_branch_name>
 
-        <variable_properties>FMax,FMax,FMin,FMin</variable_properties>
+        <variable_properties>FMax,FMax,FMin,FMin,FMin,FMin</variable_properties>
     </Vars>
 
 </myTMVA>
