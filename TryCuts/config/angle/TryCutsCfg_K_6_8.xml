@@ -13,11 +13,11 @@
         </eta>
         
 		<pt_dau1>
-			<cut1>1,1e6</cut1>
+			<cut1>0.5,1e6</cut1>
         </pt_dau1>
         
 		<pt_dau2>
-			<cut1>1,7,1e6</cut1>
+			<cut1>1.5,1e6</cut1>
         </pt_dau2>
         
 		<eta_dau1>
@@ -25,11 +25,11 @@
         </eta_dau1>
         
 		<eta_dau2>
-			<cut1>0,1.2</cut1>
+			<cut1>0,1.4</cut1>
         </eta_dau2>
         
-		<xyDCA_high>2,4,8,1e10</xyDCA_high>
-        <zDCA_high>2,4,8,1e10</zDCA_high>
+		<xyDCA_high>23</xyDCA_high>
+        <zDCA_high>23</zDCA_high>
 
         <mass_dau1_zscore_max>4</mass_dau1_zscore_max>
         <mass_dau1_mean>0.498</mass_dau1_mean>
