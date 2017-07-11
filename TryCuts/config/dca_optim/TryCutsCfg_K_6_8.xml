@@ -34,7 +34,7 @@
 		<xyDCA_high>8,13,16,23</xyDCA_high>
         <zDCA_high>8,13,16,23</zDCA_high>
 
-        <mass_dau1_zscore_max>2</mass_dau1_zscore_max>
+        <mass_dau1_zscore_max>4</mass_dau1_zscore_max>
         <mass_dau1_mean>0.498</mass_dau1_mean>
         <mass_dau1_sigma>0.0067</mass_dau1_sigma>
 		
