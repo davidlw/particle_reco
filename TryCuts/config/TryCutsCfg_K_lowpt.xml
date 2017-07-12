@@ -1,11 +1,11 @@
 <Config>
 	<Files>
-		<out_file_base>/home/jg61/particle_reco/TryCuts/histos/K_10_20/data_KsProton_readxml_test</out_file_base>
+		<out_file_base>/home/jg61/particle_reco/TryCuts/histos/K_1_2/data_KsProton</out_file_base>
     </Files>
     
     <Cuts>
         <pt>
-            <cut1>2,4</cut1>
+            <cut1>1,2</cut1>
         </pt>
         
         <eta>
@@ -13,25 +13,27 @@
         </eta>
         
         <pt_dau1>
-            <cut1>1.31219,1e6</cut1>
+            <cut1>1.3,1e6</cut1>
+            <cut2>0.5,1e6</cut2>
         </pt_dau1>
         
         <pt_dau2>
-            <cut1>0.463115,1e6</cut1>
+            <cut1>0.4,1e6</cut1>
         </pt_dau2>
         
         <eta_dau1>
-            <cut1>0,1.81825</cut1>
+            <cut1>0,1.4</cut1>
         </eta_dau1>
         
         <eta_dau2>
-            <cut1>0,1.00131</cut1>
+            <cut1>0,1.1</cut1>
+            <cut2>0,1.4</cut2>
         </eta_dau2>
         
-        <xyDCA_high>1e10</xyDCA_high>
-        <zDCA_high>1e10</zDCA_high>
+        <xyDCA_high>13,1e10</xyDCA_high>
+        <zDCA_high>13,1e10</zDCA_high>
 
-        <mass_dau1_zscore_max>3</mass_dau1_zscore_max>
+        <mass_dau1_zscore_max>2,3,4</mass_dau1_zscore_max>
         <mass_dau1_mean>0.498</mass_dau1_mean>
         <mass_dau1_sigma>0.0067</mass_dau1_sigma>
         
@@ -49,7 +51,7 @@
             <kca_low>2.6,2.2,-0.1</kca_low>
             <x_cutoff_low>2.2</x_cutoff_low>
 
-            <nhits_dau2_min>11</nhits_dau2_min>
+            <nhits_dau2_min>0</nhits_dau2_min>
         </dedx>
     </Cuts>
     
