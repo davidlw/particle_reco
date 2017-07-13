@@ -22,5 +22,5 @@ readxml_fit: readxml_fit.o
 clean:
 	rm -f *.o $(PROG)
 
-readxml.o: ../includes/readxml.h ../includes/Tools.h ../uti.h
-readxml_fit.o: ../includes/readxml.h ../includes/Tools.h ../uti.h
+readxml.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h
+readxml_fit.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h
