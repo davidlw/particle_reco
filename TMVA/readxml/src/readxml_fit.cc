@@ -91,7 +91,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
 
     //read weight file
     const string filename = cfg.weightFilePath + "/" + cfg.jobName + "_CutsSA.weights.xml";
-    void *doc = TMVA::gTools().xmlengine().ParseFile(filename.c_str(), TMVA::gTools().xmlenginebuffersize());
+    void* doc = TMVA::gTools().xmlengine().ParseFile(filename.c_str(), TMVA::gTools().xmlenginebuffersize());
     void* rootnode = TMVA::gTools().xmlengine().DocGetRootElement(doc); // node "MethodSetup"
     TString fullMethodName("");  
     TMVA::gTools().ReadAttr(rootnode, "Method", fullMethodName);
@@ -206,41 +206,41 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         RooMsgService::instance().setStreamStatus(0,kFALSE);
         RooMsgService::instance().setStreamStatus(1,kFALSE);
 
-        TCanvas *c = new TCanvas("c","c",1600,1600);
+        TCanvas* c = new TCanvas("c", "c", 1600, 1600);
         c->cd();
         h = (TH1D*)histoFile.Get(Form("mass_cut%d", icut));      
 
         RooRealVar x("x", "mass", cfg.massWindowLo, cfg.massWindowHi);
-        RooDataHist data("data","dataset", x, h);
+        RooDataHist data("data", "dataset", x, h);
         RooPlot* xframe = x.frame(cfg.nMassBins);
         data.plotOn(xframe,Name("data"));
         RooRealVar mean("mean", "mean", cfg.peakMass, cfg.peakMass - 0.01, cfg.peakMass + 0.01);
-        RooRealVar sigma1("sigma1","sigma1",0.015,0.005,0.015);
-        RooRealVar sigma2("sigma2","sigma2",0.015,0.005,0.015);
-        RooRealVar sig1("sig1","signal1",10,0,10000000);
-        RooRealVar sig2("sig2","signal2",10,0,10000000);
-        RooRealVar a("a","a",0,-100000,100000);
-        RooRealVar b("b","b",0,-100000,100000);
-        RooRealVar cp("cp","cp",0,-100000,100000);
-        RooRealVar d("d","d",0,-100000,100000);
-        RooGaussian gaus1("gaus1","gaus1",x,mean,sigma1);
-        RooGaussian gaus2("gaus2","gaus2",x,mean,sigma2);
-        RooPolynomial poly("poly","poly",x,RooArgList(a,b,cp,d));
-        RooRealVar polysig("polysig","polysig",10,0,1e9);
-        RooAddPdf sum("sum","sum",RooArgList(gaus1,gaus2,poly),RooArgList(sig1,sig2,polysig));
+        RooRealVar sigma1("sigma1", "sigma1", 0.015, 0.005, 0.015);
+        RooRealVar sigma2("sigma2", "sigma2", 0.015, 0.005, 0.015);
+        RooRealVar sig1("sig1", "signal1", 10, 0, 10000000);
+        RooRealVar sig2("sig2", "signal2", 10, 0, 10000000);
+        RooRealVar a("a", "a", 0, -100000, 100000);
+        RooRealVar b("b", "b", 0, -100000, 100000);
+        RooRealVar cp("cp", "cp", 0, -100000, 100000);
+        RooRealVar d("d", "d", 0, -100000, 100000);
+        RooGaussian gaus1("gaus1", "gaus1", x, mean, sigma1);
+        RooGaussian gaus2("gaus2", "gaus2", x, mean, sigma2);
+        RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp, d));
+        RooRealVar polysig("polysig", "polysig", 10, 0, 1e9);
+        RooAddPdf sum("sum", "sum", RooArgList(gaus1, gaus2, poly), RooArgList(sig1, sig2, polysig));
         
-        RooFitResult *r = sum.fitTo(data,Save(),Minos(kTRUE),PrintLevel(-1));
-        r = sum.fitTo(data,Save(),Minos(kTRUE),PrintLevel(-1));
-        r = sum.fitTo(data,Save(),Minos(kTRUE),PrintLevel(-1));
-        r = sum.fitTo(data,Save(),Minos(kTRUE),PrintLevel(-1));
-        r = sum.fitTo(data,Save(),Minos(kTRUE),PrintLevel(-1));
+        RooFitResult* r = sum.fitTo(data, Save(), Minos(kTRUE), PrintLevel(-1));
+        r = sum.fitTo(data, Save(), Minos(kTRUE), PrintLevel(-1));
+        r = sum.fitTo(data, Save(), Minos(kTRUE), PrintLevel(-1));
+        r = sum.fitTo(data, Save(), Minos(kTRUE), PrintLevel(-1));
+        r = sum.fitTo(data, Save(), Minos(kTRUE), PrintLevel(-1));
         
-        sum.plotOn(xframe,Name("sum"));
-        sum.plotOn(xframe,Components(poly),LineStyle(kDashed));
+        sum.plotOn(xframe, Name("sum"));
+        sum.plotOn(xframe, Components(poly), LineStyle(kDashed));
 
         // r->Print();
         
-        // double chi2 = xframe->chiSquare("sum","data");
+        // double chi2 = xframe->chiSquare("sum", "data");
         double meanf = mean.getVal();
         // double meanfe = mean.getError();
         double sigmaf1 = sigma1.getVal();
@@ -248,8 +248,8 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         double bkgf = polysig.getVal();
         double sigf1 = sig1.getVal();
         double sigf2 = sig2.getVal();
-        double sigwf1 = sigf1/(sigf1 + sigf2);
-        double sigwf2 = sigf2/(sigf1 + sigf2);
+        double sigwf1 = sigf1 / (sigf1 + sigf2);
+        double sigwf2 = sigf2 / (sigf1 + sigf2);
         // double c1 = a.getVal();
         // double c2 = b.getVal();
         
@@ -262,15 +262,15 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         int anmin = h->GetXaxis()->FindBin(cfg.massWindowLo);
         int anmax = h->GetXaxis()->FindBin(cfg.massWindowHi);
         
-        double awyh1 = h->Integral(anmin,nmin);
-        double awyh2 = h->Integral(nmax,anmax);
+        double awyh1 = h->Integral(anmin, nmin);
+        double awyh2 = h->Integral(nmax, anmax);
         double awyh = awyh1 + awyh2;
-        double totyh = h->Integral(nmin,nmax);
+        double totyh = h->Integral(nmin, nmax);
         
         x.setRange("cut",massmin,massmax);
-        RooAbsReal* ibkg = poly.createIntegral(x,NormSet(x),Range("cut"));
-        RooAbsReal* isig1 = gaus1.createIntegral(x,NormSet(x),Range("cut"));
-        RooAbsReal* isig2 = gaus2.createIntegral(x,NormSet(x),Range("cut"));
+        RooAbsReal* ibkg = poly.createIntegral(x, NormSet(x), Range("cut"));
+        RooAbsReal* isig1 = gaus1.createIntegral(x, NormSet(x), Range("cut"));
+        RooAbsReal* isig2 = gaus2.createIntegral(x, NormSet(x), Range("cut"));
         double ibkgf = ibkg->getVal();
         // double bkgfe = polysig.getError();
         double isig1f = isig1->getVal();
@@ -283,20 +283,20 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         double sigy = (sigy1 + sigy2) / cfg.massBinSize; // Normalize by bin width
         double toty = bkgy + sigy;
         
-        double abkgy = (1-ibkgf)*bkgf;
-        double asigy1 = (1-isig1f)*sigf1;
-        double asigy2 = (1-isig2f)*sigf2;
+        double abkgy = (1 - ibkgf) * bkgf;
+        double asigy1 = (1 - isig1f) * sigf1;
+        double asigy2 = (1 - isig2f) * sigf2;
         double asigy = asigy1 + asigy2;
         // double awy = abkgy + asigy;
         
-        double sigfrac = sigy/toty;
-        double bkgfrac = bkgy/toty;
+        double sigfrac = sigy / toty;
+        double bkgfrac = bkgy / toty;
         
         double sigyh = totyh - bkgy;
-        double sigfrach = sigy/totyh;
-        double bkgfrach = bkgy/totyh;
+        double sigfrach = sigy / totyh;
+        double bkgfrach = bkgy / totyh;
         
-        double signif = sigy/sqrt(totyh);
+        double signif = sigy / sqrt(totyh);
         sigsig[icut] = signif;
         sigeff[icut] = icut;
         xframe->SetXTitle( ("m(" + cfg.dau1name + cfg.dau2name + ") [GeV/c^{2}]").c_str() );
@@ -318,8 +318,8 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         xframe->Draw();
         h->Draw("PEsame");
 
-        TLine* l1 = new TLine(massmin,uymin,massmin,uymax);
-        TLine* l2 = new TLine(massmax,uymin,massmax,uymax);
+        TLine* l1 = new TLine(massmin, uymin, massmin, uymax);
+        TLine* l2 = new TLine(massmax, uymin, massmax, uymax);
         l1->SetLineStyle(2);
         l2->SetLineStyle(2);
         l1->Draw("same");
@@ -330,15 +330,16 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         latex.SetTextSize(0.03);
         latex.SetNDC();
 
-        latex.DrawLatex(0.70,0.85,Form("#frac{s}{#sqrt{s+b}} = %.3f", signif));
-        latex.DrawLatex(0.70,0.80,Form("#frac{s}{s+b} = %.3f", sigfrac));
-        latex.DrawLatex(0.70,0.75,Form("s+b = %.1f", totyh));
-        latex.DrawLatex(0.70,0.70,Form("#mu = %.3f", meanf));
-        latex.DrawLatex(0.70,0.65,Form("#sigma = %.4f", sigmaf));
+        latex.DrawLatex(0.70, 0.85, Form("#frac{s}{#sqrt{s+b}} = %.3f", signif));
+        latex.DrawLatex(0.70, 0.80, Form("#frac{s}{s+b} = %.3f", sigfrac));
+        latex.DrawLatex(0.70, 0.75, Form("s+b = %.1f", toty));
+        latex.DrawLatex(0.70, 0.70, Form("#mu = %.3f", meanf));
+        latex.DrawLatex(0.70, 0.65, Form("#sigma = %.4f", sigmaf));
 
         c->Print(Form(("./plots/fits/cut%d" + output_tag + cfg.imageType).c_str(), icut));
 
         delete h;
+        delete c;
     }
 
 
@@ -357,7 +358,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
 
 
     // Draw signal significance vs. signal efficiency plot
-    TCanvas* cg = new TCanvas("cg","cg",800,800);
+    TCanvas* cg = new TCanvas("cg", "cg", 800, 800);
     cg->cd();
     TGraph* g = new TGraph (100, sigeff, sigsig);
     // Remove invalid points
@@ -375,12 +376,12 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
     TH1D* LCmassS = (TH1D*)histoFile.Get("LCmassS");
     TH1D* LCmassB = (TH1D*)histoFile.Get("LCmassB");
 
-    TCanvas *cS = new TCanvas("cS","cS",1600,1600);
+    TCanvas* cS = new TCanvas("cS", "cS", 1600, 1600);
     cS->cd();
     LCmassS->Draw("E");
     cS->Print(("./plots/signal" + output_tag + cfg.imageType).c_str());
 
-    TCanvas *cB = new TCanvas("cB","cB",1600,1600);
+    TCanvas* cB = new TCanvas("cB", "cB", 1600, 1600);
     cB->cd();
     LCmassB->Draw("E");
     cB->Print(("./plots/background" + output_tag + cfg.imageType).c_str());

@@ -165,32 +165,6 @@ void readxml(const string& config_file_name, const string& file_list, const stri
     
     cout << "Finished reading cuts." << endl;
     //construct histos with TMVA cuts
-    
-    // TFile* inputS = TFile::Open(cfg.signalFileName.c_str());
-    // if(!inputS)
-    // {
-    //     cout << "Signal file not found." << endl;
-    //     return;
-    // }
-    
-    // TTree* signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
-
-    // // Chain together the background trees
-    // TChain* background = new TChain("background");
-    // vector<string> in_bases = ichain.get_in_bases();
-    // vector< vector<int> > i_lims = ichain.get_idx_lims();
-    // for(unsigned i = 0; i < in_bases.size(); i++)
-    // {
-    //     int idxlo = i_lims[i][0], idxhi = i_lims[i][1];
-    //     for(int j = idxlo; j <= idxhi; j++)
-    //     {
-    //         string file = in_bases[i];
-    //         if(file.find("{}") != file.npos)
-    //             file.replace( file.find("{}"), 2, to_string(j) );
-
-    //         background->Add(file.c_str());
-    //     }
-    // }
 
     string histoOutPath = cfg.histoOutPathBase + output_tag + ".root";
     TFile histoOutFile(histoOutPath.c_str(), "recreate");
@@ -236,24 +210,6 @@ void readxml(const string& config_file_name, const string& file_list, const stri
     }
 
 
-    // Open and read background files one-by-one
-
-    // TChain* background = new TChain("background");
-    // vector<string> in_bases = ichain.get_in_bases();
-    // vector< vector<int> > i_lims = ichain.get_idx_lims();
-    // for(unsigned i = 0; i < in_bases.size(); i++)
-    // {
-    //     int idxlo = i_lims[i][0], idxhi = i_lims[i][1];
-    //     for(int j = idxlo; j <= idxhi; j++)
-    //     {
-    //         string file = in_bases[i];
-    //         if(file.find("{}") != file.npos)
-    //             file.replace( file.find("{}"), 2, to_string(j) );
-
-    //         background->Add(file.c_str());
-    //     }
-    // }
-
 
     // Determine the indices of the branches corresponding to each variable cut
     vector<string> vNamesList = cfg.variableNamesList;
@@ -287,14 +243,16 @@ void readxml(const string& config_file_name, const string& file_list, const stri
 
     unsigned file_counter = 0;
     unsigned n_files = ichain.get_n_files();
-    for(unsigned f = 0; f < n_files; ++f)
+    unsigned n_bases = i_lims.size();
+    
+    for(unsigned f = 0; f < n_bases; ++f)
     {
-        // Progress tracking
-        cout << "Opening file " << ++file_counter << "/" << n_files << "." << endl;
-
         int idxlo = i_lims[f][0], idxhi = i_lims[f][1];
         for(int f_idx = idxlo; f_idx <= idxhi; ++f_idx)
         {
+            // Progress tracking
+            cout << "Opening file " << ++file_counter << "/" << n_files << "." << endl;
+
             string file = in_bases[f];
             if(file.find("{}") != file.npos)
                 file.replace( file.find("{}"), 2, to_string(f_idx) );
