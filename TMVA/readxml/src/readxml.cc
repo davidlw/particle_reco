@@ -46,7 +46,7 @@ void readxml(const string& config_file_name, const string& file_list, const stri
 
     InputChain::InputChain ichain(file_list);
     cout << "Using input chain configuration file: " << file_list << "\n";
-
+cout << "N_files: " << ichain.n_files << endl; exit(0);
     // Stuff that was in readxml.h //
     Double_t effS[cfg.nEff], effB[cfg.nEff];
 
@@ -165,31 +165,31 @@ void readxml(const string& config_file_name, const string& file_list, const stri
     cout << "Finished reading cuts." << endl;
     //construct histos with TMVA cuts
     
-    TFile* inputS = TFile::Open(cfg.signalFileName.c_str());
-    if(!inputS)
-    {
-        cout << "Signal file not found." << endl;
-        return;
-    }
+    // TFile* inputS = TFile::Open(cfg.signalFileName.c_str());
+    // if(!inputS)
+    // {
+    //     cout << "Signal file not found." << endl;
+    //     return;
+    // }
     
-    TTree* signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
+    // TTree* signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
 
-    // Chain together the background trees
-    TChain* background = new TChain("background");
-    vector<string> in_bases = ichain.get_in_bases();
-    vector< vector<int> > i_lims = ichain.get_idx_lims();
-    for(unsigned i = 0; i < in_bases.size(); i++)
-    {
-        int idxlo = i_lims[i][0], idxhi = i_lims[i][1];
-        for(int j = idxlo; j <= idxhi; j++)
-        {
-            string file = in_bases[i];
-            if(file.find("{}") != file.npos)
-                file.replace( file.find("{}"), 2, to_string(j) );
+    // // Chain together the background trees
+    // TChain* background = new TChain("background");
+    // vector<string> in_bases = ichain.get_in_bases();
+    // vector< vector<int> > i_lims = ichain.get_idx_lims();
+    // for(unsigned i = 0; i < in_bases.size(); i++)
+    // {
+    //     int idxlo = i_lims[i][0], idxhi = i_lims[i][1];
+    //     for(int j = idxlo; j <= idxhi; j++)
+    //     {
+    //         string file = in_bases[i];
+    //         if(file.find("{}") != file.npos)
+    //             file.replace( file.find("{}"), 2, to_string(j) );
 
-            background->Add(file.c_str());
-        }
-    }
+    //         background->Add(file.c_str());
+    //     }
+    // }
 
     string histoOutPath = cfg.histoOutPathBase + output_tag + ".root";
     TFile histoOutFile(histoOutPath.c_str(), "recreate");
@@ -208,6 +208,16 @@ void readxml(const string& config_file_name, const string& file_list, const stri
 
     vector<string> bNames = cfg.branchNames;
     vector<Float_t> branches(bNames.size());
+
+    // Open and read signal file
+    TFile* inputS = TFile::Open(cfg.signalFileName.c_str());
+    if(!inputS)
+    {
+        cout << "Signal file not found." << endl;
+        return;
+    }
+    
+    TTree* signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
     for(unsigned i = 0; i < bNames.size(); i++)
     {
         signal->SetBranchAddress(bNames[i].c_str(), &branches[i]);
@@ -223,6 +233,25 @@ void readxml(const string& config_file_name, const string& file_list, const stri
         if(cfg.passesBaseSignalCuts(branches))
             LCmassS->Fill(branches[m]);
     }
+
+
+    // Open and read background files one-by-one
+
+    // TChain* background = new TChain("background");
+    // vector<string> in_bases = ichain.get_in_bases();
+    // vector< vector<int> > i_lims = ichain.get_idx_lims();
+    // for(unsigned i = 0; i < in_bases.size(); i++)
+    // {
+    //     int idxlo = i_lims[i][0], idxhi = i_lims[i][1];
+    //     for(int j = idxlo; j <= idxhi; j++)
+    //     {
+    //         string file = in_bases[i];
+    //         if(file.find("{}") != file.npos)
+    //             file.replace( file.find("{}"), 2, to_string(j) );
+
+    //         background->Add(file.c_str());
+    //     }
+    // }
 
     for(unsigned i = 0; i < bNames.size(); i++)
     {

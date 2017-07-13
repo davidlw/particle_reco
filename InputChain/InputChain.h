@@ -43,6 +43,7 @@ public:
 		tree_name = incfg.get<string>("Files.in_files.tree_name");
 
 		int n_infiles = incfg.get_child("Files.in_files").size() - 2;	// - 2 discounts directory_name and tree_name
+		n_files = 0;
 		inpath_bases.reserve(n_infiles);
 		idx_lims.reserve(n_infiles);
 		for(int i = 1; i <= n_infiles; i++)
@@ -57,7 +58,10 @@ public:
 			in += "/" + tree_name;
 
 			inpath_bases.push_back(in);
-			idx_lims.push_back( strToVect<int>( incfg.get<string>(in_file + ".index_limits") ) );
+			vector<int> lim_i = strToVect<int>( incfg.get<string>(in_file + ".index_limits") );
+			idx_lims.push_back( lim_i );
+
+			n_files += lim_i[1] - lim_i[0] + 1;
 		}
 	}
 
@@ -66,6 +70,7 @@ public:
 	vector< vector<int> > get_idx_lims() const {return idx_lims;}
 	string get_dir_name() const {return directory_name;}
 	string get_tree_name() const {return tree_name;}
+	unsigned get_n_files() const {return n_files};
 
 
 private:
@@ -73,6 +78,8 @@ private:
 	vector< vector<int> > idx_lims;
 	string directory_name;
 	string tree_name;
+
+	unsigned n_files;
 
 };
 
