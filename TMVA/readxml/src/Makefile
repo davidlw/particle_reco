@@ -11,10 +11,10 @@ SRCS = $(OBJS:o=cc)
 all: $(PROGS)
 
 readxml: readxml.o
-	$(CC) $(LFLAGS) $(OBJS) -o $@ $(LIBS)
+	$(CC) $(LFLAGS) readxml.o -o $@ $(LIBS)
 
 readxml_fit: readxml_fit.o
-	$(CC) $(LFLAGS) $(OBJS) -o $@ $(LIBS)
+	$(CC) $(LFLAGS) readxml_fit.o -o $@ $(LIBS)
 
 .cc.o:
 	$(CC) $(INC) $(CFLAGS) $< -o $@
