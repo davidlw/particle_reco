@@ -73,7 +73,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
     gStyle->SetTitleX(.0f);
 
     //read weight file
-    const string filename = cfg.weight_file_path + "/" + cfg.jobName + "_CutsSA.weights.xml";
+    const string filename = cfg.weightFilePath + "/" + cfg.jobName + "_CutsSA.weights.xml";
     void *doc = TMVA::gTools().xmlengine().ParseFile(filename.c_str(), TMVA::gTools().xmlenginebuffersize());
     void* rootnode = TMVA::gTools().xmlengine().DocGetRootElement(doc); // node "MethodSetup"
     TString fullMethodName("");  
@@ -346,7 +346,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag = "")
     // Remove invalid points
     for(int i = 0; i < 100; i++)
     {
-        if(isnan(sigeff[i]) || isnan(sigsig[i]) || isinf(sigeff[i]) || isinf(sigsig[i]))
+        if(std::isnan(sigeff[i]) || std::isnan(sigsig[i]) || std::isinf(sigeff[i]) || std::isinf(sigsig[i]))
             g->RemovePoint(i);
     }
 

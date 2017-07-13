@@ -54,7 +54,7 @@ void readxml(const string& config_file_name, const string& file_list, const stri
     gStyle->SetTitleX(.0f);
 
     //read weight file
-    const string filename = cfg.weight_file_path + "/" + cfg.jobName + "_CutsSA.weights.xml";
+    const string filename = cfg.weightFilePath + "/" + cfg.jobName + "_CutsSA.weights.xml";
     void *doc = TMVA::gTools().xmlengine().ParseFile(filename.c_str(), TMVA::gTools().xmlenginebuffersize());
     void* rootnode = TMVA::gTools().xmlengine().DocGetRootElement(doc); // node "MethodSetup"
     TString fullMethodName("");  

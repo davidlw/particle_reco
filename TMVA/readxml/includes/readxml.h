@@ -4,6 +4,6 @@
 #include <ctime>
 
 #include "uti.h"
-#include "../../config_util/Configuration.h"
-#include "../../../InputChain/InputChain.h"
+#include "Configuration.h"
+#include "InputChain.h"
 using namespace Configuration_TMVA;
