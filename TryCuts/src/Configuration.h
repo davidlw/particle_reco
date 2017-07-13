@@ -36,18 +36,18 @@ public:
 	// Getters
 	string get_out_base() const {return out_file_base;}
 	vector< vector<double> > get_pt_lims() const {return pt_lims;}
-	vector< vector<double> > get_eta_lims() const {return eta_lims;}
-	vector< vector<double> > get_ptd1_lims() const {return ptdau1_lims;}
-	vector< vector<double> > get_ptd2_lims() const {return ptdau2_lims;}
-	vector< vector<double> > get_etad1_lims() const {return etadau1_lims;}
-	vector< vector<double> > get_etad2_lims() const {return etadau2_lims;}
-	vector<double> get_xyDCA_hi() const {return xyDCA_hi;}
-	vector<double> get_zDCA_hi() const {return zDCA_hi;}
+	vector<double> get_eta_max() const {return eta_max;}
+	vector<double> get_ptd1_min() const {return ptdau1_min;}
+	vector<double> get_ptd2_min() const {return ptdau2_min;}
+	vector<double> get_etad1_max() const {return etadau1_max;}
+	vector<double> get_etad2_max() const {return etadau2_max;}
+	vector<double> get_xyDCA_max() const {return xyDCA_max;}
+	vector<double> get_zDCA_max() const {return zDCA_max;}
 	vector<double> get_massd1_zmax() const {return massdau1_zmax;}
 	double get_massd1_mean() const {return massdau1_mean;}
 	double get_massd1_sigma() const {return massdau1_sigma;}
-	vector<double> get_cosPAlo() const {return cosPAlo;}
-	vector<double> get_DLsiglo() const {return DLsiglo;}
+	vector<double> get_cosPA_min() const {return cosPA_min;}
+	vector<double> get_DLsig_min() const {return DLsig_min;}
 	bool use_dedx() const {return dedx_flag;}
 	double get_dedx_mass() const {return dedx_mass;}
 	vector<double> get_kca_lo() const {return kca_low;}
@@ -57,14 +57,6 @@ public:
 	int get_nhits_min() const {return nhits_min;}
 	vector<double> get_hrange() const {return histo_range;}
 	double get_binsize() const {return binsize;}
-
-	string get_histoFile() const {return histoFitFile;}
-	string get_fitOutPath() const {return fitOutPath;}
-	double get_peakMass() const {return peakMass;}
-	double get_peakStd() const {return peakStDev;}
-	string get_dau1name() const {return dau1name;}
-	string get_dau2name() const {return dau2name;}
-	string get_imageType() const {return imageType;}
 
 	// Calculate information about the output histograms
 	int n_histos() const;
@@ -76,18 +68,18 @@ private:
 
 	// Cut info
 	vector< vector<double> > pt_lims;
-	vector< vector<double> > eta_lims;
-	vector< vector<double> > ptdau1_lims;
-	vector< vector<double> > ptdau2_lims;
-	vector< vector<double> > etadau1_lims;
-	vector< vector<double> > etadau2_lims;
-	vector<double> xyDCA_hi;
-	vector<double> zDCA_hi;
+	vector<double> eta_max;
+	vector<double> ptdau1_min;
+	vector<double> ptdau2_min;
+	vector<double> etadau1_max;
+	vector<double> etadau2_max;
+	vector<double> xyDCA_max;
+	vector<double> zDCA_max;
 	vector<double> massdau1_zmax;
 	double massdau1_mean;
 	double massdau1_sigma;
-	vector<double> cosPAlo;
-	vector<double> DLsiglo;
+	vector<double> cosPA_min;
+	vector<double> DLsig_min;
 
 	bool dedx_flag;
 	double dedx_mass;
@@ -96,15 +88,6 @@ private:
 	vector<double> kca_high;
 	double cutoff_high;
 	int nhits_min;
-
-    // Fitting info
-    string histoFitFile;
-    string fitOutPath;
-    double peakMass;
-    double peakStDev;
-    string dau1name;
-    string dau2name;
-    string imageType;
 
 	// Histogram info
 	vector<double> histo_range;

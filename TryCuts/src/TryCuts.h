@@ -19,7 +19,7 @@
 #include <iostream>
 #include <ctime>
 
-#include "TChain.h"
+#include "TNtuple.h"
 #include "TH1D.h"
 #include "TFile.h"
 #include "TMath.h"

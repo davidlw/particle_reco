@@ -1,5 +1,5 @@
 PROGS = TryCuts TryCuts_fit
-CC = g++ -std=c++14
+CC = g++ -std=c++14 -O2
 INC = -I/usr/include -I../../ROOT_Util -I../../InputChain
 LIBS = `root-config --libs` -L../../ROOT_Util -lROOT_Util
 DEBUG = -g

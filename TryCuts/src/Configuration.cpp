@@ -20,20 +20,21 @@ Configuration::Configuration(const string& cfg_file)
 
 	// Cut information
 	readRangeCuts(cfg, "Config.Cuts.pt", pt_lims);
-	readRangeCuts(cfg, "Config.Cuts.eta", eta_lims);
-	readRangeCuts(cfg, "Config.Cuts.pt_dau1", ptdau1_lims);
-	readRangeCuts(cfg, "Config.Cuts.pt_dau2", ptdau2_lims);
-	readRangeCuts(cfg, "Config.Cuts.eta_dau1", etadau1_lims);
-	readRangeCuts(cfg, "Config.Cuts.eta_dau2", etadau2_lims);
 
-	xyDCA_hi = strToVect<double>( cfg.get<string>("Config.Cuts.xyDCA_high") );
-	zDCA_hi = strToVect<double>( cfg.get<string>("Config.Cuts.zDCA_high") );
+	eta_max = strToVect<double>( cfg.get<string>("Config.Cuts.eta_max"));
+	ptdau1_min = strToVect<double>( cfg.get<string>("Config.Cuts.pt_dau1_min"));
+	ptdau2_min = strToVect<double>( cfg.get<string>("Config.Cuts.pt_dau2_min"));
+	etadau1_max = strToVect<double>( cfg.get<string>("Config.Cuts.eta_dau1_max"));
+	etadau2_max = strToVect<double>( cfg.get<string>("Config.Cuts.eta_dau2_max"));
+
+	xyDCA_max = strToVect<double>( cfg.get<string>("Config.Cuts.xyDCA_max") );
+	zDCA_max = strToVect<double>( cfg.get<string>("Config.Cuts.zDCA_max") );
 
 	massdau1_zmax = strToVect<double>( cfg.get<string>("Config.Cuts.mass_dau1_zscore_max") );
 	massdau1_mean = cfg.get<double>("Config.Cuts.mass_dau1_mean");
 	massdau1_sigma = cfg.get<double>("Config.Cuts.mass_dau1_sigma");
-	cosPAlo = strToVect<double>(cfg.get<string>("Config.Cuts.cosPA_low") );
-	DLsiglo = strToVect<double>(cfg.get<string>("Config.Cuts.DLsig_low") );
+	cosPA_min = strToVect<double>(cfg.get<string>("Config.Cuts.cosPA_min") );
+	DLsig_min = strToVect<double>(cfg.get<string>("Config.Cuts.DLsig_min") );
 
 	string use_dedx = cfg.get<string>("Config.Cuts.dedx.use_dedx");
 	if(use_dedx == "true")
@@ -56,19 +57,6 @@ Configuration::Configuration(const string& cfg_file)
 	cutoff_high = cfg.get<double>("Config.Cuts.dedx.x_cutoff_high");
 	nhits_min = cfg.get<int>("Config.Cuts.dedx.nhits_dau2_min");
 
-
-	// Fitting info
-	histoFitFile = cfg.get<string>("Config.Fit.in_file");
-	fitOutPath = cfg.get<string>("Config.Fit.out_path");
-	imageType = cfg.get<string>("Config.Fit.image_type");
-
-	peakStDev = cfg.get<double>("Config.Fit.peak_stdev");
-    peakMass = cfg.get<double>("Config.Fit.peak_mass");
-
-    dau1name = cfg.get<string>("Config.Fit.dau1_name");
-    dau2name = cfg.get<string>("Config.Fit.dau2_name");
-
-
 	// Histogram information
 	histo_range = strToVect<double>( cfg.get<string>("Config.Histo.range") );
 	binsize = cfg.get<double>("Config.Histo.bin_size");
@@ -80,14 +68,14 @@ Configuration::~Configuration() {}
 int Configuration::n_histos() const
 {
 	// Returns the number of histograms specified in the configuration
-	return pt_lims.size() * eta_lims.size() * ptdau1_lims.size() * ptdau2_lims.size() * etadau1_lims.size() * etadau2_lims.size() \
-			* xyDCA_hi.size() * zDCA_hi.size() * massdau1_zmax.size() * cosPAlo.size() * DLsiglo.size();
+	return pt_lims.size() * eta_max.size() * ptdau1_min.size() * ptdau2_min.size() * etadau1_max.size() * etadau2_max.size() \
+			* xyDCA_max.size() * zDCA_max.size() * massdau1_zmax.size() * cosPA_min.size() * DLsig_min.size();
 }
 
 int Configuration::n_bins() const
 {
 	// Returns the number of bins in each histogram
-	return ceil( (histo_range[1] - histo_range[0]) / binsize );
+	return round( (histo_range[1] - histo_range[0]) / binsize );
 }
 
 

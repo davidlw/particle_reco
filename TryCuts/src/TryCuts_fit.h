@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <ctime>
 
 #include "Configuration.h"
 
@@ -18,8 +20,6 @@
 #include "RooGaussian.h"
 #include "RooPolynomial.h"
 #include "RooAddPdf.h"
-
-#include <fstream>
 
 using namespace Configuration;
 using namespace RooFit;

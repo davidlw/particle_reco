@@ -3,7 +3,7 @@
 // Author      : Johann Gan
 // Version     :
 // Copyright   : 
-// Description : Reads in trees into a TChain and outputs mass histograms with various different cuts applied.
+// Description : Reads in trees and outputs mass histograms with various different cuts applied.
 //============================================================================
 
 #include "TryCuts.h"
@@ -31,27 +31,10 @@ int main(int argc, char* argv[])
 	cout << "Using general configuration file: " << cfg_file << endl;
 	InputChain::InputChain ic(infile_config);	// File parameters
 	cout << "Using input chain configuration file: " << infile_config << endl;
+	cout << "n_files: " << ic.get_n_files() << endl;
 	cout << "Using output tag: " << output_tag << endl;
 
-	// Read in the chain
-	unique_ptr<TChain> chain( new TChain("chain") );
-
-	cout << "Reading in files.\n";
-	for(unsigned i = 0; i < ic.get_in_bases().size(); i++)
-	{
-		int idxlo = ic.get_idx_lims()[i][0], idxhi = ic.get_idx_lims()[i][1];
-		for(int j = idxlo; j <= idxhi; j++)
-		{
-			string file = ic.get_in_bases()[i];
-			if(file.find("{}") != file.npos)
-				file.replace( file.find("{}"), 2, to_string(j) );
-
-			chain->Add(file.c_str());
-		}
-	}
-
-
-	// Set readers for the branches
+	// Readers for the branches
 	Float_t mass_read = 0;
 	Float_t pt_read = 0;
 	Float_t eta_read = 0;
@@ -67,23 +50,6 @@ int main(int argc, char* argv[])
 	Float_t dedx_read = 0;
 	Float_t pdau2_read = 0;
 	Float_t nhits_read = 0;
-
-	chain->SetBranchAddress("mass", &mass_read);
-	chain->SetBranchAddress("pt", &pt_read);
-	chain->SetBranchAddress("eta", &eta_read);
-	chain->SetBranchAddress("pt_dau1", &ptdau1_read);
-	chain->SetBranchAddress("eta_dau1", &etadau1_read);
-	chain->SetBranchAddress("pt_dau2", &ptdau2_read);
-	chain->SetBranchAddress("eta_dau2", &etadau2_read);
-	chain->SetBranchAddress("xyDCASig_dau2", &xydca_read);
-	chain->SetBranchAddress("zDCASig_dau2", &zdca_read);
-	chain->SetBranchAddress("mass_dau1", &massdau1_read);
-	chain->SetBranchAddress("3DPointingAngle_dau1", &PA_read);
-	chain->SetBranchAddress("3DDecayLengthSig_dau1", &DLsig_read);
-	chain->SetBranchAddress("dEdxHarmonic_dau2", &dedx_read);
-	chain->SetBranchAddress("p_dau2", &pdau2_read);
-	chain->SetBranchAddress("nhits_dau2", &nhits_read);
-
 
 	// Get dE/dx cut information (but use only if specified)
 	bool use_dedx = params.use_dedx();
@@ -120,33 +86,44 @@ int main(int argc, char* argv[])
 	// Read in configuration cuts for iteration
 	double massd1_mean = params.get_massd1_mean(), massd1_sigma = params.get_massd1_sigma();
 
-	vector< vector<double> > pt_lims = params.get_pt_lims(),
-			eta_lims = params.get_eta_lims(),
-			ptd1_lims = params.get_ptd1_lims(),
-			ptd2_lims = params.get_ptd2_lims(),
-			etad1_lims = params.get_etad1_lims(),
-			etad2_lims = params.get_etad2_lims();
-	vector<double> xyDCA_hi = params.get_xyDCA_hi(),
-			zDCA_hi = params.get_zDCA_hi(),
-			massd1_z_hi = params.get_massd1_zmax(),
-			cosPA_lo = params.get_cosPAlo(),
-			dlsig_lo = params.get_DLsiglo();
+	vector< vector<double> > pt_lims = params.get_pt_lims();
+	vector<double> eta_max = params.get_eta_max(),
+			ptd1_min = params.get_ptd1_min(),
+			ptd2_min = params.get_ptd2_min(),
+			etad1_max = params.get_etad1_max(),
+			etad2_max = params.get_etad2_max(),
+			xyDCA_max = params.get_xyDCA_max(),
+			zDCA_max = params.get_zDCA_max(),
+			massd1_z_max = params.get_massd1_zmax(),
+			cosPA_min = params.get_cosPA_min(),
+			dlsig_min = params.get_DLsig_min();
 
 	// Loop through all the combinations of cuts to fill the text file and form the histograms
 	int counter = 0; 	// Counter for iterations
-	for(auto pt = pt_lims.begin(); pt < pt_lims.end(); pt++) {
-	for(auto eta = eta_lims.begin(); eta < eta_lims.end(); eta++) {
-	for(auto ptd1 = ptd1_lims.begin(); ptd1 < ptd1_lims.end(); ptd1++) {
-	for(auto ptd2 = ptd2_lims.begin(); ptd2 < ptd2_lims.end(); ptd2++) {
-	for(auto etad1 = etad1_lims.begin(); etad1 < etad1_lims.end(); etad1++) {
-	for(auto etad2 = etad2_lims.begin(); etad2 < etad2_lims.end(); etad2++) {
-	for(auto xy = xyDCA_hi.begin(); xy < xyDCA_hi.end(); xy++) {
-	for(auto z = zDCA_hi.begin(); z < zDCA_hi.end(); z++) {
-	for(auto md1 = massd1_z_hi.begin(); md1 < massd1_z_hi.end(); md1++) {
-	for(auto agl = cosPA_lo.begin(); agl < cosPA_lo.end(); agl++) {
-	for(auto dl = dlsig_lo.begin(); dl < dlsig_lo.end(); dl++)
+    auto pt_end = pt_lims.end();
+    auto eta_end = eta_max.end();
+    auto ptd1_end = ptd1_min.end();
+    auto ptd2_end = ptd2_min.end();
+    auto etad1_end = etad1_max.end();
+    auto etad2_end = etad2_max.end();
+    auto xyDCA_end = xyDCA_max.end();
+    auto zDCA_end = zDCA_max.end();
+    auto massd1_z_end = massd1_z_max.end();
+    auto cosPA_end = cosPA_min.end();
+    auto dlsig_end = dlsig_min.end();
+	for(auto pt = pt_lims.begin(); pt < pt_end; ++pt) {
+	for(auto eta = eta_max.begin(); eta < eta_end; ++eta) {
+	for(auto ptd1 = ptd1_min.begin(); ptd1 < ptd1_end; ++ptd1) {
+	for(auto ptd2 = ptd2_min.begin(); ptd2 < ptd2_end; ++ptd2) {
+	for(auto etad1 = etad1_max.begin(); etad1 < etad1_end; ++etad1) {
+	for(auto etad2 = etad2_max.begin(); etad2 < etad2_end; ++etad2) {
+	for(auto xy = xyDCA_max.begin(); xy < xyDCA_end; ++xy) {
+	for(auto z = zDCA_max.begin(); z < zDCA_end; ++z) {
+	for(auto md1 = massd1_z_max.begin(); md1 < massd1_z_end; ++md1) {
+	for(auto agl = cosPA_min.begin(); agl < cosPA_end; ++agl) {
+	for(auto dl = dlsig_min.begin(); dl < dlsig_end; ++dl)
 	{
-		counter++;
+		++counter;
 
 		// Set up the histograms
 		string nametitle = "cut_" + to_string(counter);
@@ -168,11 +145,11 @@ int main(int argc, char* argv[])
 		// Write cut information to the text output file
 		textout << endl << nametitle << ":\n";
 		iterVarOut(textout, "pT", *pt);
-		iterVarOut(textout, "|eta|", *eta);
-		iterVarOut(textout, "pT_dau1", *ptd1);
-		iterVarOut(textout, "pT_dau2", *ptd2);
-		iterVarOut(textout, "|eta_dau1|", *etad1);
-		iterVarOut(textout, "|eta_dau2|", *etad2);
+		textout << "\t|eta| < " << *eta << endl;
+		textout << "\tpT_dau1 > " << *ptd1 << endl;
+		textout << "\tpT_dau2 > " << *ptd2 << endl;
+		textout << "\t|eta_dau1| < " << *etad1 << endl;
+		textout << "\t|eta_dau2| < " << *etad2 << endl;
 		textout << "\t|xyDCA| < " << *xy << endl;
 		textout << "\t|zDCA| < " << *z << endl;
 		textout << "\t|(mass_dau1 - " << massd1_mean << ") / " << massd1_sigma << "| <= " << *md1 << endl;
@@ -182,64 +159,111 @@ int main(int argc, char* argv[])
 	}}}}}}}}}}}	// 11 closing braces
 
 	// Loop through the entries of the chain and divide up the entries according to the different sets of cuts
+
+	// Setup for file reading
+	string treePath = "";
+	if(ic.get_dir_name().length() > 0)
+		treePath += ic.get_dir_name() + "/";
+
+	treePath += ic.get_tree_name();
+
+
+	vector<string> in_bases = ic.get_in_bases();
+	vector< vector<int> > i_lims = ic.get_idx_lims();
+
+	// Setup for progress tracking
+	unsigned file_counter = 0;
+	unsigned n_files = ic.get_n_files();
+	unsigned n_bases = i_lims.size();
+
 	cout << "Begin reading entries.\n";
-
-	int next_update = 1;	// Progress tracker
-	unsigned long long int num_entries = chain->GetEntries();	// Total number of entries in chain
-	for(unsigned long long int i = 0; i < num_entries; i++)
+	for(unsigned f = 0; f < n_bases; ++f)
 	{
-		chain->GetEntry(i);
-
-		// Check whether the current leaf satisfies each set of cuts, and if so, fill the corresponding histogram
-		int index = -1; 	// Index for the current set of cuts
-		for(auto pt = pt_lims.begin(); pt < pt_lims.end(); pt++) {
-		for(auto eta = eta_lims.begin(); eta < eta_lims.end(); eta++) {
-		for(auto ptd1 = ptd1_lims.begin(); ptd1 < ptd1_lims.end(); ptd1++) {
-		for(auto ptd2 = ptd2_lims.begin(); ptd2 < ptd2_lims.end(); ptd2++) {
-		for(auto etad1 = etad1_lims.begin(); etad1 < etad1_lims.end(); etad1++) {
-		for(auto etad2 = etad2_lims.begin(); etad2 < etad2_lims.end(); etad2++) {
-		for(auto xy = xyDCA_hi.begin(); xy < xyDCA_hi.end(); xy++) {
-		for(auto z = zDCA_hi.begin(); z < zDCA_hi.end(); z++) {
-		for(auto md1 = massd1_z_hi.begin(); md1 < massd1_z_hi.end(); md1++) {
-		for(auto agl = cosPA_lo.begin(); agl < cosPA_lo.end(); agl++) {
-		for(auto dl = dlsig_lo.begin(); dl < dlsig_lo.end(); dl++)
+		int idxlo = i_lims[f][0], idxhi = i_lims[f][1];
+		for(int f_idx = idxlo; f_idx <= idxhi; ++f_idx)
 		{
-			index++;
+			// Progress tracking
+			cout << "Opening file " << ++file_counter << "/" << n_files << "." << endl;
+
+			string file = in_bases[f];
+            if(file.find("{}") != file.npos)
+                file.replace( file.find("{}"), 2, to_string(f_idx) );
+
+            // Open the current file and tree
+            TFile* file_i = new TFile(file.c_str());
+            TNtuple* tree_i = (TNtuple*)file_i->Get(treePath.c_str());
+
+            // Set up the current tree
+			tree_i->SetBranchAddress("mass", &mass_read);
+			tree_i->SetBranchAddress("pt", &pt_read);
+			tree_i->SetBranchAddress("eta", &eta_read);
+			tree_i->SetBranchAddress("pt_dau1", &ptdau1_read);
+			tree_i->SetBranchAddress("eta_dau1", &etadau1_read);
+			tree_i->SetBranchAddress("pt_dau2", &ptdau2_read);
+			tree_i->SetBranchAddress("eta_dau2", &etadau2_read);
+			tree_i->SetBranchAddress("xyDCASig_dau2", &xydca_read);
+			tree_i->SetBranchAddress("zDCASig_dau2", &zdca_read);
+			tree_i->SetBranchAddress("mass_dau1", &massdau1_read);
+			tree_i->SetBranchAddress("3DPointingAngle_dau1", &PA_read);
+			tree_i->SetBranchAddress("3DDecayLengthSig_dau1", &DLsig_read);
+			tree_i->SetBranchAddress("dEdxHarmonic_dau2", &dedx_read);
+			tree_i->SetBranchAddress("p_dau2", &pdau2_read);
+			tree_i->SetBranchAddress("nhits_dau2", &nhits_read);
 
 
-			if( isWithin(pt_read, *pt) && isWithin(fabs(eta_read), *eta) && \
-				isWithin(ptdau1_read, *ptd1) && isWithin(ptdau2_read, *ptd2) && \
-				isWithin(fabs(etadau1_read), *etad1) && isWithin(fabs(etadau2_read), *etad2) && \
-				fabs( (massdau1_read - massd1_mean) / massd1_sigma ) <= *md1 && \
-				cos(PA_read) > *agl && DLsig_read > *dl && \
-				fabs(xydca_read) < *xy && fabs(zdca_read) < *z)
+			unsigned long long int num_entries = tree_i->GetEntries();	// Total number of entries in tree
+			for(unsigned long long int i = 0; i < num_entries; ++i)
 			{
-				// Apply dE/dx cuts only if specified
-				if(!use_dedx || (
-					(nhits_read >= nhits_min) && \
-					(dedx_read >= k_lo * pow(dedx_mass / (pdau2_read - a_lo), 2) + c_lo || pdau2_read >= cutoff_lo) && \
-					(dedx_read < k_hi * pow(dedx_mass / (pdau2_read - a_hi), 2) + c_hi || pdau2_read >= cutoff_hi) )
-				)
+				tree_i->GetEntry(i);
+
+				// Check whether the current leaf satisfies each set of cuts, and if so, fill the corresponding histogram
+				int index = -1; 	// Index for the current set of cuts
+				for(auto pt = pt_lims.begin(); pt < pt_end; ++pt) {
+				for(auto eta = eta_max.begin(); eta < eta_end; ++eta) {
+				for(auto ptd1 = ptd1_min.begin(); ptd1 < ptd1_end; ++ptd1) {
+				for(auto ptd2 = ptd2_min.begin(); ptd2 < ptd2_end; ++ptd2) {
+				for(auto etad1 = etad1_max.begin(); etad1 < etad1_end; ++etad1) {
+				for(auto etad2 = etad2_max.begin(); etad2 < etad2_end; ++etad2) {
+				for(auto xy = xyDCA_max.begin(); xy < xyDCA_end; ++xy) {
+				for(auto z = zDCA_max.begin(); z < zDCA_end; ++z) {
+				for(auto md1 = massd1_z_max.begin(); md1 < massd1_z_end; ++md1) {
+				for(auto agl = cosPA_min.begin(); agl < cosPA_end; ++agl) {
+				for(auto dl = dlsig_min.begin(); dl < dlsig_end; ++dl)
 				{
-					histos[index]->Fill(static_cast<double>(mass_read));
-				}
+					++index;
+
+
+					if( isWithin(pt_read, *pt) && fabs(eta_read) < *eta && \
+						ptdau1_read > *ptd1 && ptdau2_read > *ptd2 && \
+						fabs(etadau1_read) < *etad1 && fabs(etadau2_read) < *etad2 && \
+						fabs( (massdau1_read - massd1_mean) / massd1_sigma ) <= *md1 && \
+						cos(PA_read) > *agl && DLsig_read > *dl && \
+						fabs(xydca_read) < *xy && fabs(zdca_read) < *z)
+					{
+						// Apply dE/dx cuts only if specified
+						if(!use_dedx || (
+							(nhits_read >= nhits_min) && \
+							(dedx_read >= k_lo * pow(dedx_mass / (pdau2_read - a_lo), 2) + c_lo || pdau2_read >= cutoff_lo) && \
+							(dedx_read < k_hi * pow(dedx_mass / (pdau2_read - a_hi), 2) + c_hi || pdau2_read >= cutoff_hi) )
+						)
+						{
+							histos[index]->Fill(static_cast<double>(mass_read));
+						}
+					}
+
+				}}}}}}}}}}}	// 11 closing braces
 			}
 
-		}}}}}}}}}}}	// 8 closing braces
-
-		// Progress tracking in percentage. Report every 1%.
-		int progress = static_cast<int>( 100.0 * (i + 1) / num_entries );
-		if(progress >= next_update)
-		{
-			cout << progress << "% finished.\n";
-			next_update++;
+			delete tree_i;
+			delete file_i;
 		}
 	}
 
 	// Remove the empty histograms from the file
 	cout << "\nRemoving empty histograms.\n";
 
-	for(auto i = histos.begin(); i < histos.end(); i++)
+    auto histos_end = histos.end();
+	for(auto i = histos.begin(); i < histos_end; ++i)
 	{
 		if( (*i)->GetMaximum() <= 0 )
 			(*i)->SetDirectory(0);
