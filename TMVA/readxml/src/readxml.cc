@@ -253,53 +253,85 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
     //     }
     // }
 
-    for(unsigned f = 0; f < ichain.get_n_files(); ++f)
+
+    // Determine the indices of the branches corresponding to each variable cut
+    vector<string> vNamesList = cfg.variableNamesList;
+    vector<int> vCutsIdx(vNamesList.size());
+    for(unsigned i = 0; i < vNamesList.size(); ++i)
     {
-        TChain* background = new TChain("background");
+        vCutsIdx[i] = cfg.whichBranch(vNamesList[i]);
+    }
 
-        for(unsigned i = 0; i < bNames.size(); i++)
+    // Read the cutVals (as in Configuration.passesVariableCuts) vector for each of the 100 cut sets
+    vector< vector<Double_t> > cutValsList(100, vector<double>(bNames.size()));
+    for(unsigned i = 0; i < cutValsList.size(); ++i)
+    {
+        for(unsigned j = 0; j < vCutsIdx.size(); ++j)
         {
-            background->SetBranchAddress(bNames[i].c_str(), &branches[i]);
+            cutValsList[i][ vCutsIdx[j] ] = cutval[j].at(i);
         }
+    }
 
-        
-        Long64_t nentries = background->GetEntries();
 
-        // Determine the indices of the branches corresponding to each variable cut
-        vector<string> vNamesList = cfg.variableNamesList;
-        vector<int> vCutsIdx(vNamesList.size());
-        for(unsigned i = 0; i < vNamesList.size(); ++i)
+    // If the directory_name node is empty, don't use a directory in the path
+    string bkgTreePath = "";
+    if(ichain.get_dir_name().length() > 0)
+        bkgTreePath += ichain.get_dir_name() + "/";
+
+    bkgTreePath += ichain.get_tree_name();
+
+
+    vector<string> in_bases = ichain.get_in_bases();
+    vector< vector<int> > i_lims = ichain.get_idx_lims();
+
+    unsigned file_counter = 0;
+    unsigned n_files = ichain.get_n_files();
+    for(unsigned f = 0; f < n_files; ++f)
+    {
+        // Progress tracking
+        cout << "Opening file " << ++file_counter << "/" << n_files << endl;
+
+        int idxlo = i_lims[f][0], idxhi = i_lims[f][1];
+        for(int f_idx = idxlo; f_idx <= idxhi; ++f_idx)
         {
-            vCutsIdx[i] = cfg.whichBranch(vNamesList[i]);
-        }
+            string file = in_bases[f];
+            if(file.find("{}") != file.npos)
+                file.replace( file.find("{}"), 2, to_string(f_idx) );
 
-        // Read the cutVals (as in Configuration.passesVariableCuts) vector for each of the 100 cut sets
-        vector< vector<Double_t> > cutValsList(100, vector<double>(bNames.size()));
-        for(unsigned i = 0; i < cutValsList.size(); ++i)
-        {
-            for(unsigned j = 0; j < vCutsIdx.size(); ++j)
+            // Open the current file and tree
+            TFile* backgroundFile = new TFile(file.c_str());
+            TNtuple* background = (TNtuple*)backgroundFile->Get(bkgTreePath.c_str());
+
+            // Set up the current tree
+            for(unsigned i = 0; i < bNames.size(); i++)
             {
-                cutValsList[i][ vCutsIdx[j] ] = cutval[j].at(i);
+                background->SetBranchAddress(bNames[i].c_str(), &branches[i]);
             }
-        }
 
-        // Fill the background histograms
-        for (Long64_t i = 0; i < nentries; ++i)
-        {
-            background->GetEntry(i);
             
-            //first implement non-tuning cut; must be sychronized with the setting in TMVA tuning (mycutb)
-            if(cfg.passesBaseBackgroundCuts(branches))
+            Long64_t nentries = background->GetEntries();
+
+            // Fill the background histograms
+            for (Long64_t i = 0; i < nentries; ++i)
             {
-                LCmassB->Fill(branches[m]);
-            
-                //now implement the tuning cuts
-                for(int icut = 0; icut < 100; ++icut)
+                background->GetEntry(i);
+                
+                //first implement non-tuning cut; must be sychronized with the setting in TMVA tuning (mycutb)
+                if(cfg.passesBaseBackgroundCuts(branches))
                 {
-                    if( cfg.passesVariableCuts(branches, cutValsList[icut]) )
-                        LCmass[icut]->Fill(branches[m]);
+                    LCmassB->Fill(branches[m]);
+                
+                    //now implement the tuning cuts
+                    for(int icut = 0; icut < 100; ++icut)
+                    {
+                        if( cfg.passesVariableCuts(branches, cutValsList[icut]) )
+                            LCmass[icut]->Fill(branches[m]);
+                    }
                 }
             }
+
+            delete background;
+            delete backgroundFile;
         }
     }
 

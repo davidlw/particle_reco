@@ -51,12 +51,6 @@ public:
 			string in_file = "Files.in_files.in_file_" + to_string(i);
 			string in = incfg.get<string>(in_file + ".name_base");
 
-			// If the directory_name node is empty, don't use a directory in the path
-			if(directory_name.length() > 0)
-				in += "/" + directory_name;
-
-			in += "/" + tree_name;
-
 			inpath_bases.push_back(in);
 			vector<int> lim_i = strToVect<int>( incfg.get<string>(in_file + ".index_limits") );
 			idx_lims.push_back( lim_i );
