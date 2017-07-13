@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
 void readxml(const string& config_file_name, const string& file_list, const string& output_tag)
 {
-    clock_t start = clock();
+    clock_t clock_start = clock();
 
     cout << "Loading configurations...\n";
 
@@ -284,6 +284,8 @@ void readxml(const string& config_file_name, const string& file_list, const stri
         }
         cout << endl;
     }
+
+    clock_t clock_end = clock();
 
     cout << "Program terminated successfully.\n";
     cout << "Time elapsed: " << (clock_end - clock_start) / (double)CLOCKS_PER_SEC << " seconds.\n";
