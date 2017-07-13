@@ -14,7 +14,7 @@ readxml: readxml.o
 	$(CC) $(LFLAGS) readxml.o -o $@ $(LIBS)
 
 readxml_fit: readxml_fit.o
-	$(CC) $(LFLAGS) readxml_fit.o -o $@ $(LIBS)
+	$(CC) $(LFLAGS) readxml_fit.o -o $@ $(LIBS) -lRooFit -lRooFitCore -lRooStats
 
 .cc.o:
 	$(CC) $(INC) $(CFLAGS) $< -o $@
