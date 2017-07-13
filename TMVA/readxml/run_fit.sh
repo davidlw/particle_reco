@@ -1,12 +1,12 @@
 #!/bin/bash
 
-PTBIN="K_2_4"
+PTBIN="L_10up"
 READXML_PATH="/home/jg61/particle_reco/TMVA/readxml"
-LOG_PATH="/home/jg61/particle_reco/TMVA/readxml/logs/${PTBIN}"
-CONFIG_FILE="/home/jg61/particle_reco/TMVA/myTMVA_${PTBIN}/config_${PTBIN}.xml"
+LOG_NAME="/home/jg61/particle_reco/TMVA/readxml/logs/${PTBIN}/fit_histos_exec_test.log"
+CONFIG_FILE="/home/jg61/particle_reco/TMVA/config/config_${PTBIN}.xml"
+EXEC="/home/jg61/particle_reco/TMVA/readxml/readxml_fit"
 OUT_TAG="_${PTBIN}"
 
-source start.sh
 cd ${READXML_PATH}
 
-nohup unbuffer root -l -b -q `echo 'readxml_fit.cc+("'${CONFIG_FILE}'","'${OUT_TAG}'")'` &> ${LOG_PATH}/fit_histos.log &
+nohup unbuffer ${EXEC} ${CONFIG_FILE} ${OUT_TAG} &> ${LOG_NAME} &
