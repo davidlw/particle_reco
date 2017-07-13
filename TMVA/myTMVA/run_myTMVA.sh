@@ -1,5 +1,8 @@
 #!/bin/bash
 
-config_file_path="/home/jg61/particle_reco/TMVA/config/config_L_10up.xml"
+PTBIN="L_10up"
+CONFIG_FILE_PATH="/home/jg61/particle_reco/TMVA/config/config_${PTBIN}.xml"
+LOG_PATH="/home/jg61/particle_reco/TMVA/myTMVA/logs"
+EXEC="/home/jg61/particle_reco/TMVA/TMVAClassification"
 
-nohup unbuffer root -l -b -q `echo 'TMVAClassification.C+("'${config_file_path}'")'` &> myTMVA.log &
+nohup unbuffer ${EXEC} CONFIG_FILE_PATH &> ${LOG_PATH}/${PTBIN}.log &
