@@ -20,7 +20,7 @@ readxml_fit: readxml_fit.o
 	$(CC) $(INC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f *.o $(PROG)
+	rm -f *.o $(PROGS)
 
 readxml.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h ../../config_util/Configuration.h ../../config_util/strToVect.h ../../../InputChain/InputChain.h
 readxml_fit.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h ../../config_util/Configuration.h ../../config_util/strToVect.h
