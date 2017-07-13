@@ -13,8 +13,10 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o $@ $(LIBS)
 
-TMVAClassification.o: TMVAClassification.C ../../config_util/Configuration.h ../../../strToVect.h
+TMVAClassification.o: TMVAClassification.C
 	$(CC) $(INC) $(CFLAGS) $< -o $@
 
 clean:
 	rm -f *.o $(PROG)
+
+TMVAClassification.o: ../../config_util/Configuration.h ../../../strToVect.h
