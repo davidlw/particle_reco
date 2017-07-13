@@ -276,11 +276,11 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         double isig1f = isig1->getVal();
         double isig2f = isig2->getVal();
         
-        double bkgy = ibkgf * bkgf / cfg.massBinSize; // Normalize by bin width
+        double bkgy = ibkgf * bkgf;
         // double bkgye = ibkgf*bkgfe;
         double sigy1 = isig1f * sigf1;
         double sigy2 = isig2f * sigf2;
-        double sigy = (sigy1 + sigy2) / cfg.massBinSize; // Normalize by bin width
+        double sigy = sigy1 + sigy2;
         double toty = bkgy + sigy;
         
         double abkgy = (1 - ibkgf) * bkgf;
@@ -301,7 +301,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
 
         double signifh = sigyh / sqrt(totyh);
 
-        sigsig[icut] = signif;
+        sigsig[icut] = signifh;
         sigeff[icut] = icut;
         xframe->SetXTitle( ("m(" + cfg.dau1name + cfg.dau2name + ") [GeV/c^{2}]").c_str() );
         xframe->GetXaxis()->CenterTitle();
