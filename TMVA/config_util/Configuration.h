@@ -41,6 +41,9 @@ public:
     string signalFileName;
     string signalTreePath;
 
+    string weightFilePath;
+    string jobName;
+
     // Cutting information
     vector<double> ptBinLimits;
 
@@ -80,7 +83,7 @@ public:
     // *** Configuration only for TMVAClassification.C *** //
 
     // File information
-    string outfileName;
+    string outfilePath;
 
     string backgroundFileName;
     string backgroundTreePath;
@@ -98,7 +101,6 @@ public:
     // *** Configuration only for readxml *** //
 
     // File information
-    string myTMVApath;
     string histoOutPathBase;
 
     // Names of branches to be used in cutting
@@ -211,6 +213,9 @@ public:
         signalFileName = cfg.get<string>("Shared.Files.signal_file_name");
         signalTreePath = cfg.get<string>("Shared.Files.signal_tree_path");
 
+        weightFilePath = cfg.get<string>("Shared.Files.weight_file_path");
+        jobName = cfg.get<string>("Shared.Files.job_name");
+
         // Cuts
         ptBinLimits = strToVect<double>(cfg.get<string>("Shared.Cuts.pt_bin_limits"));
 
@@ -261,7 +266,7 @@ public:
         // *** TMVAClassification.C configuration *** //
 
         // Files
-        outfileName = cfg.get<string>("myTMVA.Files.out_file_name");
+        outfilePath = cfg.get<string>("myTMVA.Files.out_file_path_base") + "_" + jobName + ".root";
         backgroundFileName = cfg.get<string>("myTMVA.Files.background_file_name");
         backgroundTreePath = cfg.get<string>("myTMVA.Files.background_tree_path");
 
@@ -293,8 +298,7 @@ public:
         // *** readxml configuration *** //
 
         // File information
-        myTMVApath = cfg.get<string>("readxml.myTMVA_path");
-        histoOutPathBase = cfg.get<string>("readxml.histo_outpath_base");
+        histoOutPathBase = cfg.get<string>("readxml.histo_outpath_base") + "_" + jobName;
 
 
         branchNames = {

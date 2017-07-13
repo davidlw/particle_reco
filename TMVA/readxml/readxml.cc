@@ -19,140 +19,145 @@ using namespace std;
 
 void readxml(const string& config_file_name, const string& file_list, const string& output_tag = "")
 {
-  cout << "Loading configurations...\n";
+    clock_t start = clock();
 
-  Configuration cfg(config_file_name);
-  cout << "Using general configuration file: " << config_file_name << "\n";
+    cout << "Loading configurations...\n";
 
-  InputChain::InputChain ichain(file_list);
-  cout << "Using input chain configuration file: " << file_list << "\n";
+    Configuration cfg(config_file_name);
+    cout << "Using general configuration file: " << config_file_name << "\n";
 
-  // Stuff that was in readxml.h //
-  Double_t effS[cfg.nEff], effB[cfg.nEff];
+    InputChain::InputChain ichain(file_list);
+    cout << "Using input chain configuration file: " << file_list << "\n";
 
-  std::vector<TString> cuts;
-  std::vector< std::vector<Double_t> > cutval(cfg.nMaxVar);
-  std::vector<TString> varval(cfg.nMaxVar);
-  ////
+    // Stuff that was in readxml.h //
+    Double_t effS[cfg.nEff], effB[cfg.nEff];
+
+    std::vector<TString> cuts;
+    std::vector< std::vector<Double_t> > cutval(cfg.nMaxVar);
+    std::vector<TString> varval(cfg.nMaxVar);
+    ////
 
 
-  Float_t ptmin = cfg.ptBinLimits[0];
-  Float_t ptmax = cfg.ptBinLimits[1];
+    Float_t ptmin = cfg.ptBinLimits[0];
+    Float_t ptmax = cfg.ptBinLimits[1];
 
-  gStyle->SetOptTitle(0);
-  gStyle->SetOptStat(0);
-  gStyle->SetEndErrorSize(0);
-  gStyle->SetMarkerStyle(20);
-  gStyle->SetTextSize(0.05);
-  gStyle->SetTextFont(42);
-  gStyle->SetPadRightMargin(0.043);
-  gStyle->SetPadLeftMargin(0.18);
-  gStyle->SetPadTopMargin(0.1);
-  gStyle->SetPadBottomMargin(0.145);
-  gStyle->SetTitleX(.0f);
+    gStyle->SetOptTitle(0);
+    gStyle->SetOptStat(0);
+    gStyle->SetEndErrorSize(0);
+    gStyle->SetMarkerStyle(20);
+    gStyle->SetTextSize(0.05);
+    gStyle->SetTextFont(42);
+    gStyle->SetPadRightMargin(0.043);
+    gStyle->SetPadLeftMargin(0.18);
+    gStyle->SetPadTopMargin(0.1);
+    gStyle->SetPadBottomMargin(0.145);
+    gStyle->SetTitleX(.0f);
 
-  //read weight file
-  const string filename = cfg.myTMVApath + "/weights/TMVAClassification_CutsSA.weights.xml";
-  void *doc = TMVA::gTools().xmlengine().ParseFile(filename.c_str(),TMVA::gTools().xmlenginebuffersize());
-  void* rootnode = TMVA::gTools().xmlengine().DocGetRootElement(doc); // node "MethodSetup"
-  TString fullMethodName("");  
-  TMVA::gTools().ReadAttr(rootnode, "Method", fullMethodName);
+    //read weight file
+    const string filename = cfg.weight_file_path + "/" + cfg.jobName + "_CutsSA.weights.xml";
+    void *doc = TMVA::gTools().xmlengine().ParseFile(filename.c_str(), TMVA::gTools().xmlenginebuffersize());
+    void* rootnode = TMVA::gTools().xmlengine().DocGetRootElement(doc); // node "MethodSetup"
+    TString fullMethodName("");  
+    TMVA::gTools().ReadAttr(rootnode, "Method", fullMethodName);
 
-  cout<<endl;
-  cout<<" ╒══════════════════════════════════════════════════╕"<<endl;
-  cout<<" |               Cut Opt Configuration              |"<<endl;
-  cout<<" ├────────────┬────────────────────────────┬────────┤"<<endl;
-  cout<<" | "<<setiosflags(ios::left)<<setw(10)<<"Method"<<" | "<<setiosflags(ios::left)<<setw(26)<<fullMethodName<<" | "<<setiosflags(ios::left)<<setw(6)<<" "<<" |"<<endl;
+    cout << endl;
+    cout << " ╒══════════════════════════════════════════════════╕" << endl;
+    cout << " |               Cut Opt Configuration              |" << endl;
+    cout << " ├────────────┬────────────────────────────┬────────┤" << endl;
+    cout << " | " << setiosflags(ios::left) << setw(10) << "Method" << " | " << setiosflags(ios::left) << setw(26) << \
+        fullMethodName << " | " << setiosflags(ios::left) << setw(6) << " " << " |" << endl;
 
-  void *opts = TMVA::gTools().GetChild(rootnode,"Options");
-  void* opt = TMVA::gTools().GetChild(opts,"Option");
+    void* opts = TMVA::gTools().GetChild(rootnode, "Options");
+    void* opt = TMVA::gTools().GetChild(opts, "Option");
 
-  TString varProp("");
-  while (opt)
+    TString varProp("");
+    while(opt)
     {
-      TString optname("");
-      TMVA::gTools().ReadAttr(opt, "name", optname);
-      if (optname=="VarProp") varProp = TMVA::gTools().GetContent(opt);
-      opt = TMVA::gTools().GetNextChild(opt);
+        TString optname("");
+        TMVA::gTools().ReadAttr(opt, "name", optname);
+        if(optname == "VarProp") varProp = TMVA::gTools().GetContent(opt);
+        opt = TMVA::gTools().GetNextChild(opt);
     }
 
-  TObjArray *marginclass = varProp.Tokenize(" ");
-  std::vector<TString> margins;//avoid objarrays
-  for(int i=0;i<marginclass->GetEntries();i++)
+    TObjArray* marginclass = varProp.Tokenize(" ");
+    std::vector<TString> margins;//avoid objarrays
+    for(int i = 0; i < marginclass->GetEntries(); i++)
     {
-      margins.push_back(((TObjString *)(marginclass->At(i)))->String());
+        margins.push_back(((TObjString*)(marginclass->At(i)))->String());
     }
-  void* variables = TMVA::gTools().GetChild(rootnode,"Variables");
-  UInt_t nVar=0;
-  std::vector<TString> varnames;
-  TMVA::gTools().ReadAttr(variables, "NVar", nVar);
+    void* variables = TMVA::gTools().GetChild(rootnode, "Variables");
+    UInt_t nVar = 0;
+    std::vector<TString> varnames;
+    TMVA::gTools().ReadAttr(variables, "NVar", nVar);
 
-  void* var = TMVA::gTools().GetChild(variables,"Variable");
-  for(unsigned int k=0;k<nVar;k++)
+    void* var = TMVA::gTools().GetChild(variables, "Variable");
+    for(unsigned int k = 0; k < nVar; k++)
     {
-      TString varname("");
-      TMVA::gTools().ReadAttr(var, "Expression", varname);
-      TString tem = Form("Variable%i",k);
-      varval[k] = varname;
-      cout<<" ├────────────┼────────────────────────────┼────────┤"<<endl;
-      cout<<" | "<<setiosflags(ios::left)<<setw(10)<<tem<<" | "<<setiosflags(ios::left)<<setw(26)<<varname<<" | "<<setiosflags(ios::left)<<setw(6)<<margins[k]<<" |"<<endl;
-      var = TMVA::gTools().GetNextChild(var);
-      varnames.push_back(varname);
+        TString varname("");
+        TMVA::gTools().ReadAttr(var, "Expression", varname);
+        TString tem = Form("Variable%i", k);
+        varval[k] = varname;
+        cout << " ├────────────┼────────────────────────────┼────────┤" << endl;
+        cout << " | " << setiosflags(ios::left) << setw(10) << tem << " | " << setiosflags(ios::left) << setw(26) << varname << \
+            " | " << setiosflags(ios::left) << setw(6) << margins[k] << " |" << endl;
+        var = TMVA::gTools().GetNextChild(var);
+        varnames.push_back(varname);
     }
-  cout<<" ╞════════════╪════════════════════════════╪════════╡"<<endl;
-    TString ptstring = Form("(%.1f,%.1f)",ptmin,ptmax);
-    cout<<" | "<<setiosflags(ios::left)<<setw(10)<<"Pt"<<" | "<<setiosflags(ios::left)<<setw(26)<<ptstring<<" | "<<setiosflags(ios::left)<<setw(6)<<" "<<" |"<<endl;
-    cout<<" ╘════════════╧════════════════════════════╧════════╛"<<endl;
-    cout<<endl;
+    cout << " ╞════════════╪════════════════════════════╪════════╡" << endl;
+    TString ptstring = Form("(%.1f, %.1f)", ptmin, ptmax);
+    cout << " | " << setiosflags(ios::left) << setw(10) << "Pt" << " | " << setiosflags(ios::left) << setw(26) << ptstring << \
+        " | " << setiosflags(ios::left) << setw(6) << " " << " |" << endl;
+    cout << " ╘════════════╧════════════════════════════╧════════╛" << endl;
+    cout << endl;
     
-  void* weight = TMVA::gTools().GetChild(rootnode,"Weights");
-  void* eff = TMVA::gTools().GetChild(weight,"Bin");
-  int n=0;
-  while(eff)
+    void* weight = TMVA::gTools().GetChild(rootnode, "Weights");
+    void* eff = TMVA::gTools().GetChild(weight, "Bin");
+    int n = 0;
+    while(eff)
     {
-      TMVA::gTools().ReadAttr(eff, "effS", effS[n]);
-      TMVA::gTools().ReadAttr(eff, "effB", effB[n]);
-      void* cutsnode = TMVA::gTools().GetChild(eff,"Cuts");
+        TMVA::gTools().ReadAttr(eff, "effS", effS[n]);
+        TMVA::gTools().ReadAttr(eff, "effB", effB[n]);
+        void* cutsnode = TMVA::gTools().GetChild(eff, "Cuts");
 
-      TString cut;
-      for(ULong_t l=0;l<varnames.size();l++)
-    {
-      Double_t min,max;
-      TMVA::gTools().ReadAttr(cutsnode, TString("cutMin_")+l, min);
-      TMVA::gTools().ReadAttr(cutsnode, TString("cutMax_")+l, max);
-      TString lessmax = "<"; lessmax+=max;
-      TString moremin = ">"; moremin+=min;
-      if(margins[l]=="FMin")
+        TString cut;
+        for(ULong_t l = 0; l < varnames.size(); l++)
         {
-          cut+=" && "+varnames[l]+lessmax;
-          cutval[l].push_back(max);
+            Double_t min, max;
+            TMVA::gTools().ReadAttr(cutsnode, TString("cutMin_") + l, min);
+            TMVA::gTools().ReadAttr(cutsnode, TString("cutMax_") + l, max);
+            TString lessmax = "<"; lessmax += max;
+            TString moremin = ">"; moremin += min;
+            if(margins[l] == "FMin")
+            {
+                cut += " && " + varnames[l] + lessmax;
+                cutval[l].push_back(max);
+            }
+            if(margins[l] == "FMax")
+            {
+                cut += " && " + varnames[l] + moremin;
+                cutval[l].push_back(min);
+            }
         }
-      if(margins[l]=="FMax")
-        {
-          cut+=" && "+varnames[l]+moremin;
-          cutval[l].push_back(min);
-        }
-    }
-      cuts.push_back(cut);
-      eff = TMVA::gTools().GetNextChild(eff);
-      n++;
+        cuts.push_back(cut);
+        eff = TMVA::gTools().GetNextChild(eff);
+        n++;
     }
     TMVA::gTools().xmlengine().FreeDoc(doc);
     
-    cout<<"Finished reading cuts."<<endl;
+    cout << "Finished reading cuts." << endl;
     //construct histos with TMVA cuts
     
-    TFile *inputS = TFile::Open(cfg.signalFileName.c_str());
+    TFile* inputS = TFile::Open(cfg.signalFileName.c_str());
     if(!inputS)
     {
-        cout<<"Signal file not found."<<endl;
+        cout << "Signal file not found." << endl;
         return;
     }
     
-    TTree *signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
+    TTree* signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
 
     // Chain together the background trees
-    TChain *background = new TChain("background");
+    TChain* background = new TChain("background");
     vector<string> in_bases = ichain.get_in_bases();
     vector< vector<int> > i_lims = ichain.get_idx_lims();
     for(unsigned i = 0; i < in_bases.size(); i++)
@@ -260,5 +265,8 @@ void readxml(const string& config_file_name, const string& file_list, const stri
             cout << ", " << cfg.variableNamesList[j] << " " << cfg.variableComparators[j] << " " << cutval[j].at(icut);
         }
         cout << endl;
-    }   
+    }
+
+    cout << "Program terminated successfully.\n";
+    cout << "Time elapsed: " << (clock_end - clock_start) / (double)CLOCKS_PER_SEC << " seconds.\n";
 }

@@ -76,12 +76,11 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
    TMVA::Tools::Instance();
 
    // to get access to the GUI and all tmva macros
-    TString tmva_dir(TString(gRootDir) + "/tmva");
-    if(gSystem->Getenv("TMVASYS"))
-       tmva_dir = TString(gSystem->Getenv("TMVASYS"));
-    gROOT->SetMacroPath(tmva_dir + "/test/:" + gROOT->GetMacroPath() );
-    //gROOT->ProcessLine(".L TMVAGui.C");
-
+   TString tmva_dir(TString(gRootDir) + "/tmva");
+   if(gSystem->Getenv("TMVASYS"))
+      tmva_dir = TString(gSystem->Getenv("TMVASYS"));
+   gROOT->SetMacroPath(tmva_dir + "/test/:" + gROOT->GetMacroPath() );
+   //gROOT->ProcessLine(".L TMVAGui.C");
 
    // Default MVA methods to be trained + tested
    std::map<std::string,int> Use;
@@ -174,7 +173,10 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
    cout << "Using configuration file: " << config_file_name << "\n";
 
    // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-   TFile* outputFile = TFile::Open(cfg.outfileName.c_str(), "RECREATE");
+   TFile* outputFile = TFile::Open(cfg.outfilePath.c_str(), "RECREATE");
+
+   // Configure the output weight file directory
+   TMVA::gConfig().ioNames.weightFileDir = cfg.weightFilePath.c_str();
 
    // Create the factory object. Later you can choose the methods
    // whose performance you'd like to investigate. The factory is 
@@ -186,7 +188,7 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
    // The second argument is the output file for the training results
    // All TMVA output can be suppressed by removing the "!" (not) in
    // front of the "Silent" argument in the option string
-   TMVA::Factory *factory = new TMVA::Factory( "TMVAClassification_testname", outputFile,
+   TMVA::Factory *factory = new TMVA::Factory( cfg.jobName.c_str(), outputFile,
                                                "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
 
    // If you wish to modify default settings
