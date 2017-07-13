@@ -180,7 +180,7 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
    TFile* outputFile = TFile::Open(cfg.outfilePath.c_str(), "RECREATE");
 
    // Configure the output weight file directory
-   TMVA::gConfig().ioNames.weightFileDir = cfg.weightFilePath.c_str();
+   (TMVA::gConfig().GetIONames()).fWeightFileDir = cfg.weightFilePath.c_str();
 
    // Create the factory object. Later you can choose the methods
    // whose performance you'd like to investigate. The factory is 
@@ -523,7 +523,7 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
    delete factory;
 
    // Launch the GUI for the root macros
-   if(!gROOT->IsBatch()) TMVAGui(cfg.outfileName.c_str());
+   if(!gROOT->IsBatch()) TMVAGui(cfg.outfilePath.c_str());
 
    clock_t clock_end = clock();
    cout << "Time elapsed: " << (clock_end - clock_start) / (double)CLOCKS_PER_SEC << " seconds.\n";
