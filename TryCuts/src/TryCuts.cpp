@@ -12,6 +12,8 @@
 
 int main(int argc, char* argv[])
 {
+    clock_t clock_start = clock();
+
 	// Specify configuration file
 	string cfg_file = "config.xml";	// Default
 	string infile_config = "infile_list.xml"; // Default
@@ -249,7 +251,10 @@ int main(int argc, char* argv[])
 	// Cleanup
 	textout.close();
 
-	cout << "\nProgram terminated successfully.\n";
+    clock_t clock_end = clock();
+
+    cout << "Program terminated successfully.\n";
+    cout << "Time elapsed: " << (clock_end - clock_start) / (double)CLOCKS_PER_SEC << " seconds.\n";
 }
 
 void iterVarOut(ofstream& out, const string& var_name, const vector<double>& var_lims)
