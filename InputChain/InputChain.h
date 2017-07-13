@@ -70,7 +70,7 @@ public:
 	vector< vector<int> > get_idx_lims() const {return idx_lims;}
 	string get_dir_name() const {return directory_name;}
 	string get_tree_name() const {return tree_name;}
-	unsigned get_n_files() const {return n_files};
+	unsigned get_n_files() const {return n_files;}
 
 
 private:
