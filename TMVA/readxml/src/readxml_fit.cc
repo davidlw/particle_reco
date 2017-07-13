@@ -292,9 +292,10 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         double sigfrac = sigy / toty;
         double bkgfrac = bkgy / toty;
         
-        double sigyh = totyh - bkgy;
-        double sigfrach = sigy / totyh;
-        double bkgfrach = bkgy / totyh;
+        double sigyh = totyh * sigfrac;
+        double sigfrach = sigyh / totyh;
+        double bkgyh = totyh * bkgfrac;
+        double bkgfrach = bkgyh / totyh;
         
         double signif = sigy / sqrt(toty);
 
@@ -333,9 +334,9 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         latex.SetTextSize(0.03);
         latex.SetNDC();
 
-        latex.DrawLatex(0.70, 0.85, Form("#frac{s}{#sqrt{s+b}} = %.3f", signif));
-        latex.DrawLatex(0.70, 0.80, Form("#frac{s}{s+b} = %.3f", sigfrac));
-        latex.DrawLatex(0.70, 0.75, Form("s+b = %.1f", toty));
+        latex.DrawLatex(0.70, 0.85, Form("#frac{s}{#sqrt{s+b}} = %.3f", signifh));
+        latex.DrawLatex(0.70, 0.80, Form("#frac{s}{s+b} = %.3f", sigfrach));
+        latex.DrawLatex(0.70, 0.75, Form("s+b = %.1f", totyh));
         latex.DrawLatex(0.70, 0.70, Form("#mu = %.3f", meanf));
         latex.DrawLatex(0.70, 0.65, Form("#sigma = %.4f", sigmaf));
 
