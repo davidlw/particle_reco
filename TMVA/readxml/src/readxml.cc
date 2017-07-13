@@ -290,7 +290,7 @@ void readxml(const string& config_file_name, const string& file_list, const stri
     for(unsigned f = 0; f < n_files; ++f)
     {
         // Progress tracking
-        cout << "Opening file " << ++file_counter << "/" << n_files << endl;
+        cout << "Opening file " << ++file_counter << "/" << n_files << "." << endl;
 
         int idxlo = i_lims[f][0], idxhi = i_lims[f][1];
         for(int f_idx = idxlo; f_idx <= idxhi; ++f_idx)
@@ -354,6 +354,6 @@ void readxml(const string& config_file_name, const string& file_list, const stri
 
     clock_t clock_end = clock();
 
-    cout << "Program terminated successfully.\n";
+    cout << "\nProgram terminated successfully.\n";
     cout << "Time elapsed: " << (clock_end - clock_start) / (double)CLOCKS_PER_SEC << " seconds.\n";
 }
