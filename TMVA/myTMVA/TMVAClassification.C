@@ -34,6 +34,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <ctime>
 
 #include "TChain.h"
 #include "TFile.h"
@@ -56,6 +57,8 @@ using namespace Configuration_TMVA;
 
 void TMVAClassification( const string& config_file_name, TString myMethodList = "" )
 {
+    clock_t clock_start = clock();
+
    // The explicit loading of the shared libTMVA is done in TMVAlogon.C, defined in .rootrc
    // if you use your private .rootrc, or run from a different directory, please copy the
    // corresponding lines from .rootrc
@@ -520,4 +523,7 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
 
    // Launch the GUI for the root macros
    if(!gROOT->IsBatch()) TMVAGui(cfg.outfileName.c_str());
+
+   clock_t clock_end = clock();
+   cout << "Time elapsed: " << (clock_end - clock_start) / (double)CLOCKS_PER_SEC << " seconds.\n";
 }
