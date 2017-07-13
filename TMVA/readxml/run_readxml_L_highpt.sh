@@ -9,4 +9,4 @@ EXEC="src/readxml"
 
 cd ${READXML_PATH}
 
-nohup unbuffer ${EXEC} ${CONFIG_FILE} /home/jg61/particle_reco/InputChain/config/dataTrees_L_highpt.xml ${OUT_TAG} &> ${LOG_PATH}/readxml${OUT_TAG}.log &
+nohup unbuffer ${EXEC} ${CONFIG_FILE} /home/jg61/particle_reco/InputChain/config/split_L/dataTrees_L_14b.xml ${OUT_TAG} &> ${LOG_PATH}/readxml${OUT_TAG}.log &
