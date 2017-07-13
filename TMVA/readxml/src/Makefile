@@ -22,5 +22,5 @@ readxml_fit: readxml_fit.o
 clean:
 	rm -f *.o $(PROG)
 
-readxml.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h ../../config_util/Configuration. ../../config_util/strToVect.h ../../../InputChain/InputChain.h
-readxml_fit.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h ../../config_util/Configuration. ../../config_util/strToVect.h
+readxml.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h ../../config_util/Configuration.h ../../config_util/strToVect.h ../../../InputChain/InputChain.h
+readxml_fit.o: ../includes/readxml.h ../includes/Tools.h ../includes/uti.h ../../config_util/Configuration.h ../../config_util/strToVect.h
