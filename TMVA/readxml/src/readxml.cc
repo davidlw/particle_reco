@@ -99,7 +99,7 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
 
     TObjArray* marginclass = varProp.Tokenize(" ");
     std::vector<TString> margins;//avoid objarrays
-    for(int i = 0; i < marginclass->GetEntries(); i++)
+    for(int i = 0; i < marginclass->GetEntries(); ++i)
     {
         margins.push_back(((TObjString*)(marginclass->At(i)))->String());
     }
@@ -109,7 +109,7 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
     TMVA::gTools().ReadAttr(variables, "NVar", nVar);
 
     void* var = TMVA::gTools().GetChild(variables, "Variable");
-    for(unsigned int k = 0; k < nVar; k++)
+    for(unsigned int k = 0; k < nVar; ++k)
     {
         TString varname("");
         TMVA::gTools().ReadAttr(var, "Expression", varname);
@@ -138,7 +138,7 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
         void* cutsnode = TMVA::gTools().GetChild(eff, "Cuts");
 
         TString cut;
-        for(ULong_t l = 0; l < varnames.size(); l++)
+        for(ULong_t l = 0; l < varnames.size(); ++l)
         {
             Double_t min, max;
             TMVA::gTools().ReadAttr(cutsnode, TString("cutMin_") + l, min);
@@ -218,14 +218,14 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
     }
     
     TTree* signal = (TTree*) inputS->Get(cfg.signalTreePath.c_str());
-    for(unsigned i = 0; i < bNames.size(); i++)
+    for(unsigned i = 0; i < bNames.size(); ++i)
     {
         signal->SetBranchAddress(bNames[i].c_str(), &branches[i]);
     }
 
     // Fill the signal histogram
     Long64_t nentriesS = signal->GetEntries();
-    for (Long64_t i = 0; i < nentriesS; i++)
+    for (Long64_t i = 0; i < nentriesS; ++i)
     {
         signal->GetEntry(i);
         
@@ -253,7 +253,7 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
     //     }
     // }
 
-    for(unsigned f = 0; f < ichain.get_n_files())
+    for(unsigned f = 0; f < ichain.get_n_files(); ++f)
     {
         TChain* background = new TChain("background");
 
@@ -268,23 +268,23 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
         // Determine the indices of the branches corresponding to each variable cut
         vector<string> vNamesList = cfg.variableNamesList;
         vector<int> vCutsIdx(vNamesList.size());
-        for(unsigned i = 0; i < vNamesList.size(); i++)
+        for(unsigned i = 0; i < vNamesList.size(); ++i)
         {
             vCutsIdx[i] = cfg.whichBranch(vNamesList[i]);
         }
 
         // Read the cutVals (as in Configuration.passesVariableCuts) vector for each of the 100 cut sets
         vector< vector<Double_t> > cutValsList(100, vector<double>(bNames.size()));
-        for(unsigned i = 0; i < cutValsList.size(); i++)
+        for(unsigned i = 0; i < cutValsList.size(); ++i)
         {
-            for(unsigned j = 0; j < vCutsIdx.size(); j++)
+            for(unsigned j = 0; j < vCutsIdx.size(); ++j)
             {
                 cutValsList[i][ vCutsIdx[j] ] = cutval[j].at(i);
             }
         }
 
         // Fill the background histograms
-        for (Long64_t i = 0; i < nentries; i++)
+        for (Long64_t i = 0; i < nentries; ++i)
         {
             background->GetEntry(i);
             
@@ -294,7 +294,7 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
                 LCmassB->Fill(branches[m]);
             
                 //now implement the tuning cuts
-                for(int icut = 0; icut < 100; icut++)
+                for(int icut = 0; icut < 100; ++icut)
                 {
                     if( cfg.passesVariableCuts(branches, cutValsList[icut]) )
                         LCmass[icut]->Fill(branches[m]);
@@ -309,7 +309,7 @@ cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
 
 
     // Print the cuts
-    for(int icut = 0; icut < 100; icut++)
+    for(int icut = 0; icut < 100; ++icut)
     {
         cout << "icut: " << icut;
         for(unsigned j = 0; j < cfg.variableNamesList.size(); j++)
