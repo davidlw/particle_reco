@@ -57,6 +57,13 @@ public:
 	int get_nhits_min() const {return nhits_min;}
 	vector<double> get_hrange() const {return histo_range;}
 	double get_binsize() const {return binsize;}
+	string get_histoFile() const {return histoFile;}
+	string get_fitOutPath() const {return fitOutPath;}
+	string get_imageType() const {return imageType;}
+	double get_peakStd() const {return peakStDev;}
+	double get_peakMass() const {return peakMass;}
+	string get_dau1name() const {return dau1name;}
+	string get_dau2name() const {return dau2name;}
 
 	// Calculate information about the output histograms
 	int n_histos() const;
@@ -92,6 +99,17 @@ private:
 	// Histogram info
 	vector<double> histo_range;
 	double binsize;
+
+	// Fit info
+	string histoFile;
+	string fitOutPath;
+	string imageType;
+
+	double peakStDev;
+	double peakMass;
+
+	string dau1name;
+	string dau2name;
 
 	// Supporting function for reading cut info
 	void readRangeCuts(const boost::property_tree::ptree&, const string&, vector< vector<double> >&);

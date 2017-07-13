@@ -60,6 +60,17 @@ Configuration::Configuration(const string& cfg_file)
 	// Histogram information
 	histo_range = strToVect<double>( cfg.get<string>("Config.Histo.range") );
 	binsize = cfg.get<double>("Config.Histo.bin_size");
+
+	// Fit information
+	histoFile = cfg.get<string>("Config.Fit.in_file");
+	fitOutPath = cfg.get<string>("Config.Fit.out_path");
+	imageType = cfg.get<string>("Config.Fit.image_type");
+
+	peakStDev = cfg.get<double>("Config.Fit.peak_stdev");
+	peakMass = cfg.get<double>("Config.Fit.peak_mass");
+
+	dau1name = cfg.get<string>("Config.Fit.dau1_name");
+	dau2name = cfg.get<string>("Config.Fit.dau2_name");
 }
 
 Configuration::~Configuration() {}
