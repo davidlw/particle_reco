@@ -46,7 +46,8 @@ void readxml(const string& config_file_name, const string& file_list, const stri
 
     InputChain::InputChain ichain(file_list);
     cout << "Using input chain configuration file: " << file_list << "\n";
-cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
+    cout << "n_files: " << ichain.get_n_files() << endl;
+
     // Stuff that was in readxml.h //
     Double_t effS[cfg.nEff], effB[cfg.nEff];
 
