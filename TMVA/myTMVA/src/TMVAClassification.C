@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
         TMVAClassification(config_file_name);
 }
 
-void TMVAClassification( const string& config_file_name, TString myMethodList = "" )
+void TMVAClassification( const string& config_file_name, TString myMethodList )
 {
     clock_t clock_start = clock();
 
