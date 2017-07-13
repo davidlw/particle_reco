@@ -51,6 +51,7 @@ using namespace Configuration_TMVA;
 // needs to be included when makecint runs (ACLIC)
 #include "TMVA/Factory.h"
 #include "TMVA/Tools.h"
+#include "TMVA/Config.h"
 #include "TMVAGui.C"
 
 #endif
