@@ -46,7 +46,7 @@ void readxml(const string& config_file_name, const string& file_list, const stri
 
     InputChain::InputChain ichain(file_list);
     cout << "Using input chain configuration file: " << file_list << "\n";
-cout << "N_files: " << ichain.n_files << endl; exit(0);
+cout << "N_files: " << ichain.get_n_files() << endl; exit(0);
     // Stuff that was in readxml.h //
     Double_t effS[cfg.nEff], effB[cfg.nEff];
 
@@ -253,47 +253,52 @@ cout << "N_files: " << ichain.n_files << endl; exit(0);
     //     }
     // }
 
-    for(unsigned i = 0; i < bNames.size(); i++)
+    for(unsigned f = 0; f < ichain.get_n_files())
     {
-        background->SetBranchAddress(bNames[i].c_str(), &branches[i]);
-    }
+        TChain* background = new TChain("background");
 
-    
-    Long64_t nentries = background->GetEntries();
-
-    // Determine the indices of the branches corresponding to each variable cut
-    vector<string> vNamesList = cfg.variableNamesList;
-    vector<int> vCutsIdx(vNamesList.size());
-    for(unsigned i = 0; i < vNamesList.size(); i++)
-    {
-        vCutsIdx[i] = cfg.whichBranch(vNamesList[i]);
-    }
-
-    // Read the cutVals (as in Configuration.passesVariableCuts) vector for each of the 100 cut sets
-    vector< vector<Double_t> > cutValsList(100, vector<double>(bNames.size()));
-    for(unsigned i = 0; i < cutValsList.size(); i++)
-    {
-        for(unsigned j = 0; j < vCutsIdx.size(); j++)
+        for(unsigned i = 0; i < bNames.size(); i++)
         {
-            cutValsList[i][ vCutsIdx[j] ] = cutval[j].at(i);
+            background->SetBranchAddress(bNames[i].c_str(), &branches[i]);
         }
-    }
 
-    // Fill the background histograms
-    for (Long64_t i = 0; i < nentries; i++)
-    {
-        background->GetEntry(i);
         
-        //first implement non-tuning cut; must be sychronized with the setting in TMVA tuning (mycutb)
-        if(cfg.passesBaseBackgroundCuts(branches))
+        Long64_t nentries = background->GetEntries();
+
+        // Determine the indices of the branches corresponding to each variable cut
+        vector<string> vNamesList = cfg.variableNamesList;
+        vector<int> vCutsIdx(vNamesList.size());
+        for(unsigned i = 0; i < vNamesList.size(); i++)
         {
-            LCmassB->Fill(branches[m]);
-        
-            //now implement the tuning cuts
-            for(int icut = 0; icut < 100; icut++)
+            vCutsIdx[i] = cfg.whichBranch(vNamesList[i]);
+        }
+
+        // Read the cutVals (as in Configuration.passesVariableCuts) vector for each of the 100 cut sets
+        vector< vector<Double_t> > cutValsList(100, vector<double>(bNames.size()));
+        for(unsigned i = 0; i < cutValsList.size(); i++)
+        {
+            for(unsigned j = 0; j < vCutsIdx.size(); j++)
             {
-                if( cfg.passesVariableCuts(branches, cutValsList[icut]) )
-                    LCmass[icut]->Fill(branches[m]);
+                cutValsList[i][ vCutsIdx[j] ] = cutval[j].at(i);
+            }
+        }
+
+        // Fill the background histograms
+        for (Long64_t i = 0; i < nentries; i++)
+        {
+            background->GetEntry(i);
+            
+            //first implement non-tuning cut; must be sychronized with the setting in TMVA tuning (mycutb)
+            if(cfg.passesBaseBackgroundCuts(branches))
+            {
+                LCmassB->Fill(branches[m]);
+            
+                //now implement the tuning cuts
+                for(int icut = 0; icut < 100; icut++)
+                {
+                    if( cfg.passesVariableCuts(branches, cutValsList[icut]) )
+                        LCmass[icut]->Fill(branches[m]);
+                }
             }
         }
     }
