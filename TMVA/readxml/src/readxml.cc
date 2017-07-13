@@ -17,7 +17,25 @@
 
 using namespace std;
 
-void readxml(const string& config_file_name, const string& file_list, const string& output_tag = "")
+void readxml(const string&, const string&, const string& output_tag = "");
+
+int main(int argc, char* argv[])
+{
+    if(argc <= 2)
+    {
+        cout << "ERROR: Please pass in the configuration file name and the input file list. Exiting.\n";
+        exit(-1);
+    }
+
+    string config_file_name = argv[1];
+    string file_list = argv[2];
+    if(argc > 3)
+        readxml(config_file_name, file_list, argv[3]);
+    else
+        readxml(config_file_name, file_list);
+}
+
+void readxml(const string& config_file_name, const string& file_list, const string& output_tag)
 {
     clock_t start = clock();
 

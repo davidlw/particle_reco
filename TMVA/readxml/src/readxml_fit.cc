@@ -22,8 +22,25 @@
 using namespace RooFit;
 using namespace std;
 
+void readxml_fit(const string&, const string& output_tag = "");
 
-void readxml_fit(const string& config_file_name, const string& output_tag = "")
+int main(int argc, char* argv[])
+{
+    if(argc <= 1)
+    {
+        cout << "ERROR: Please pass in the configuration file name. Exiting.\n";
+        exit(-1);
+    }
+
+    string config_file_name = argv[1];
+    if(argc > 2)
+        readxml_fit(config_file_name, argv[2]);
+    else
+        readxml_fit(config_file_name);
+}
+
+
+void readxml_fit(const string& config_file_name, const string& output_tag)
 {
     clock_t clock_start = clock();
 
