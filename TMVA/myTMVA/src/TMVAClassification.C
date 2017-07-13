@@ -44,7 +44,7 @@
 #include "TSystem.h"
 #include "TROOT.h"
 
-#include "../config_util/Configuration.h"
+#include "Configuration.h"
 using namespace Configuration_TMVA;
 
 #if not defined(__CINT__) || defined(__MAKECINT__)
@@ -523,7 +523,7 @@ void TMVAClassification( const string& config_file_name, TString myMethodList = 
    delete factory;
 
    // Launch the GUI for the root macros
-   if(!gROOT->IsBatch()) TMVAGui(cfg.outfilePath.c_str());
+   // if(!gROOT->IsBatch()) TMVAGui(cfg.outfilePath.c_str());
 
    clock_t clock_end = clock();
    cout << "Time elapsed: " << (clock_end - clock_start) / (double)CLOCKS_PER_SEC << " seconds.\n";
