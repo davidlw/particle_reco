@@ -1,7 +1,7 @@
 PROG = TMVAClassification
 CC = g++ -std=c++14
 INC = -I/usr/include -I../../../ROOT_Util -I../../config_util
-LIBS = `root-config --libs` -lTMVA -L../../ROOT_Util -lROOT_Util
+LIBS = `root-config --libs` -lTMVA -L../../../ROOT_Util -lROOT_Util
 DEBUG = -g
 CFLAGS = -c `root-config --cflags` -Wall $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
