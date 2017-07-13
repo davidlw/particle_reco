@@ -332,7 +332,7 @@ public:
 
         // Histograms
         targetBinSize = cfg.get<double>("readxml.target_bin_size");
-        nMassBins = ceil( (massWindowHi - massWindowLo) / targetBinSize );
+        nMassBins = round( (massWindowHi - massWindowLo) / targetBinSize );
         massBinSize = (massWindowHi - massWindowLo) / nMassBins; // Actual bin size
 
         // Misc.

@@ -267,7 +267,7 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         double awyh = awyh1 + awyh2;
         double totyh = h->Integral(nmin, nmax);
         
-        x.setRange("cut",massmin,massmax);
+        x.setRange("cut", massmin, massmax);
         RooAbsReal* ibkg = poly.createIntegral(x, NormSet(x), Range("cut"));
         RooAbsReal* isig1 = gaus1.createIntegral(x, NormSet(x), Range("cut"));
         RooAbsReal* isig2 = gaus2.createIntegral(x, NormSet(x), Range("cut"));
@@ -276,10 +276,10 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         double isig1f = isig1->getVal();
         double isig2f = isig2->getVal();
         
-        double bkgy = ibkgf*bkgf / cfg.massBinSize; // Normalize by bin width
+        double bkgy = ibkgf * bkgf / cfg.massBinSize; // Normalize by bin width
         // double bkgye = ibkgf*bkgfe;
-        double sigy1 = isig1f*sigf1;
-        double sigy2 = isig2f*sigf2;
+        double sigy1 = isig1f * sigf1;
+        double sigy2 = isig2f * sigf2;
         double sigy = (sigy1 + sigy2) / cfg.massBinSize; // Normalize by bin width
         double toty = bkgy + sigy;
         
@@ -296,7 +296,10 @@ void readxml_fit(const string& config_file_name, const string& output_tag)
         double sigfrach = sigy / totyh;
         double bkgfrach = bkgy / totyh;
         
-        double signif = sigy / sqrt(totyh);
+        double signif = sigy / sqrt(toty);
+
+        double signifh = sigyh / sqrt(totyh);
+
         sigsig[icut] = signif;
         sigeff[icut] = icut;
         xframe->SetXTitle( ("m(" + cfg.dau1name + cfg.dau2name + ") [GeV/c^{2}]").c_str() );

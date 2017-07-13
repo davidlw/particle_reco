@@ -25,8 +25,8 @@
         <mass_dau1_mean>1.116</mass_dau1_mean>
         <mass_dau1_sigma>0.0028</mass_dau1_sigma>
 
-        <mass_window_low>2.1</mass_window_low>
-        <mass_window_high>2.5</mass_window_high>
+        <mass_window_low>2.19</mass_window_low>
+        <mass_window_high>2.39</mass_window_high>
 
         <dEdx>
             <use_dedx>false</use_dedx>
