@@ -278,7 +278,7 @@ public:
         backgroundWeight = cfg.get<double>("myTMVA.Vars.background_weight");
 
         double mass_sqr = peakMass * peakMass;
-        string rapidity_expr = "abs( log( (sqrt(" + to_string(mass_sqr) "+ (pt*cosh(eta))^2 ) + pt*sinh(eta)) / sqrt(" + \
+        string rapidity_expr = "abs( log( (sqrt(" + to_string(mass_sqr) + "+ (pt*cosh(eta))^2 ) + pt*sinh(eta)) / sqrt(" + \
             to_string(mass_sqr) + "+ pt^2) ) +" + to_string(y_cm_correction) + " )";
         baseSignalCuts = (
             rapidity_expr + "<" + to_string(absYcmMax) + "&& pt_dau1 >" + to_string(ptD1Min) + \
