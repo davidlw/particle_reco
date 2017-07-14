@@ -36,7 +36,7 @@ public:
 	// Getters
 	string get_out_base() const {return out_file_base;}
 	vector< vector<double> > get_pt_lims() const {return pt_lims;}
-	vector<double> get_eta_max() const {return eta_max;}
+	vector<double> get_y_cm_max() const {return y_cm_max;}
 	vector<double> get_ptd1_min() const {return ptdau1_min;}
 	vector<double> get_ptd2_min() const {return ptdau2_min;}
 	vector<double> get_etad1_max() const {return etadau1_max;}
@@ -75,7 +75,7 @@ private:
 
 	// Cut info
 	vector< vector<double> > pt_lims;
-	vector<double> eta_max;
+	vector<double> y_cm_max;
 	vector<double> ptdau1_min;
 	vector<double> ptdau2_min;
 	vector<double> etadau1_max;

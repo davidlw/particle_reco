@@ -60,6 +60,8 @@ int main(int argc, char* argv[])
 	double dedx_mass = params.get_dedx_mass();
 	double nhits_min = params.get_nhits_min();
 
+	double y_cm_corr = ic.get_y_cm_corr();	// y_cm correction -- added to the base rapidity calculation
+
 	// Write default cuts to the text file
 	cout << "Generating output files.\n";
 	ofstream textout;
@@ -73,6 +75,7 @@ int main(int argc, char* argv[])
 		textout << "[ dEdxHarmonic_dau2 < " << k_hi << " * (" << dedx_mass << " / (p_dau2 + " << -a_hi << "))^2 + " << c_hi << \
 				"   OR   p_dau2 >= " << cutoff_hi << " ]\n";
 	}
+	textout << "\ny_cm correction: " << y_cm_corr << endl;
 	textout << "-----------------------------------------\n";
 	textout << "Histogram-specific cuts:\n";
 
@@ -87,7 +90,7 @@ int main(int argc, char* argv[])
 	double massd1_mean = params.get_massd1_mean(), massd1_sigma = params.get_massd1_sigma();
 
 	vector< vector<double> > pt_lims = params.get_pt_lims();
-	vector<double> eta_max = params.get_eta_max(),
+	vector<double> y_cm_max = params.get_y_cm_max(),
 			ptd1_min = params.get_ptd1_min(),
 			ptd2_min = params.get_ptd2_min(),
 			etad1_max = params.get_etad1_max(),
@@ -101,7 +104,7 @@ int main(int argc, char* argv[])
 	// Loop through all the combinations of cuts to fill the text file and form the histograms
 	int counter = 0; 	// Counter for iterations
     auto pt_end = pt_lims.end();
-    auto eta_end = eta_max.end();
+    auto y_cm_end = y_cm_max.end();
     auto ptd1_end = ptd1_min.end();
     auto ptd2_end = ptd2_min.end();
     auto etad1_end = etad1_max.end();
@@ -112,7 +115,7 @@ int main(int argc, char* argv[])
     auto cosPA_end = cosPA_min.end();
     auto dlsig_end = dlsig_min.end();
 	for(auto pt = pt_lims.begin(); pt < pt_end; ++pt) {
-	for(auto eta = eta_max.begin(); eta < eta_end; ++eta) {
+	for(auto y_cm = y_cm_max.begin(); y_cm < y_cm_end; ++y_cm) {
 	for(auto ptd1 = ptd1_min.begin(); ptd1 < ptd1_end; ++ptd1) {
 	for(auto ptd2 = ptd2_min.begin(); ptd2 < ptd2_end; ++ptd2) {
 	for(auto etad1 = etad1_max.begin(); etad1 < etad1_end; ++etad1) {
@@ -145,7 +148,7 @@ int main(int argc, char* argv[])
 		// Write cut information to the text output file
 		textout << endl << nametitle << ":\n";
 		iterVarOut(textout, "pT", *pt);
-		textout << "\t|eta| < " << *eta << endl;
+		textout << "\t|y_cm| < " << *y_cm << endl;
 		textout << "\tpT_dau1 > " << *ptd1 << endl;
 		textout << "\tpT_dau2 > " << *ptd2 << endl;
 		textout << "\t|eta_dau1| < " << *etad1 << endl;
@@ -175,6 +178,9 @@ int main(int argc, char* argv[])
 	unsigned file_counter = 0;
 	unsigned n_files = ic.get_n_files();
 	unsigned n_bases = i_lims.size();
+
+	// For eta->y conversion
+	double peak_mass = params.get_peakMass();
 
 	cout << "Begin reading entries.\n";
 	for(unsigned f = 0; f < n_bases; ++f)
@@ -219,7 +225,7 @@ int main(int argc, char* argv[])
 				// Check whether the current leaf satisfies each set of cuts, and if so, fill the corresponding histogram
 				int index = -1; 	// Index for the current set of cuts
 				for(auto pt = pt_lims.begin(); pt < pt_end; ++pt) {
-				for(auto eta = eta_max.begin(); eta < eta_end; ++eta) {
+				for(auto y_cm = y_cm_max.begin(); y_cm < y_cm_end; ++y_cm) {
 				for(auto ptd1 = ptd1_min.begin(); ptd1 < ptd1_end; ++ptd1) {
 				for(auto ptd2 = ptd2_min.begin(); ptd2 < ptd2_end; ++ptd2) {
 				for(auto etad1 = etad1_max.begin(); etad1 < etad1_end; ++etad1) {
@@ -233,12 +239,13 @@ int main(int argc, char* argv[])
 					++index;
 
 
-					if( isWithin(pt_read, *pt) && fabs(eta_read) < *eta && \
+					if( isWithin(pt_read, *pt) && \
 						ptdau1_read > *ptd1 && ptdau2_read > *ptd2 && \
 						fabs(etadau1_read) < *etad1 && fabs(etadau2_read) < *etad2 && \
 						fabs( (massdau1_read - massd1_mean) / massd1_sigma ) <= *md1 && \
 						cos(PA_read) > *agl && DLsig_read > *dl && \
-						fabs(xydca_read) < *xy && fabs(zdca_read) < *z)
+						fabs(xydca_read) < *xy && fabs(zdca_read) < *z && \
+						fabs( rapidity(eta_read, peak_mass, pt_read, y_cm_corr) ) < *y_cm)
 					{
 						// Apply dE/dx cuts only if specified
 						if(!use_dedx || (

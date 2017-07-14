@@ -57,6 +57,8 @@ public:
 
 			n_files += lim_i[1] - lim_i[0] + 1;
 		}
+
+		y_cm_correction = incfg.get<double>("Files.y_cm_correction");
 	}
 
 	// Getters
@@ -65,6 +67,7 @@ public:
 	string get_dir_name() const {return directory_name;}
 	string get_tree_name() const {return tree_name;}
 	unsigned get_n_files() const {return n_files;}
+	double get_y_cm_corr() const {return y_cm_correction;}
 
 
 private:
@@ -75,6 +78,7 @@ private:
 
 	unsigned n_files;
 
+	double y_cm_correction;
 };
 
 } /* namespace InputChain */

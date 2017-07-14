@@ -21,7 +21,7 @@ Configuration::Configuration(const string& cfg_file)
 	// Cut information
 	readRangeCuts(cfg, "Config.Cuts.pt", pt_lims);
 
-	eta_max = strToVect<double>( cfg.get<string>("Config.Cuts.eta_max"));
+	y_cm_max = strToVect<double>( cfg.get<string>("Config.Cuts.y_cm_max"));
 	ptdau1_min = strToVect<double>( cfg.get<string>("Config.Cuts.pt_dau1_min"));
 	ptdau2_min = strToVect<double>( cfg.get<string>("Config.Cuts.pt_dau2_min"));
 	etadau1_max = strToVect<double>( cfg.get<string>("Config.Cuts.eta_dau1_max"));
@@ -79,7 +79,7 @@ Configuration::~Configuration() {}
 int Configuration::n_histos() const
 {
 	// Returns the number of histograms specified in the configuration
-	return pt_lims.size() * eta_max.size() * ptdau1_min.size() * ptdau2_min.size() * etadau1_max.size() * etadau2_max.size() \
+	return pt_lims.size() * y_cm_max.size() * ptdau1_min.size() * ptdau2_min.size() * etadau1_max.size() * etadau2_max.size() \
 			* xyDCA_max.size() * zDCA_max.size() * massdau1_zmax.size() * cosPA_min.size() * DLsig_min.size();
 }
 

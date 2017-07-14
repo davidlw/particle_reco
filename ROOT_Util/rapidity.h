@@ -15,9 +15,9 @@
 /////////////////////////////////////////////////
 
 
-double rapidity(double eta, double m, double pt)
+double rapidity(double eta, double m, double pt, double cm_correction = 0)
 {
-    return log( (hypot(m, pt * cosh(eta)) + pt * sinh(eta)) / hypot(m, pt) );
+    return log( (hypot(m, pt * cosh(eta)) + pt * sinh(eta)) / hypot(m, pt) ) + cm_correction;
 }
 
 

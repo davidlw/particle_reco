@@ -28,6 +28,7 @@
 #include "InputChain.h"
 #include "doubleToStr.h"
 #include "isWithin.h"
+#include "rapidity.h"
 
 //============================================================================
 
