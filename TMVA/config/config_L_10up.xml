@@ -11,7 +11,7 @@
     <Cuts>
         <pt_bin_limits>10,1e6</pt_bin_limits>
 
-        <abs_eta_max>1</abs_eta_max>
+        <abs_y_cm_max>1</abs_y_cm_max>
         <pt_dau1_min>1</pt_dau1_min>
         <abs_eta_dau1_max>2.4</abs_eta_dau1_max>
         <cos_angle_dau1_min>0.999</cos_angle_dau1_min>
@@ -57,6 +57,8 @@
     </Files>
 
     <Vars>
+        <y_cm_correction>0.465</y_cm_correction>
+
         <signal_weight>1</signal_weight>
         <background_weight>1</background_weight>
 

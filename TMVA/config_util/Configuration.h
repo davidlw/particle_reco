@@ -28,6 +28,7 @@
 #include "TMath.h"
 
 #include "strToVect.h"
+#include "rapidity.h"
 
 //============================================================================
 
@@ -47,8 +48,11 @@ public:
     // Cutting information
     vector<double> ptBinLimits;
 
+    double peakMass;
+    double y_cm_correction;
+
     // Base cuts (not tuning cuts)
-    double absEtaMax;
+    double absYcmMax;
     double ptD1Min;
     double absEtaD1Max;
     double cosAngleD1Min;
@@ -125,7 +129,6 @@ public:
     bool passesBaseSignalCuts(const vector<Float_t>& branches)
     {
         if(!(branches[pt] >= ptBinLimits[0] && branches[pt] < ptBinLimits[1])) return false;
-        if(fabs(branches[eta]) >= absEtaMax) return false;
         if(branches[ptd1] <= ptD1Min) return false;
         if(fabs(branches[etad1]) >= absEtaD1Max) return false;
         if(cos(branches[angle]) <= cosAngleD1Min) return false;
@@ -135,6 +138,7 @@ public:
         if(fabs(branches[etad2]) >= absEtaD2Max) return false;
         if(fabs(branches[xydca]) >= absxyDCASigD2Max) return false;
         if(fabs(branches[zdca]) >= abszDCASigD2Max) return false;
+        if( fabs( rapidity(branches[eta], peakMass, branches[pt], y_cm_correction) ) >= absYcmMax ) return false;
 
         // If dedx cuts are not desired, then at this point return true. If not, do one last cut.
         if(!use_dedx) return true;
@@ -164,7 +168,6 @@ public:
     //     in isVariableCut.
     bool passesVariableCuts(const std::vector<Float_t>& branches, const std::vector<Double_t>& cutVals)
     {
-        if( isVariableCut[eta] && fabs(branches[eta]) >= cutVals[eta] ) return false;
         if( isVariableCut[ptd1] && branches[ptd1] <= cutVals[ptd1] ) return false;
         if( isVariableCut[etad1] && fabs(branches[etad1]) >= cutVals[etad1] ) return false;
         if( isVariableCut[md1] && fabs(branches[md1] - massD1Mean) / massD1Sigma > cutVals[md1] ) return false;
@@ -192,7 +195,6 @@ public:
     // Fitting information
     vector<int> entryIdxLims;    // First and last mass_cut histos to fit
     double peakStDev;
-    double peakMass;
 
     // Labeling information
     string dau1name;
@@ -219,7 +221,7 @@ public:
         // Cuts
         ptBinLimits = strToVect<double>(cfg.get<string>("Shared.Cuts.pt_bin_limits"));
 
-        absEtaMax = cfg.get<double>("Shared.Cuts.abs_eta_max");
+        absYcmMax = cfg.get<double>("Shared.Cuts.abs_y_cm_max");
         ptD1Min = cfg.get<double>("Shared.Cuts.pt_dau1_min");
         absEtaD1Max = cfg.get<double>("Shared.Cuts.abs_eta_dau1_max");
         cosAngleD1Min = cfg.get<double>("Shared.Cuts.cos_angle_dau1_min");
@@ -265,6 +267,8 @@ public:
 
         // *** TMVAClassification.C configuration *** //
 
+        y_cm_correction = cfg.get<string>("myTMVA.Vars.y_cm_correction");
+
         // Files
         outfilePath = cfg.get<string>("myTMVA.Files.out_file_path_base") + "_" + jobName + ".root";
         backgroundFileName = cfg.get<string>("myTMVA.Files.background_file_name");
@@ -273,8 +277,9 @@ public:
         signalWeight = cfg.get<double>("myTMVA.Vars.signal_weight");
         backgroundWeight = cfg.get<double>("myTMVA.Vars.background_weight");
 
+        string rapidity_expr = "abs(rapidity(eta," + to_string(peakMass) + ", pt," + to_string(y_cm_correction) + "))";
         baseSignalCuts = (
-            "abs(eta) <" + to_string(absEtaMax) + "&& pt_dau1 >" + to_string(ptD1Min) + \
+            rapidity_expr + "<" + to_string(absYcmMax) + "&& pt_dau1 >" + to_string(ptD1Min) + \
             "&& abs(eta_dau1) <" + to_string(absEtaD1Max) + "&& cos(3DPointingAngle_dau1) >" + to_string(cosAngleD1Min) + \
             "&& 3DDecayLengthSig_dau1 >" + to_string(DLSigD1Min) + "&& abs((mass_dau1 -" + to_string(massD1Mean) + ") /" + \
                 to_string(massD1Sigma) + ") <=" + to_string(absMassD1zScoreMax) + \
@@ -367,7 +372,7 @@ public:
         boost::erase_all(str, " ");
 
 
-        if(str == "abs(eta)") return eta;
+        // if(str == "abs(eta)") return eta;
         if(str == "pt_dau1") return ptd1;
         if(str == "abs(eta_dau1)") return etad1;
         if(str == "cos(3DPointingAngle_dau1)") return angle;

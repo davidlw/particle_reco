@@ -36,7 +36,6 @@
 #include <string>
 #include <ctime>
 
-#include "TChain.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TString.h"
