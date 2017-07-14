@@ -267,7 +267,7 @@ public:
 
         // *** TMVAClassification.C configuration *** //
 
-        y_cm_correction = cfg.get<string>("myTMVA.Vars.y_cm_correction");
+        y_cm_correction = cfg.get<double>("myTMVA.Vars.y_cm_correction");
 
         // Files
         outfilePath = cfg.get<string>("myTMVA.Files.out_file_path_base") + "_" + jobName + ".root";
