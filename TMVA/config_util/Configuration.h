@@ -211,6 +211,8 @@ public:
 
         // *** Shared configuration *** //
 
+        peakMass = cfg.get<double>("Fit.peak_mass");
+
         // Files
         signalFileName = cfg.get<string>("Shared.Files.signal_file_name");
         signalTreePath = cfg.get<string>("Shared.Files.signal_tree_path");
@@ -357,7 +359,6 @@ public:
         // Fitting
         entryIdxLims = strToVect<int>(cfg.get<string>("Fit.entry_index_limits"));
         peakStDev = cfg.get<double>("Fit.peak_stdev");
-        peakMass = cfg.get<double>("Fit.peak_mass");
 
         // Labeling
         dau1name = cfg.get<string>("Fit.dau1_name");
