@@ -5,11 +5,11 @@
         <signal_tree_path>lcreco/lambdac_match</signal_tree_path>
 
         <weight_file_path>/home/jg61/particle_reco/TMVA/myTMVA/weights_md1_2</weight_file_path>
-        <job_name>L_10up</job_name>
+        <job_name>L_4_6</job_name>
     </Files>
 
     <Cuts>
-        <pt_bin_limits>10,1e6</pt_bin_limits>
+        <pt_bin_limits>4,6</pt_bin_limits>
 
         <abs_y_cm_max>1</abs_y_cm_max>
         <pt_dau1_min>1</pt_dau1_min>
@@ -52,7 +52,7 @@
 
     <Files>
         <out_file_path_base>/home/jg61/particle_reco/TMVA/myTMVA/outputs/TMVA</out_file_path_base>
-        <background_file_name>/home/jg61/store/outputs/data/data_L_high_pt_nomassd1_pPb_complete_skim.root</background_file_name>
+        <background_file_name>/home/jg61/store/outputs/data/data_L_4_6_nomassd1_pPb_smaller_skim.root</background_file_name>
         <background_tree_path>lambdac</background_tree_path>
     </Files>
 
@@ -72,7 +72,7 @@
 
 <readxml>
     
-    <histo_outpath_base>/home/jg61/particle_reco/TMVA/readxml/histos/L_10up/readxml_histos</histo_outpath_base>
+    <histo_outpath_base>/home/jg61/particle_reco/TMVA/readxml/histos/L_4_6/readxml_histos</histo_outpath_base>
     <target_bin_size>5e-3</target_bin_size>
     <n_eff>100</n_eff>
 
@@ -80,7 +80,7 @@
 
 
 <Fit>
-    <in_file>/home/jg61/particle_reco/TMVA/readxml/histos/L_10up/readxml_histos_L_10up.root</in_file>
+    <in_file>/home/jg61/particle_reco/TMVA/readxml/histos/L_4_6/readxml_histos_L_4_6.root</in_file>
     <image_type>.png</image_type>
 
     <entry_index_limits>0,99</entry_index_limits>
