@@ -10,5 +10,5 @@ source start.sh
 cd ${READXML_PATH}
 
 for i in pPb Pbp; do
-    nohup unbuffer ${EXEC} ${CONFIG_FILE} "/home/jg61/particle_reco/InputChain/config/L_${i}_files.xml" _${PTBIN} &> ${LOG_PATH}/readxml_${PTBIN}.log &
+    nohup unbuffer ${EXEC} ${CONFIG_FILE} "/home/jg61/particle_reco/InputChain/config/L_${i}_files.xml" "" &> ${LOG_PATH}/readxml_${PTBIN}.log &
 done
