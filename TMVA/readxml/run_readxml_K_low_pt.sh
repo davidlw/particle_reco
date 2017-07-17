@@ -10,4 +10,4 @@ source start.sh
 cd ${READXML_PATH}
 
 i=pPb
-nohup unbuffer ${EXEC} ${CONFIG_FILE} "/home/jg61/particle_reco/InputChain/config/K_${i}_files.xml" ${i} &> ${LOG_PATH}/readxml_${PTBIN}_${i}.log &
+nohup unbuffer ${EXEC} ${CONFIG_FILE} "/home/jg61/particle_reco/InputChain/config/K_${i}_files.xml" _${i} &> ${LOG_PATH}/readxml_${PTBIN}_${i}.log &

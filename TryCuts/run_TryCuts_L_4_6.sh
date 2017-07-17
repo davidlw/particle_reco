@@ -9,5 +9,5 @@ CONFIG_FILE="/home/jg61/particle_reco/TryCuts/config/${CFG_TAG}/TryCutsCfg_${PTB
 source start.sh
 
 for i in pPb Pbp; do
-    nohup unbuffer ${TRYCUTS_EXEC} ${CONFIG_FILE} "/home/jg61/particle_reco/InputChain/config/L_${i}_4_6.xml" ${i} &> ${LOG_PATH}/TryCuts_${PTBIN}_${i}.log &
+    nohup unbuffer ${TRYCUTS_EXEC} ${CONFIG_FILE} "/home/jg61/particle_reco/InputChain/config/L_${i}_4_6.xml" _${i} &> ${LOG_PATH}/TryCuts_${PTBIN}_${i}.log &
 done
