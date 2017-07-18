@@ -16,7 +16,7 @@
         
         <eta_dau1_max>1.4,1.8,2,2.2</eta_dau1_max>
         
-        <eta_dau2_max>1.4,1.8,2</eta_dau2_max>
+        <eta_dau2_max>1.4,1.7,1.9</eta_dau2_max>
         
         <xyDCA_max>1e10</xyDCA_max>
         <zDCA_max>1e10</zDCA_max>

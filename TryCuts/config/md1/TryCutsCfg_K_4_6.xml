@@ -10,13 +10,13 @@
         
         <y_cm_max>1</y_cm_max>
         
-        <pt_dau1_min>0.5,0.8</pt_dau1_min>
+        <pt_dau1_min>0.5,0.7,0.8</pt_dau1_min>
         
         <pt_dau2_min>0.4,0.5</pt_dau2_min>
         
-        <eta_dau1_max>1.4,2,2.3</eta_dau1_max>
+        <eta_dau1_max>1.4,2.1,2.2</eta_dau1_max>
         
-        <eta_dau2_max>1.4,1.6,2</eta_dau2_max>
+        <eta_dau2_max>1.4,1.7,1.9</eta_dau2_max>
         
         <xyDCA_max>1e10</xyDCA_max>
         <zDCA_max>1e10</zDCA_max>
