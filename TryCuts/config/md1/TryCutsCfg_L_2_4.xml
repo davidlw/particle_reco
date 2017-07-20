@@ -50,7 +50,7 @@
 
     <Fit>
         <in_file>/home/jg61/particle_reco/TryCuts/histos/L_2_4/data_md1_L_2_4_histos.root</in_file>
-        <out_path>/home/jg61/particle_reco/TryCuts/fits/L_2_4</out_path>
+        <out_path>/home/jg61/particle_reco/TryCuts/fits/L_2_4/cut</out_path>
         <image_type>.png</image_type>
         
         <peak_stdev>2</peak_stdev>
