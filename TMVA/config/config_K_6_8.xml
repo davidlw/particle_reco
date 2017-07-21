@@ -4,7 +4,7 @@
         <signal_file_name>/home/jg61/store/outputs/AODSIM_NEW/MC_LambdaC_KsProton_gen_match_bkg_merged.root</signal_file_name>
         <signal_tree_path>lcreco/lambdac_match</signal_tree_path>
 
-        <weight_file_path>/home/jg61/particle_reco/TMVA/myTMVA/weights_md1_2</weight_file_path>
+        <weight_file_path>/home/jg61/particle_reco/TMVA/myTMVA/weights_md1_3</weight_file_path>
         <job_name>K_6_8</job_name>
     </Files>
 
