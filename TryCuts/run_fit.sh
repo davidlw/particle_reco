@@ -9,4 +9,4 @@ CONFIG_FILE="/home/jg61/particle_reco/TryCuts/config/${CFG_TAG}/TryCutsCfg_${PTB
 
 source start.sh
 
-nohup unbuffer ${FIT_EXEC} ${CONFIG_FILE} _${CFG_TAG} &> ${LOG_PATH}/fits.log &
+nohup unbuffer ${FIT_EXEC} ${CONFIG_FILE} _${CFG_TAG} &> ${LOG_PATH}/fits_${CFG_TAG}.log &
