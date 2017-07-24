@@ -10,9 +10,9 @@
         
         <y_cm_max>1</y_cm_max>
         
-        <pt_dau1_min>2.5</pt_dau1_min>
+        <pt_dau1_min>2,2.5,3,3.5,4,4.5,5</pt_dau1_min>
         
-        <pt_dau2_min>3.5</pt_dau2_min>
+        <pt_dau2_min>2,2.5,3,3.5,4,4.5,5</pt_dau2_min>
         
         <eta_dau1_max>1.1</eta_dau1_max>
         
