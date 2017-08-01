@@ -1,7 +1,12 @@
 //
 // rapidity.h
+// ROOT_Util/
 //
 // Created by Johann Gan on 6/13/17
+//
+// Calculates a particle's rapidity from its eta, mass, and transverse momentum.
+//      <cm_correction> is an optional correction for calculating center of mass rapidity via the relation:
+//          y_cm = y + cm_correction
 
 /////////////////////////////////////////////////
 
