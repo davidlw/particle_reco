@@ -1,5 +1,5 @@
 # particle_reco
-Particle mass reconstruction using Cern's ROOT
+Particle mass reconstruction using Cern's ROOT and CMSSW
 
 ===================================================================
 
@@ -17,3 +17,5 @@ TMVA: Contains tools for finding cuts to optimize signal significance
 
 TryCuts: Contains a program for trying all combinations of cuts within a discrete, user-defined parameter space to see the effects on signal significance.
     - See the TryCuts directory for instructions on use.
+
+LambdaCData: Contains CMSSW analyzer code for CRAB tasks
