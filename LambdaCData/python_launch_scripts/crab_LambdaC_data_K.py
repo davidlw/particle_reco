@@ -2,7 +2,7 @@ from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 config = config()
 
 # GLOBAL STUFF
-requestNameTag = '_histos_y'
+requestNameTag = ''
 
 config.section_("General")
 config.General.workArea = 'crab_K' + requestNameTag

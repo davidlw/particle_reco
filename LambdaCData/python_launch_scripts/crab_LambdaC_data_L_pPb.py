@@ -2,7 +2,7 @@ from CRABClient.UserUtilities import config, getUsernameFromSiteDB
 config = config()
 
 # GLOBAL STUFF
-requestNameTag = ''
+requestNameTag = '_histos_y'
 
 config.section_("General")
 config.General.workArea = 'crab_L' + requestNameTag
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         print
 
     ####Pbp####
-    for index in range(1, 21):
+    for index in []:
         print
         print('Submitting task: Pbp' + str(index))
         submit_task(config, 'Pbp', str(index), requestNameTag)
