@@ -4,7 +4,7 @@
         <signal_file_name>/home/jg61/store/outputs/AODSIM_NEW/MC_LambdaC_LambdaPi_gen_match_bkg_merged.root</signal_file_name>
         <signal_tree_path>lcreco/lambdac_match</signal_tree_path>
 
-        <weight_file_path>/home/jg61/particle_reco/TMVA/myTMVA/weights_md1_3</weight_file_path>
+        <weight_file_path>/home/jg61/particle_reco/TMVA/myTMVA/weights_md1_2</weight_file_path>
         <job_name>L_2_4</job_name>
     </Files>
 
@@ -16,7 +16,7 @@
         <abs_eta_dau1_max>2.4</abs_eta_dau1_max>
         <cos_angle_dau1_min>0.999</cos_angle_dau1_min>
         <decay_length_sig_dau1_min>5</decay_length_sig_dau1_min>
-        <abs_mass_dau1_zscore_max>3</abs_mass_dau1_zscore_max>
+        <abs_mass_dau1_zscore_max>2</abs_mass_dau1_zscore_max>
         <pt_dau2_min>0.7</pt_dau2_min>
         <abs_eta_dau2_max>2.4</abs_eta_dau2_max>
         <abs_xyDCASig_dau2_max>1e10</abs_xyDCASig_dau2_max>
