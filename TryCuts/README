@@ -172,10 +172,10 @@ The different run_TryCuts scripts use different InputChain configuration files, 
     5. KsProton for pT >= 6 (high_pt)
 
 ~~ Macros ~~
-PTBIN - Used to define the log file name for readxml.
-CFG_TAG - A tag used to locate a particular set of configurations/configuration files. E.g. A directory called "md1" could be created to hold a set of configuration files for each pT bin where only the mass_dau1 cuts are varied while the other cuts are kept constant. This tag acts as a name specifier for that directory.
+PTBIN - Used to define the log file path for TryCuts.
+CFG_TAG - A tag used to name the log file, and to locate a particular set of configurations/configuration files. E.g. A directory called "md1" could be created to hold a set of configuration files for each pT bin where only the mass_dau1 cuts are varied while the other cuts are kept constant. This tag acts as a name specifier for that directory.
 TRYCUTS_EXEC - Path to the TryCuts executable.
-LOG_PATH - Path to the directory where the log file will be written. It will be called "TryCuts_{PTBIN}_{pPb or Pbp}.log"
+LOG_PATH - Path to the directory where the log file will be written. It will be called "TryCuts_{pPb or Pbp}_{CFG_TAG}.log"
 CONFIG_FILE - Path to the configuration file to use.
 
 

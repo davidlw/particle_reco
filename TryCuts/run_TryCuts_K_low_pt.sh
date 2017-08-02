@@ -9,4 +9,4 @@ CONFIG_FILE="config/${CFG_TAG}/TryCutsCfg_${PTBIN}.xml"
 source start.sh
 
 i=pPb
-nohup unbuffer ${TRYCUTS_EXEC} ${CONFIG_FILE} "../InputChain/config/K_${i}_files.xml" _${i} &> ${LOG_PATH}/TryCuts_${PTBIN}_${i}.log &
+nohup unbuffer ${TRYCUTS_EXEC} ${CONFIG_FILE} "../InputChain/config/K_${i}_files.xml" _${i} &> ${LOG_PATH}/TryCuts_${i}_${CFG_TAG}.log &

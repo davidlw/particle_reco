@@ -9,5 +9,5 @@ CONFIG_FILE="config/${CFG_TAG}/TryCutsCfg_${PTBIN}.xml"
 source start.sh
 
 for i in pPb Pbp; do
-    nohup unbuffer ${TRYCUTS_EXEC} ${CONFIG_FILE} "../InputChain/config/L_${i}_high_pt.xml" _${i} &> ${LOG_PATH}/TryCuts_${PTBIN}_${i}.log &
+    nohup unbuffer ${TRYCUTS_EXEC} ${CONFIG_FILE} "../InputChain/config/L_${i}_high_pt.xml" _${i} &> ${LOG_PATH}/TryCuts_${i}_${CFG_TAG}.log &
 done
