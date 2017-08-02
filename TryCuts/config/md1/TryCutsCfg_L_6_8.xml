@@ -1,6 +1,6 @@
 <Config>
 	<Files>
-		<out_file_base>/home/jg61/particle_reco/TryCuts/histos/L_6_8/data_md1_L_6_8</out_file_base>
+		<out_file_base>histos/L_6_8/data_md1_L_6_8</out_file_base>
     </Files>
     
 	<Cuts>
@@ -49,8 +49,8 @@
     </Histo>
 
     <Fit>
-        <in_file>/home/jg61/particle_reco/TryCuts/histos/L_6_8/data_md1_L_6_8_histos.root</in_file>
-        <out_path>/home/jg61/particle_reco/TryCuts/fits/L_6_8/cut</out_path>
+        <in_file>histos/L_6_8/data_md1_L_6_8_histos.root</in_file>
+        <out_path>fits/L_6_8/cut</out_path>
         <image_type>.png</image_type>
         
         <peak_stdev>2</peak_stdev>
