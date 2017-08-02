@@ -4,7 +4,7 @@
         <tree_name>lambdac</tree_name>
 
         <in_file_1>
-            <name_base>/home/jg61/store/outputs/data/data_L_4_6_nomassd1_Pbp_complete_skim.root</name_base>
+            <name_base>data_L_4_6_nomassd1_Pbp_complete_skim.root</name_base>
             <index_limits>1,1</index_limits>
         </in_file_1>
         
