@@ -19,3 +19,5 @@ TryCuts: Contains a program for trying all combinations of cuts within a discret
     - See the TryCuts directory for instructions on use.
 
 LambdaCData: Contains CMSSW analyzer code for CRAB tasks
+
+rooFitHisto_error.cpp: A macro for fitting peaks in TH1D objects. See the documentation within the file for instructions on use.
