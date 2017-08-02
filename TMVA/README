@@ -218,3 +218,29 @@ LOG_NAME - Path to log file to be used.
 CONFIG_FILE - Path to the configuration file to use.
 EXEC - Path to the readxml_fit executable.
 OUT_TAG - Output tag to be used. Make sure this is different for different jobs, or some image files will be overwritten!
+
+
+===============================================================
+
+
+--- Subdirectories ---
+
+The "config" subdirectory contains some example configuration files for TMVA.
+
+The "config_util" subdirectory holds some utilities for the program.
+
+** myTMVA **
+
+The "logs" and "outputs" subdirectories hold outputs. "logs" holds log files from both myTMVA. "outputs" holds the .root output files from myTMVA. The storage structure goes along with the run scripts and the example configuration files. This structure is only suggestive and can be altered.
+
+The "src" subdirectory holds source code.
+
+** readxml **
+
+The "includes" subdirectory holds some include files for readxml.
+
+The "histos", and "logs" subdirectories hold outputs. "histos" is meant to hold .root files containing histograms "logs" holds log files from both readxml and readxml_fit. The storage structure goes along with the run scripts and the example configuration files. This structure is only suggestive and can be altered.
+
+The "plots" subdirectory holds image output from readxml_fit. As of now, this is hard-coded. If desired, it should be pretty easy to modify the program to allow a user-specified directory to hold images, but I never got around to it... Sorry.
+
+The "src" subdirectory holds source code.

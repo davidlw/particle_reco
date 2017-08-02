@@ -186,3 +186,15 @@ CFG_TAG - See the explanation for the run_TryCuts scripts. Also used to tag the 
 FIT_EXEC - Path to the TryCuts_fit executable.
 LOG_PATH - Path to directory where the log file will be written. It will be called "fits_{CFG_TAG}.log"
 CONFIG_FILE - Path to the configuration file to use.
+
+
+===============================================================
+
+
+--- Subdirectories ---
+
+The "config" subdirectory contains some example configuration files for TryCuts.
+
+The "fits", "histos", and "logs" subdirectories hold outputs. "fits" is meant to hold image output of fits. "histos" is meant to hold .root files containing histograms, as well as text files specifying the cut configurations used for each job. "logs" holds log files from both TryCuts and TryCuts_fit. The storage structure goes along with the run scripts and the example configuration files. This structure is only suggestive and can be altered.
+
+The "src" subdirectory holds source code.
