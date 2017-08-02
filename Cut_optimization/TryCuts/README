@@ -1,0 +1,200 @@
+# TryCuts
+
+--- Description ---
+
+- Tries different combinations of cuts and measures their effects on signal significance.
+
+
+===============================================================
+
+
+--- Summary ---
+
+- Runs in two parts:
+    - 1. TryCuts
+    - 2. TryCuts_fit
+
+
+1. TryCuts
+- Varies cuts on:
+    1. pT
+    2. y_cm
+    3. pT_dau1
+    4. pT_dau2
+    5. eta_dau1
+    6. eta_dau2
+    7. xyDCASig_dau2
+    8. zDCASig_dau2
+    9. mass_dau1
+    10. cos(3DPointingAngle_dau1)
+    11. cos(3DDecayLengthSig_dau1)
+- Each variable has a user-specified, discrete domain of values, and TryCuts tries all possible combinations of these values.
+- Outputs
+    - ROOT file containing histograms of data when subject to these different cut combinations.
+    - Text file listing fixed information (dE/dx and nhits cuts if used, y_cm correction), and the cut combinations used to generate each individual histogram.
+
+
+2. TryCuts_fit
+- Performs fits on the histograms (to a double Gaussian with shared mean plus cubic background) contained in the ROOT file output from TryCuts.
+- Outputs:
+    - pictures of the fit and calculated values pertaining to the peak.
+        - signal significance
+        - signal yield fraction
+        - raw signal count
+        - mean of the Gaussian fit
+        - weighted RMS average of the standard deviation of the Gaussians
+    - graph of the calculated signal significance for each set of cuts
+    - pictures of the signal and background (not very useful)
+- Executable takes two arguments:
+    1. Path to the configuration file
+    2. (optional) Output tag - will be added to the names of all output image files
+- Note: TryCuts_fit performs fitting in the same manner as readxml_fit.
+
+
+- The config directory is the recommended (but not required) directory for TryCuts configuration files (see below).
+
+
+===============================================================
+
+
+--- Usage ---
+
+** Setup **
+
+Make sure the ROOT_Util static library is in the ../ROOT_Util directory. If not, cd to that directory and run "make". The ROOT environment must be set up prior to doing this (so the root-config command is valid).
+
+Run the "make" command in TryCuts/src directory (I haven't gotten around to making a proper makefile in the particle_reco directory...). The ROOT environment must be set up prior to doing this (so the root-config command is valid).  If the C++ boost libraries are not located at /usr/include, modify the INC macro to reflect the proper location.
+
+** Starting a new analysis **
+
+Note: multiple analyses can be run at once (e.g. for different pT bins).
+
+1. Create a configuration file (see instructions below).
+
+2. Configure and run the appropriate run_TryCuts script. See instructions below for details on selection and configuration.
+
+3. Some of the scripts launch two jobs at once, one for pPb data and one for Pbp data. If this is the case, the two output files should be merged into one common .root file after the processes from step 3 both finish.
+
+4. Configure and run run_fit.sh. See instruction below for details on configuration.
+
+5. View the outputs:
+    - The cutinfo text files list the cut combinations used to generate each histogram.
+    - The log files (or console output, depending on how TryCuts_fit was run) list the significance corresponding to each cut combination.
+    - The image files shows the peaks resulting from each cut.
+
+
+** Configuration **
+
+The TryCuts configuration file is an xml file that specifies a configuration for TryCuts and TryCuts_fit. The two steps in the analysis are meant to be run back-to-back, but are kept separated so as to give the use more control over the process. If desired, a script can be written to run both steps consecutively using a single configuration file (although some merging of files may be necessary in between).
+
+The TryCuts configuration class that parses the configuration file is defined in the src/ directory.
+
+== Configuration file nodes ==
+
+All of the nodes listed are necessary. No more and no less. The configuration file should follow the node structure indicated by the listing below. Text in angle brackets "<>" indicates the actual names of nodes. Text inside quotation marks indicates node content (quotation marks should be excluded in the actual xml file).
+
+The configuration file has just one base node, <Config>, that contains all of the configuration information.
+
+1. <Config>
+    a. <Files> (output configuration)
+        i. <out_file_base> - Output file stub for TryCuts. The names of the histogram file and the cutinfo file will be formed, respectively, as:
+            out_file_base + (an output tag specified as a parameter when executing TryCuts) + "_histos.root"
+                AND
+            out_file_base + (the same output tag as ^^above^^) + "_cutinfo.txt"
+
+    b. <Cuts> (cutting specification)
+        i. <pt>
+            * <cut1> - Should be two numbers, a and b, separated by a comma (no spaces), where a and b are the limits of the parent pT bin of interest. E.g. <cut1>2,4</cut1> specifies the pT range of [2, 4).
+            * <cut2> - Similar to cut1, but can specify a different pT bin.
+            * <cut3> - Similar to cut1 and cut2.
+            * etc...
+        ii. <y_cm_max> - Specifies the cut of |y_cm| < y_cm_max.
+        iii. <pt_dau1_min> - Specifies the cut of pt_dau1 > pt_dau1_min.
+        iv. <pt_dau2_min> - Specifies the cut of pt_dau2 > pt_dau2_min.
+        v. <eta_dau1_max> - Specifies the cut of |eta_dau1| < eta_dau1_max.
+        vi. <eta_dau2_max> - Specifies the cut of |eta_dau2| < eta_dau2_max.
+        vii. <xyDCA_max> - Specifies the cut of |xyDCASig_dau2| < xyDCA_max.
+        viii. <zDCA_max> - Specifies the cut of |zDCASig_dau2| < zDCA_max.
+        ix. <mass_dau1_zscore_max> - Specifies the cut of | (mass_dau1 - mass_dau1_mean) / mass_dau1_sigma | <= mass_dau1_zscore_max. (The mean and sigma are separately specified.)
+        x. <mass_dau1_mean> - The dau1 mean mass used to calculate z-score.
+        xi. <mass_dau1_sigma> - The dau1_mass standard deviation used to calculate z-score.
+        xii. <cosPA_min> - Specifies the cut of cos(3DPointingAngle_dau1) > cosPA_min.
+        xiii. <DLsig_min> - Specifies the cut of 3DDecayLengthSig_dau1 > DLsig_min.
+
+        xvi. <dedx>
+            * <use_dedx> - Specifies whether or not to use dE/dx cuts. Should be "true" or "false".
+
+            - NOTE: The dE/dx cut is of the form:
+                dE/dx >= k_low * (mass / (p_dau2 - a_low))^2 + c_low   OR   p_dau2 >= x_cutoff_low
+                    AND
+                dE/dx < k_high * (mass / (p_dau2 - a_high))^2 + c_high   OR   p_dau2 >= x_cutoff_high
+                    AND
+                nhits_dau2 >= nhits_dau2_min
+
+                where dE/dx, p_dau2, and nhits_dau2 are candidate-specific values read from input trees, and the rest are specified parameters (below)
+
+            * <mass>
+
+            * <kca_high> - comma-separated list (no spaces) of k_high, c_high, a_high
+            * <x_cutoff_high>
+
+            * <kca_low> - comma-separated list (no spaces) of k_low, c_low, a_low
+            * <x_cutoff_low>
+
+            * <nhits_dau2_min>
+
+    c. <Histo> (histogram specifications)
+        i. <range> - Should be two numbers, a and b, separated by a comma (no spaces), where a and b are the limits of the output parent mass histogram.
+        ii. <bin_size> - Desired mass bin size for output histograms. Actual bin size will be rounded if the target size doesn't fit into the specified mass range. Number of bins in the histogram is calculated as:
+        round( (range[1] - range[0]) / bin_size ), where range[0] and range[1] are the two elements of the mass range node.
+
+    d. <Fit> (for TryCuts_fit)
+        i. <in_file> - Path to the output histogram file from TryCuts on which to perform the fit. Depending on the job, this may need to be a merged file rather than one output directly from TryCuts.
+        ii. <out_path> - Output file stub for TryCuts_fit.  The names of the image files will be formed, as:
+            out_path + (an output tag specified as a parameter when executing TryCuts_fit) + image_type
+        iii. <image_type> - Image file extension for output images. E.g. ".png"
+
+        iv. <peak_stdev> - Number specifying how many standard deviations away from the mean counts as the edge of the peak for the purposes of calculating signal
+        v. <peak_mass> - Value around which the peak mass should be. In fitting the mean will be within 0.01 of this value.
+
+        vi. <dau1_name> - TLatex expression for the name of the first daughter (used for labeling the histograms).
+        vii. <dau2_name> - TLatex expression for the name of the second daughter (used for labeling the histograms).
+
+
+== run_TryCuts scripts and configuration ==
+
+~~ Scripts ~~
+The different run_TryCuts scripts use different InputChain configuration files, which specify the correct input tree files for their respective pT bins. Some also set off more than one job at a time. There is a separate script for:
+    1. LambdaPi for pT < 4 (low_pt)
+    2. LambdaPi for pT: [4, 6)
+    3. LambdaPi for pT >= 6 (high_pt)
+    4. KsProton for pT < 6 (low_pt)
+    5. KsProton for pT >= 6 (high_pt)
+
+~~ Macros ~~
+PTBIN - Used to define the log file path for TryCuts.
+CFG_TAG - A tag used to name the log file, and to locate a particular set of configurations/configuration files. E.g. A directory called "md1" could be created to hold a set of configuration files for each pT bin where only the mass_dau1 cuts are varied while the other cuts are kept constant. This tag acts as a name specifier for that directory.
+TRYCUTS_EXEC - Path to the TryCuts executable.
+LOG_PATH - Path to the directory where the log file will be written. It will be called "TryCuts_{pPb or Pbp}_{CFG_TAG}.log"
+CONFIG_FILE - Path to the configuration file to use.
+
+
+== run_fit.sh configuration ==
+
+PTBIN - Used to define the the log path and the configuration file to use.
+CFG_TAG - See the explanation for the run_TryCuts scripts. Also used to tag the log file name.
+FIT_EXEC - Path to the TryCuts_fit executable.
+LOG_PATH - Path to directory where the log file will be written. It will be called "fits_{CFG_TAG}.log"
+CONFIG_FILE - Path to the configuration file to use.
+
+
+===============================================================
+
+
+--- Subdirectories ---
+
+The "config" subdirectory contains some example configuration files for TryCuts.
+
+The "fits", "histos", and "logs" subdirectories hold outputs. "fits" is meant to hold image output of fits. "histos" is meant to hold .root files containing histograms, as well as text files specifying the cut configurations used for each job. "logs" holds log files from both TryCuts and TryCuts_fit. The storage structure goes along with the run scripts and the example configuration files. This structure is only suggestive and can be altered.
+
+The "src" subdirectory holds source code.
