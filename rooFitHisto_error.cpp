@@ -3,12 +3,85 @@
 // 
 // Created by Johann Gan on 7/12/17.
 //
-// ---INSERT DESCRIPTION HERE---
+// Fits a histogram from a .root file to a curve made by summing a double Gaussian with a shared mean and a polynomial function.
+// Retries the fit until one of the following conditions is satisfied:
+//     1. The fit converges, the fit errors converge, AND the estimated distance to minimum is below a user-specified threshold.
+//     2. The number of fit attempts exceeds a user-specified maximum.
 //
-// ---INSERT USAGE INSTRUCTIONS HERE---
+//////////////////////////////////////
 //
-// Fit status 0 is desired
-// Covariance matrix quality code 3 is desired
+// --- USAGE INSTRUCTIONS ---
+//
+// ~~ Running ~~
+// Assuming ROOT is installed, to run, go into the directory containing this macro, and run "root -l -b -q rooFitHisto_error.cpp"
+// through the command line. Options on the root command can be adjusted as desired.
+//
+//
+// ~~ Reading the output ~~
+// When the program terminates, the last few
+// lines of output will look something like the following:
+//
+//     Fit Status: 0
+//     Estimated Distance to Minimum: 6.29858e-08
+//     Covariance Matrix Quality: 3
+// 
+//     Fit was successful.
+//     Signal yield HAS asymmetric error.
+//
+//     Total yield: 73.5035  +-  0.216491
+//
+//     Info in <TCanvas::Print>: png file rooFitHisto_error_fit.png has been created
+//
+// Make sure that the program outputs the line "Fit was successful." If the output is instead "Fit was UNSUCCESSFUL.", check
+// the 3 lines above the aforementioned line to see what went wrong, change the fit configuration, then rerun the macro.
+// Examples of changes include:
+//     1. Raising EDM_TOLERANCE.
+//     2. Increasing MAX_TRIES.
+//     3. Changing the initial guesses and limits on the fit parameters.
+//     4. Changing the polynomial background order.
+//     5. Changing the fitting range (massWindowHi/massWindowLo).
+//
+//     Fit status 0 is desired. If this number is not 0, then the fit did not converge.
+//     Estimated Distance to Minimum should be under a user-specified value (see below). Ideally, it should be very small (<< 1).
+//     Covariance matrix quality code 3 is desired. If this number is different from 3, then the errors of the fit did not converge.
+//
+// Note: Even if the output states that the signal yield has asymmetric error, this is just a warning.
+// The output will still use symmetric error. To use asymmetric error, modify the code.
+//
+// To read the total yield and error of the double Gaussian signal curve, one can look at either the console output or the image
+// output. Note that one should always look at the image output to make sure the fit is reasonable, regardless of whether or not
+// the fit status is 0.
+//
+// 
+// ~~ Configuration ~~
+// Most of the configuration is listed before the function definitions, and are enclosed between the "// CONFIGURATION //" and
+// "// END CONFIGURATION //" lines. However, some of the configuration for the fitting parameters must be done inside the macro.
+// These sections can be found in the sections labeled "// FIT PARAMETERS //" and "// POLYNOMIAL BACKGROUND ORDER //" near the
+// beginning of the doRooFit() function definition.
+//
+// // CONFIGURATION //
+// peakMass - The initial guess for the mean of the double Gaussians. The mean is allowed to vary around this initial guess.
+// massWindowLo and massWindowHi - Define the x-axis range for the input histogram to use for fitting.
+// peakStDev - The number of standard deviations away from the mean with which to define the "peak" region for the calculation
+//     of signal significance and the signal yield fraction. Not used for total yield calculation.
+// dau1name and dau2name - TLatex string for the names of the daughters of the reconstructed candidates. Used for histogram labeling.
+//
+// infileName - The name of the input .root file containing the histogram object to be fit.
+// pathToHisto - Internal path within the .root file to the histogram object to be fit.
+// outfileName - Path to the desired output image file for the fit.
+//
+// MAX_TRIES - The maximum number of time to attempt a fit before giving up.
+// EDM_TOLERANCE - The upper bound for acceptable values of estimated distance to minimum.
+//
+// // FIT PARAMETERS //
+// mean - The shared mean of both Gaussians.
+// sigma1 and sigma 2 - The standard deviations of the first and second Gaussians, respectively.
+// sig1prop - Proportion of the total yield that comes from the first Gaussian curve. Must be between 0 and 1.
+// sig1yield - Total yield of the double Gaussian curve. This is the variable that is read when outputting the total yield.
+// 
+// // POLYNOMIAL BACKGROUND ORDER //
+// a, b, cp, d, e, f - Polynomial coefficients. Not all are used, and more can be created if necessary.
+// poly - Polynomial function object. Can be instantiated to be whatever order is desired, using the coefficients mentioned above.
 //
 //////////////////////////////////////
 
@@ -34,18 +107,24 @@
 
 //////////////////////////////////////
 
-
 using namespace RooFit;
 using namespace std;
 
+//////////////////////////////////////
+
+// CONFIGURATION //
+
+// Lambda information
 // const double peakMass = 1.115683;
 // const double massWindowLo = 1.08;
 // const double massWindowHi = 1.16;
 
+// Kshort information
 // const double peakMass = 0.497611;
 // const double massWindowLo = 0.43;
 // const double massWindowHi = 0.56;
 
+// LambdaC information
 const double peakMass = 2.28646;
 const double massWindowLo = 2.19;
 const double massWindowHi = 2.39;
@@ -54,20 +133,28 @@ const TString dau1name = "#Lambda^{0}";
 const TString dau2name = "#pi";
 // const TString dau1name = "K_{s}^{0}";
 // const TString dau2name = "p";
-const TString imageType = ".png";
 
 
+// File configuration
+const TString infileName = "MC_LambdaC_L_histos_merged.root";
+const TString pathToHisto = "lcreco/lambdac_5";
+const TString outfileName = "rooFitHisto_error_fit.png";
+
+
+// Process parameters
 const unsigned MAX_TRIES = 20;
 const double EDM_TOLERANCE = 1e-5;
+
+// END CONFIGURATION //
 
 
 void doRooFit(TH1D*);
 
 void rooFitHisto_error()
 {
-    TFile f("/Users/johanngan/Desktop/research/blc/RESULTS/MC/eff_analysis/MC_LambdaC_L_histos_merged.root");
+    TFile f(infileName);
 
-    TH1D* h = (TH1D*)f.Get("lcreco/lambdac_5");
+    TH1D* h = (TH1D*)f.Get(pathToHisto);
     h->SetStats(kFALSE);
     h->Rebin(1);
 
@@ -89,15 +176,36 @@ void doRooFit(TH1D* h)
     RooDataHist data("data", "dataset", x, h);
     RooPlot* xframe = x.frame(nMassBins);
     data.plotOn(xframe,Name("data"));
-    RooRealVar mean("mean", "mean", peakMass, peakMass - 0.01, peakMass + 0.01);
-    RooRealVar sigma1("sigma1", "sigma1", 0.015, 0.005, 0.015);
-    RooRealVar sigma2("sigma2", "sigma2", 0.015, 0.005, 0.015);
 
-    //***NEW***
+
+    // FIT PARAMETERS //
+    // Change only the last three arguments in the constructors. From left to right, these three arguments are:
+    // 1. Initial guess for the parameter
+    // 2. Lower bound for the parameter.
+    // 3. Upper bound for the parameter.
+
+    RooRealVar mean("mean", "mean", peakMass, peakMass - 0.01, peakMass + 0.01); // shared mean of both Gaussians
+    RooRealVar sigma1("sigma1", "sigma1", 0.015, 0.005, 0.015); // sigma of the first Gaussian
+    RooRealVar sigma2("sigma2", "sigma2", 0.015, 0.005, 0.015); // sigma of the second Gaussian
+
     RooRealVar sig1prop("sig1prop", "signal1prop", 0.5, 0, 1);  // weight of the first Gaussian
     RooRealVar sigyield("sigyield", "sigyield", 10, 0, 1e9);    // total combined yield of the two Gaussians
+
+    // END FIT PARAMETERS //
+
+
     RooFormulaVar sig1("sig1", "@0 * @1", RooArgList(sigyield, sig1prop));  // total yield of the first Gaussian
     RooFormulaVar sig2("sig2", "@0 * (1 - @1)", RooArgList(sigyield, sig1prop)); // total yield of the second Gaussian
+
+    // The two Gaussians
+    RooGaussian gaus1("gaus1", "gaus1", x, mean, sigma1);
+    RooGaussian gaus2("gaus2", "gaus2", x, mean, sigma2);
+
+
+    // POLYNOMIAL BACKGROUND ORDER //
+    // Uncomment whichever definition of the "poly" object provides the desired polynomial background order.
+    // If higher orders are desired, add new RooRealVars after "f" (these are the coefficients of poly), and
+    // add a new line instantiating poly with whatever order is desired.
 
     RooRealVar a("a", "a", 0, -100000, 100000);
     RooRealVar b("b", "b", 0, -100000, 100000);
@@ -105,14 +213,17 @@ void doRooFit(TH1D* h)
     RooRealVar d("d", "d", 0, -100000, 100000);
     RooRealVar e("e", "e", 0, -100000, 100000);
     RooRealVar f("f", "f", 0, -100000, 100000);
-    RooGaussian gaus1("gaus1", "gaus1", x, mean, sigma1);
-    RooGaussian gaus2("gaus2", "gaus2", x, mean, sigma2);
-    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b));
-    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp));
-    RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp, d));
-    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp, d, e));
-    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp, d, e, f));
-    RooRealVar polysig("polysig", "polysig", 10, 0, 1e9);
+    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b));                 // 1st order background
+    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp));             // 2nd order background
+    RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp, d));             // 3rd order background
+    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp, d, e));       // 4th order background
+    // RooPolynomial poly("poly", "poly", x, RooArgList(a, b, cp, d, e, f));    // 5th order background
+
+    RooRealVar polysig("polysig", "polysig", 10, 0, 1e9);   // Weight of the polynomial
+
+    // END POLYNOMIAL BACKGROUND ORDER //
+
+
     RooAddPdf sum("sum", "sum", RooArgList(gaus1, gaus2, poly), RooArgList(sig1, sig2, polysig));
 
     RooFitResult* r;
@@ -257,14 +368,13 @@ void doRooFit(TH1D* h)
     else
         cout << "Fit was UNSUCCESSFUL.\n";
 
-    //***NEW***
     bool yield_asym_err = sigyield.hasAsymError();
     if(yield_asym_err)
         cout << "Signal yield HAS asymmetric error.\n";
     else
         cout << "Signal yield DOES NOT HAVE asymmetric error.\n";
 
-    //***NEW***
-    cout << endl;
-    c->Print("rooFitHisto_fit_error" + imageType);
+    cout << "\nTotal yield: " << yield_val << "  +-  " << yield_err << "\n\n";
+
+    c->Print(outfileName);
 }
