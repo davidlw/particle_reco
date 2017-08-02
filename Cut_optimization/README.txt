@@ -16,4 +16,7 @@ TMVA: Contains tools for finding cuts to optimize signal significance
     - See the TMVA directory for instructions on use
 
 TryCuts: Contains a program for trying all combinations of cuts within a discrete, user-defined parameter space to see the effects on signal significance.
+    - Divided into two programs:
+        1. TryCuts
+        2. TryCuts_fit
     - See the TryCuts directory for instructions on use.
