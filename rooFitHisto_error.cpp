@@ -170,7 +170,7 @@ void doRooFit(TH1D* h)
     c->cd();
 
     unsigned nMassBins = h->GetNbinsX();
-    double massBinSize = (massWindowHi - massWindowLo) / nMassBins;
+    double massBinSize = h->GetBinWidth(1);
 
     RooRealVar x("x", "mass", massWindowLo, massWindowHi);
     RooDataHist data("data", "dataset", x, h);

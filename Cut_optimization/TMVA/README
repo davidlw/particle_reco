@@ -107,7 +107,7 @@ The configuration file is split into four sections. One for shared information, 
         ii. <signal_tree_path> - The internal directory path to the signal tree within the .root file, not including the name of the .root file itself.
         iii. <weight_file_path> - Absolute or relative path to the directory where the weights file from myTMVA will be stored.
         iv. <job_name> - An identifier string that will be tagged onto the name of the weights file from myTMVA.
-    b. <Cuts> (cutting specifications)
+    b. <Cuts> (Base cutting specifications)
         i. <pt_bin_limits> - Should be two numbers, a and b, separated by a comma (no spaces), where a and b are the limits of the parent pT bin of interest. E.g. <pt_bin_limits>2,4</pt_bin_limits> specifies the pT range of [2, 4).
         ii. <abs_y_cm_max> - Specifies the cut of |y_cm| < abs_y_cm_max.
         iii. <pt_dau1_min> - Specifies the cut of pt_dau1 > pt_dau1_min.

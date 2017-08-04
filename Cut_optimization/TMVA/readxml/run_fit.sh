@@ -2,7 +2,7 @@
 
 PTBIN="L_10up"
 READXML_PATH="."
-LOG_NAME="logs/${PTBIN}/fit_histos_exec_test.log"
+LOG_NAME="logs/${PTBIN}/fit_histos.log"
 CONFIG_FILE="../config/config_${PTBIN}.xml"
 EXEC="src/readxml_fit"
 OUT_TAG="_${PTBIN}"
